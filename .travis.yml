@@ -1,0 +1,21 @@
+sudo: false
+language: go
+git:
+    depth: 1
+install: 
+    - sudo snap install hugo
+script: 
+    - hugo
+    - 
+deploy:
+    provider: pages
+    skip_cleanup: true
+    github_token: $GH_TOKEN
+    on:
+        branch: code
+    local_dir: public
+    repo: heyuan110/heyuan110.github.com
+    fqdn: www.heyuan110.com
+    target_branch: master
+    email: heyuan110@gmail.com
+    name: heyuan110
