@@ -1,1 +1,1 @@
-git commit -am "update" && git push origin master-hugo-code
+git commit -am "update" && git push origin code
