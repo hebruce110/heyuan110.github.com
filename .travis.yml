@@ -6,7 +6,6 @@ install:
     - sudo snap install hugo
 script: 
     - hugo
-    - 
 deploy:
     provider: pages
     skip_cleanup: true
