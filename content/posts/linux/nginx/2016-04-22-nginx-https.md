@@ -16,7 +16,7 @@ tags:
 直接把nginx配置放上来, server_name自行做修改，用了反向代理proxy_pass到负载均衡服务器.
 
 
-```
+```nginx
 
 server {
     server_name heyuan110.com;
