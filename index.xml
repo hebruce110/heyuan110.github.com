@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/</link>
+    <description>Recent content on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 29 Jun 2020 20:36:04 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Curl命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-06-29-curl/</link>
+      <pubDate>Mon, 29 Jun 2020 20:36:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-06-29-curl/</guid>
+      <description>curl是linux下必备神器，例如：
+指定IP访问URL，HTTP和HTTPS的区别：
+curl -vosa &amp;quot;http://hikpai.hikvision.com/dashboard/workplace&amp;quot; -x 125.77.145.14:80
+curl -vosa &amp;quot;https://125.77.145.14/dashboard/workplace&amp;quot; -H &amp;quot;host:hikpai.hikvision.com&amp;quot; -k
+curl -vo /dev/null &amp;quot;https://125.77.145.14/dashboard/workplace&amp;quot; -H &amp;quot;host:hikpai.hikvision.com&amp;quot; -k
+在以下选项中，(H) 表示仅适用 HTTP/HTTPS ，(F) 表示仅适用于 FTP
+更多相关参数解释：
+ --anyauth 选择 &amp;quot;any&amp;quot; 认证方法 (H) -a, --append 添加要上传的文件 (F/SFTP) --basic 使用HTTP基础认证（Basic Authentication）(H) --cacert FILE CA 证书，用于每次请求认证 (SSL) --capath DIR CA 证书目录 (SSL) -E, --cert CERT[:PASSWD] 客户端证书文件及密码 (SSL) --cert-type TYPE 证书文件类型 (DER/PEM/ENG) (SSL) --ciphers LIST SSL 秘钥 (SSL) --compressed 请求压缩 (使用 deflate 或 gzip) -K, --config FILE 指定配置文件 --connect-timeout SECONDS 连接超时设置 -C, --continue-at OFFSET 断点续转 -b, --cookie STRING/FILE Cookies字符串或读取Cookies的文件位置 (H) -c, --cookie-jar FILE 操作结束后，要写入 Cookies 的文件位置 (H) --create-dirs 创建必要的本地目录层次结构 --crlf 在上传时将 LF 转写为 CRLF --crlfile FILE 从指定的文件获得PEM格式CRL列表 -d, --data DATA HTTP POST 数据 (H) --data-ascii DATA ASCII 编码 HTTP POST 数据 (H) --data-binary DATA binary 编码 HTTP POST 数据 (H) --data-urlencode DATA url 编码 HTTP POST 数据 (H) --delegation STRING GSS-API 委托权限 --digest 使用数字身份验证 (H) --disable-eprt 禁止使用 EPRT 或 LPRT (F) --disable-epsv 禁止使用 EPSV (F) -D, --dump-header FILE 将头信息写入指定的文件 --egd-file FILE 为随机数据设置EGD socket路径(SSL) --engine ENGINGE 加密引擎 (SSL).</description>
+    </item>
+    
+    <item>
+      <title>Traceroute命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-06-28-traceroute/</link>
+      <pubDate>Sun, 28 Jun 2020 12:12:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-06-28-traceroute/</guid>
+      <description>1. 简介 通过traceroute我们可以知道信息从你的计算机到互联网另一端的主机是走的什么路径。当然每次数据包由某一同样的出发点（source）到达某一同样的目的地(destination)走的路径可能会不一样，但基本上来说大部分时候所走的路由是相同的。linux系统中，我们称之为traceroute,在MS Windows中为tracert。 traceroute通过发送小的数据包到目的设备直到其返回，来测量其需要多长时间。一条路径上的每个设备traceroute要测3次。输出结果中包括每次测试的时间(ms)和设备的名称（如有的话）及其IP地址。
+在大多数情况下，我们会在linux主机系统下，直接执行命令行：
+traceroute hostname
+而在Windows系统下是执行tracert的命令：
+tracert hostname
+2. 命令格式 traceroute[参数][主机]
+3. 命令功能 traceroute指令让你追踪网络数据包的路由途径，预设数据包大小是40Bytes，用户可另行设置。
+具体参数格式：traceroute [-dFlnrvx][-f&amp;lt;存活数值&amp;gt;][-g&amp;lt;网关&amp;gt;&amp;hellip;][-i&amp;lt;网络界面&amp;gt;][-m&amp;lt;存活数值&amp;gt;][-p&amp;lt;通信端口&amp;gt;][-s&amp;lt;来源地址&amp;gt;][-t&amp;lt;服务类型&amp;gt;][-w&amp;lt;超时秒数&amp;gt;][主机名称或IP地址][数据包大小]
+4. 命令参数 -d 使用Socket层级的排错功能。
+-f 设置第一个检测数据包的存活数值TTL的大小。
+-F 设置勿离断位。
+-g 设置来源路由网关，最多可设置8个。
+-i 使用指定的网络界面送出数据包。
+-I 使用ICMP回应取代UDP资料信息。
+-m 设置检测数据包的最大存活数值TTL的大小。
+-n 直接使用IP地址而非主机名称。
+-p 设置UDP传输协议的通信端口。
+-r 忽略普通的Routing Table，直接将数据包送到远端主机上。
+-s 设置本地主机送出数据包的IP地址。
+-t 设置检测数据包的TOS数值。
+-v 详细显示指令的执行过程。
+-w 设置等待远端主机回报的时间。
+-x 开启或关闭数据包的正确性检验。
+5. 工作原理 Traceroute最简单的基本用法是：traceroute hostname
+Traceroute程序的设计是利用ICMP及IP header的TTL（Time To Live）栏位（field）。首先，traceroute送出一个TTL是1的IP datagram（其实，每次送出的为3个40字节的包，包括源地址，目的地址和包发出的时间标签）到目的地，当路径上的第一个路由器（router）收到这个datagram时，它将TTL减1。此时，TTL变为0了，所以该路由器会将此datagram丢掉，并送回一个「ICMP time exceeded」消息（包括发IP包的源地址，IP包的所有内容及路由器的IP地址），traceroute 收到这个消息后，便知道这个路由器存在于这个路径上，接着traceroute 再送出另一个TTL是2 的datagram，发现第2 个路由器&amp;hellip;&amp;hellip; traceroute 每次将送出的datagram的TTL 加1来发现另一个路由器，这个重复的动作一直持续到某个datagram 抵达目的地。当datagram到达目的地后，该主机并不会送回ICMP time exceeded消息，因为它已是目的地了，那么traceroute如何得知目的地到达了呢？</description>
+    </item>
+    
+    <item>
+      <title>《Go 系列》</title>
+      <link>http://www.heyuan110.com/go-categories/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/go-categories/</guid>
+      <description> 一：基础知识  Go基础学习    </description>
+    </item>
+    
+    <item>
+      <title>《Linux系列》</title>
+      <link>http://www.heyuan110.com/linux-categories/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/linux-categories/</guid>
+      <description> Shell脚本中$符开头变量解释）  </description>
+    </item>
+    
+    <item>
+      <title>Linux(MacOS)命令笔记</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</link>
+      <pubDate>Thu, 19 Mar 2020 10:55:52 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</guid>
+      <description>&lt;p&gt;linux中许多常用命令是必须掌握的，很多用过没有记录下来很快就忘记，再次使用又到处搜索，本文主要列出我日常使用过的一些命令，会持续更新。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>关于</title>
+      <link>http://www.heyuan110.com/about/</link>
+      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/about/</guid>
+      <description>联系方式：  邮箱：bruce.he@qq.com  </description>
+    </item>
+    
+    <item>
+      <title>多版本Python环境管理-Conda</title>
+      <link>http://www.heyuan110.com/posts/python/2020-01-11-python-conda/</link>
+      <pubDate>Sat, 11 Jan 2020 20:33:33 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/python/2020-01-11-python-conda/</guid>
+      <description>随着Python3被越来越多开发者接受和应用，存在着需要在python2和python3环境切换的需要，利好消息，Conda能完美解决python这个问题。
+Conda是什么 Anaconda安装 </description>
+    </item>
+    
+    <item>
+      <title>Docker常用命令</title>
+      <link>http://www.heyuan110.com/posts/docker/2019-11-14-docker-commands/</link>
+      <pubDate>Thu, 14 Nov 2019 20:37:13 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/docker/2019-11-14-docker-commands/</guid>
+      <description>Docker常用命令记录
+1. 启动、重启或停止docker服务 启动： service docker start
+停止：service docker stop
+重启：service docker restart
+2.镜像(images) 获取镜像 docker pull [OPTIONS] NAME[:TAG|@DIGEST]
+例如：docker pull ubuntu:16.04
+列出镜像  查看所有镜像: docker images或docker image ls, 显示摘要docker images --digests 查看特定镜像:docker image ls xxxx或docker image xxxx 查看镜像、容器、数据卷所占用的空间:docker system df 列出虚悬镜像（仓库名和标签名为）:docker image ls -f dangling=true,清楚此类镜像docker image prune  删除镜像 命令docker image rm [OPTIONS] IMAGE [IMAGE...] 或 docker rmi -f xxxx 例如：
+root@ubuntu:~# docker image ls redis REPOSITORY TAG IMAGE ID CREATED SIZE redis latest ce25c7293564 5 days ago 95MB  根据完整ID删除：docker image rm 578c3e61a98c 根据短ID删除：docker image rm 578c3 根据镜像名删除：docker image rm redis docker image ls配合删除：删除所有镜像docker image rm $(docker image ls -q),删除所有仓库名为redis的镜像docker image rm $(docker image ls -q redis) 删除所有未打 dangling 标签的镜像docker rmi $(docker images -q -f dangling=true)  docker ps -a | grep &amp;ldquo;Exited&amp;rdquo; | awk &amp;lsquo;{print $1 }&amp;lsquo;|xargs docker stop docker ps -a | grep &amp;ldquo;Exited&amp;rdquo; | awk &amp;lsquo;{print $1 }&amp;lsquo;|xargs docker rm docker images|grep none|awk &amp;lsquo;{print $3 }&amp;lsquo;|xargs docker rmi</description>
+    </item>
+    
+    <item>
+      <title>MySQL里EXPLAIN解读</title>
+      <link>http://www.heyuan110.com/posts/mysql/2019-09-06-mysql-explain/</link>
+      <pubDate>Fri, 06 Sep 2019 20:10:21 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/mysql/2019-09-06-mysql-explain/</guid>
+      <description>如何分析一条SQL执行过程?如果评价SQL执行性能好坏？EXPLAIN就是一个很好的工具，它的使用法也很简单，再SQL语句前加上EXPLAIN关键字就可以。
+我用的是Mac系统IDE工具Sequel Pro。
+来看第一个例子
+EXPLAIN SELECT o.id,c.`customers_firstname`,c.`customers_lastname` FROM oms_orders o LEFT JOIN sys_customers c on c.id = o.user_id WHERE o.created_at &amp;gt; &#39;2019-09-05&#39; 执行结果： EXPLAIN列的解释：
+ id：SELECT 标识符，下面具体分析 select_type: SELECT 类型，下面会具体分析 table: 查询所使用的表 type: JOIN 的类型，下面会具体分析 possible_keys: 可能使用的索引，但不一定会真正使用 key: 真正使用的索引 key_len: 所使用的索引长度 ref: 与索引比较的列 rows: 预估需要扫描的行数 Extra: 额外信息  </description>
+    </item>
+    
+    <item>
+      <title>刘澜领导力十项修炼学习总结</title>
+      <link>http://www.heyuan110.com/posts/management/2019-08-19-liulan-management/</link>
+      <pubDate>Mon, 19 Aug 2019 21:10:21 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/management/2019-08-19-liulan-management/</guid>
+      <description>周末两天去广州学习了刘澜老师领导力修炼课程，之前在得到APP上听过刘老师这个课，现场感受更好，老师逻辑性强，讲课生动不枯燥，理论结合案例，几乎所有场景都能代入到工作中。
+领导力 领导力既是承担解决集体问题的责任，也是承担失败的责任 领导力不等于职位和头衔，领导力是领导职位的责任，领导职位是领导力的资源。没有领导职位，同样可以承担领导力的责任。
+魅力不是发挥领导力的前提条件，而是你发挥了领导力之后的（被放大、被神化的）结果。 魅力往往是发挥领导力的负担。带来的副作用：
+ 崇敬领导者，追随者不再提意见 想得到领导认同，追随者不愿提意见 因为追随者的钦佩，追随者产生领导者不会犯错的幻觉 领导者过于自信，忽视了面对的危险 依赖领导者，组织没有培养胜任的继任者  领导力十项口诀
+一、我来 勇于承担责任，让我来 面对集体难题，挺身而出，让我来 对平级或上级说，让我来 对下级说，跟我来
+怎么建立关于责任感，从三个维度剖析： 意义感-》是否有意义-》我想做 义务感-》是团队一份子，领导信任对我好-》我该做 信心感-》有能力能胜任-》我能做
+二、我不知道 学习了领导与管理的区别，弄清除自己现在的定位(管理岗)。 管理岗需要维持团队运转，正确的做事，解决的是维持性问题，解决问题很多时候可能靠权威。 面对维持性问题即使知道答案也要说不知道，动员他人发现答案解决问题，
+说我不知道四种情况：
+ 技术性问题，我不一定知道 面对难题，过去的答案不一定管用 面对难题，动员群众发现答案 面对难题，知道也说不知道，更好动员他人找出答案主动实施  三、你觉得呢？ 密切联系群众，跟群众建立关系，通过群众了解信息。 走动式管理，高管不远离群众 多与下属沟通，注意问问题的技巧，通常一个好的问题应该是：
+ 思想上有启发：启发对方思考 情感上有激励：正能量，激励对方（公司文化） 关系上有促进：拉进距离 行动上有推动：推动对方积极行动起来 也可参考参考盖普洛12问和GROW模型。多一些反问，让对方自己悟出来，这样能更好的去执行自己的想法。  四、我来讲个故事 讲故事比讲道理更能动员群众。 四种重要领导力故事：我是谁的故事、我们是谁的故事、我们何处去的故事、我们为什么变革的故事。 让人行动的因素即是理智，更是情感，而打动情感的两大要素：形象和距离 讲好一个故事，最好是能同时打动理智和情感。 讲故事的方式有：
+ 用道具讲故事：借助道具拉进距离。 用仪式讲故事：例如宣誓仪式，入职欢迎仪式和升职仪式。 用行动讲故事：海尔张瑞敏砸冰箱的故事。供应商商品不合格，让Buyer和质检亲手销毁处理掉。  五、我教你 领导者三个角色：设计师、老师、仆人。 领导者需在五个层次当老师：
+ 照我说的做 我说给你听 我做给你看 你说怎么做 你为什么这么做 推行赏识式教育，多说你能行，你做得真好。 从心理学角度在教时分外在动机和内在动机，可以从下面几个方面激发内在动机： 意义感：给他们热爱、明确、整体、挑战的目标 自主感：给他们授权 能力感：给他们指导 进步感：给他们反馈和帮助  六、为什么?</description>
+    </item>
+    
+  </channel>
+</rss>

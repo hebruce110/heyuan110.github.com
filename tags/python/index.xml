@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/python/</link>
+    <description>Recent content in python on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 11 Jan 2020 20:33:33 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>多版本Python环境管理-Conda</title>
+      <link>http://www.heyuan110.com/posts/python/2020-01-11-python-conda/</link>
+      <pubDate>Sat, 11 Jan 2020 20:33:33 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/python/2020-01-11-python-conda/</guid>
+      <description>随着Python3被越来越多开发者接受和应用，存在着需要在python2和python3环境切换的需要，利好消息，Conda能完美解决python这个问题。
+Conda是什么 Anaconda安装 </description>
+    </item>
+    
+  </channel>
+</rss>

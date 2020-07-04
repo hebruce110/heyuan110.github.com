@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/go/</link>
+    <description>Recent content in go on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Fri, 25 Jan 2019 21:13:19 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go语言学习</title>
+      <link>http://www.heyuan110.com/posts/go/talk/2019-01-25-learn-go/</link>
+      <pubDate>Fri, 25 Jan 2019 21:13:19 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/go/talk/2019-01-25-learn-go/</guid>
+      <description>前言 Go语言(或Golang)是Google在2007年开发的一种开源编程语言,于2009年11月10日向全球公布,2012年早些时候发布了Go 1稳定版本。现在Go的开发已经是完全开放的，并且拥有一个活跃的社区。
+GO部署简单、并发性好、语言设计良好、执行性能好
+一、GO语言结构 Go语言的基础组成有一下几个部分：
+ 包声明 引入包 函数 变量 语句和表达式 注释  例子：
+//定义包名 package main //引入fmt包 import &amp;#34;fmt&amp;#34; //定义函数, main为入口函数 func main() { /* 这是我的第一个简单的程序，我是注释 */ fmt.Println(&amp;#34;Hello, World!&amp;#34;) } 二、Go基础语法  行分隔符：一行代表一个语句结束，无需；号结尾 注释：单行//，多行/**/ 标识符关键字：标识符用来命名变量、类型等程序实体，第一个字符必须是字母或下划线而不能是数字 关键字： 25 个关键字或保留字 36 个预定义标识符  空格：声明必须使用空格隔开，变量与运算符间加入空格，程序看起来更加美观  1.数据类型 数据类型用于声明函数和变量。 数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。
+Go按类别划分有以下集中数据类型:
+ 布尔型(BOOL)  布尔型的值只可以是常量 true 或者 false。一个简单的例子：var b bool = true。
+ 数字类型  整型 int 和浮点型 float32、float64. 整型包含： 浮点型： 其他数字类型  字符串类型  字符串就是一串固定长度的字符连接起来的字符序列。 Go 的字符串是由单个字节连接起来的，字节使用 UTF-8 编码标识 Unicode 文本。</description>
+    </item>
+    
+  </channel>
+</rss>

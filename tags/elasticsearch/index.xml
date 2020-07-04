@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>elasticsearch on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/elasticsearch/</link>
+    <description>Recent content in elasticsearch on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 12 Sep 2018 18:52:59 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Elasticsearch学习</title>
+      <link>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-elasticsearch/</link>
+      <pubDate>Wed, 12 Sep 2018 18:52:59 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-elasticsearch/</guid>
+      <description>Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。
+一、ES组成 ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）,简化如下:
+索引 -&amp;gt; 数据库 类型 -&amp;gt; 表 文档 -&amp;gt; 行 字段 -&amp;gt; 列
+二、常用查询命令 1. 查看_cat相关命令  GET /_cat/
+ 结果:
+  ➜ ~ curl -i -XGET http://192.168.11.119:9200/_cat/ HTTP/1.1 200 OK content-type: text/plain; charset=UTF-8 content-length: 493
+ =^.^= /_cat/allocation /_cat/shards /_cat/shards/{index} /_cat/master /_cat/nodes /_cat/tasks /_cat/indices /_cat/indices/{index} /_cat/segments /_cat/segments/{index} /_cat/count /_cat/count/{index} /_cat/recovery /_cat/recovery/{index} /_cat/health /_cat/pending_tasks /_cat/aliases /_cat/aliases/{alias} /_cat/thread_pool /_cat/thread_pool/{thread_pools} /_cat/plugins /_cat/fielddata /_cat/fielddata/{fields} /_cat/nodeattrs /_cat/repositories /_cat/snapshots/{repository} /_cat/templates
+  #### 2.</description>
+    </item>
+    
+    <item>
+      <title>搭建EKK日志收集分析系统</title>
+      <link>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-log-ekk/</link>
+      <pubDate>Wed, 12 Sep 2018 18:52:59 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-log-ekk/</guid>
+      <description>EKK是一套基于AWS相关服务搭建的日志收集系统，包含Amazon Elasticsearch Service, Amazon Kinesis, and Kibana，简称EKK.相比ELK搭建维护运维复杂，EKK更加简便。下图是EKK基本架构：
+本文重点记录nginx日志怎样收集和以正确格式存到es，不会就每一步详细讲解。
+一、准备工作：  开一台ec2，选择ubuntu16.04，搭建nginx一个nginx服务，设置nginx日志格式:  log_format main &#39;$remote_addr - $remote_user [$time_local] &amp;quot;$request&amp;quot; &#39; &#39;$status $body_bytes_sent &amp;quot;$http_referer&amp;quot; &#39; &#39;&amp;quot;$http_user_agent&amp;quot; &amp;quot;$http_x_forwarded_for&amp;quot; &#39; &#39;$connection &amp;quot;$upstream_addr&amp;quot; &#39; &#39;upstream_response_time $upstream_response_time request_time $request_time&#39;; 最终access.log里的日志格式如下：
+192.168.13.1 - - [12/Sep/2018:03:59:12 +0000] &amp;quot;GET /v1/home HTTP/1.1&amp;quot; 2002787 &amp;quot;https://test.com/product/Sweet-Ice-Cream-Short-sleeve-Top-and-Pink-Shorts-for-Toddler-Baby.html&amp;quot; &amp;quot;Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 [FBAN/FBIOS;FBDV/iPhone7,2;FBMD/iPhone;FBSN/iOS;FBSV/11.4.1;FBSS/2;FBCR/Telekom.de;FBID/phone;FBLC/de_DE;FBOP/5;FBRV/123725744]&amp;quot; &amp;quot;2002:c7:6f02:9801:d506:6bda:e6ca:b6f9, 112.118.106.116&amp;quot; 12340 &amp;quot;127.0.0.1:9000&amp;quot; upstream_response_time 0.11 request_time 0.11 创建可访问Kinesis stream或Kinesis firehose, AWS ES服务的IAM账号，保存awsAccessKeyId和awsSecretAccessKey。 AWS上启动ES服务TestES，创建时类型务必选择public，后面再做安全策略。 创建Kinesis firehose(如果有一个源对多个标的的需求可以使用Kinesis stream)，数据流向选择上面创建的TestES。  准备工作大概完成。</description>
+    </item>
+    
+    <item>
+      <title>搭建ELK日志收集分析系统</title>
+      <link>http://www.heyuan110.com/posts/elasticsearch/2018-09-11-log-elk/</link>
+      <pubDate>Tue, 11 Sep 2018 20:02:19 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/elasticsearch/2018-09-11-log-elk/</guid>
+      <description>日志主要包含系统日志、应用日志和安全日志。运维和开发人员通过日志可以了解服务器、程序运行情况，发现错误及检查错误发生原因。一个可靠、安全、可扩展的日志收集分析解决方案在程序或系统异常时能够让一切都变得轻松起来。
+对比了ELK几种搭建模式：
+ filebeat-&amp;gt;elasticsearch-&amp;gt;kibana filebeat-&amp;gt;logstash-&amp;gt;kafaka&amp;amp;zookeeper-&amp;gt;logstash-&amp;gt;elasticsearch-&amp;gt;kibana filebeat-&amp;gt;kafaka&amp;amp;zookeeper-&amp;gt;logstash-&amp;gt;elasticsearch-&amp;gt;kibana  架构 从左到右分别为：
+1)、数据采集层，将采集到的日志分别发送到kafka broker的集群队列上去
+2)、数据缓存层，将采集到的日志临时转存到本地的kafka broker集群中(相当于队列的生产者)
+3)、数据处理转发层，logstash实时去kafka broker集群拉去日志，在经过本地logstash后进行日志分析处理，然后转发到后端elasticsearch(相当于队列的消费者)
+4)、数据存储展示层，elasticsearch将收集到的日志进行本地存储，然后通过kibana展示出来；由于elasticsearch采用集群的方式，前端通过nginx在反向代理kibana的访问地址，使用户访问入口只有一个
+资源列表    服务器名称 IP地址 角色 功能     kz1 172.31.2.2 kafka+zookeeper kafka broker节点1   kz2 172.31.2.3 kafka+zookeeper kafka broker节点2   logstash-web 172.31.2.4 logstash 处理转发web相关日志   logstash-app 172.31.2.5 logstash 处理转发app相关日志   es-node1 172.31.2.6 elasticsearch+kibana 数据存储展示   es-node2 172.31.2.7 elasticsearch+kibana 数据存储展示    硬件配置    服务器类型 实例类型 CPU 内存 Disk     Kafka broker集群 r5.</description>
+    </item>
+    
+  </channel>
+</rss>
