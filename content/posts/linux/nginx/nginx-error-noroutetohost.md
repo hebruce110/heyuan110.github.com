@@ -10,7 +10,7 @@ tags:
 ---
 
 
-最近调整了后端站点架构为：user------->nginx proxy server--------》internal host ------(cname)----》elb host，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复，
+最近调整了后端站点架构为：`user------->nginx proxy server--------》internal host ------(cname)----》elb host`，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复，
 经过检查发现集群里部分机器往后转发时报如下错误:
 
 ```
@@ -21,4 +21,5 @@ tags:
 建议nginx上的upstream需要动态去刷新，并建议使用nginx的jdomain模块来做动态解析，参考地址<https://www.nginx.com/resources/wiki/modules/domain_resolve/>，我们加上这个模块后重新部署nginx问题就没再出现。
 
 其实原因很简单，nginx proxy指向域名时，nginx会缓存域名解析到的ip，如果域名对应的ip改变了而proxy nginx又没刷新缓存的ip，后面流量继续往旧ip转发，就会报错了，增加的动态解析模块指定dns和时间间隔去获取最新的ip并更新到缓存里，这样就保证了域名指向的ip变更proxy nginx能及时更新缓存ip。
+
 
