@@ -1,9 +1,6 @@
 ---
 title:      "Nginx报No route to host错误"
 date: 2020-07-03T13:19:44+08:00
-draft: true
-toc: false
-images:
 tags: 
   - nginx
   - linux
