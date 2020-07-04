@@ -13,16 +13,16 @@ tags:
 
 显示：`sh showallfiles.sh`
 
-![xgt](/uploads/2015/06/showfile.jpg)
+![xgt](/images/showorhidefiles/2.jpg)
 
 
-下载sh文件：[sh.zip](/uploads/2015/06/sh.zip)
+下载sh文件：[sh.zip](/download/showorhidefiles-sh.zip)
 
 **每次敲命令也是比较繁琐的**
 
 所以写了个小工具有界面哦，截图
 
-![xgt](/uploads/2015/06/showfile_t.png)
+![xgt](/images/showorhidefiles/1.png)
 
-下载工具：[ShowFiles](/uploads/2015/06/ShowFiles.zip)
+下载工具：[ShowFiles](/download/showorhidefiles-app.zip)
 
