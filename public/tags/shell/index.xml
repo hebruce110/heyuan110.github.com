@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>shell on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/shell/</link>
+    <description>Recent content in shell on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 13 May 2019 20:16:54 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/shell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Shell脚本中$符开头变量解释</title>
+      <link>http://www.heyuan110.com/posts/linux/2019-05-13-linux-shell-vars/</link>
+      <pubDate>Mon, 13 May 2019 20:16:54 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2019-05-13-linux-shell-vars/</guid>
+      <description>shell脚本中经常会看到$开头的特殊变量，那怎么理解它们呢？
+变量  $$  Shell本身的PID（ProcessID）
+ $!  Shell最后运行的后台Process的PID
+ $?  最后运行的命令的结束代码（返回值）
+ $-  使用Set命令设定的Flag一览
+ $*  所有参数列表。如&amp;quot;$*&amp;ldquo;用「&amp;quot;」括起来的情况、以&amp;quot;$1 $2 … $n&amp;quot;的形式输出所有参数。
+ $@  所有参数列表。如&amp;quot;$@&amp;ldquo;用「&amp;quot;」括起来的情况、以&amp;quot;$1&amp;rdquo; &amp;ldquo;$2&amp;rdquo; … &amp;ldquo;$n&amp;rdquo; 的形式输出所有参数。
+ $#  添加到Shell的参数个数
+ $0  Shell本身的文件名
+ $1～$n  添加到Shell的各参数值。$1是第1参数、$2是第2参数…。
+示例 1 #!/bin/bash 2 # 3 printf &amp;#34;The complete list is %s\n&amp;#34; &amp;#34;$$&amp;#34; 4 printf &amp;#34;The complete list is %s\n&amp;#34; &amp;#34;$!&amp;#34; 5 printf &amp;#34;The complete list is %s\n&amp;#34; &amp;#34;$?</description>
+    </item>
+    
+    <item>
+      <title>ZSH配置和使用</title>
+      <link>http://www.heyuan110.com/posts/linux/2015-06-17-shell-zsh/</link>
+      <pubDate>Wed, 17 Jun 2015 17:03:18 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2015-06-17-shell-zsh/</guid>
+      <description>&lt;p&gt;如果你使用Linux操作系统，那就免不了要和终端打交道，而shell是与系统交互的外壳，也是Linux的精髓，那么花一点时间使用配置一个强大的shell，绝对是物超所值的。通常系统默认安装的shell时bash，当然还有其他的shell。相对linux系统自带的bash，我更喜欢zsh(shell中的高富帅)，能安装各种插件，精美的主题，自定义各种快捷方式, zsh安装配置的方法也很简单，下面的方法我在ubuntu和mac上亲测有效。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;装完后看看你的vi吧，发两张截图&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

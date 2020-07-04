@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>aws on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/aws/</link>
+    <description>Recent content in aws on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 04 Jul 2020 00:16:54 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>AWS CLI常用命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-07-04-aws-cli/</link>
+      <pubDate>Sat, 04 Jul 2020 00:16:54 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-07-04-aws-cli/</guid>
+      <description>AWS CLI常用命令
+S3 官方参考https://docs.amazonaws.cn/cli/latest/userguide/cli-services-s3-commands.html
+##查看默认的bucket aws s3 ls ##查看默认环境的abert-test内容 aws s3 ls s3://abert-test ##查看目录大小,列出每个文件大小 aws s3 ls --summarize --human-readable --recursive s3://bucket-name ##上传本地文件 aws s3 cp bstest.txt s3://abert-test ##复制文件 aws s3 cp s3://mybucket/test.txt s3://mybucket/test2.txt ##递归拷贝 aws s3 cp s3://mybucket . --recursive ##排除拷贝 aws s3 cp myDir s3://mybucket/ --recursive --exclude &amp;quot;*.jpg&amp;quot; ##拷贝并添加ACL权限控制 aws s3 cp s3://mybucket/test.txt s3://mybucket/test2.txt --acl public-read-write ## 移动 ## 将桶testbucket下面所有文件移动到testbucket2 aws s3 mv s3://testbucket/ s3//testbucket2/ --recursive #rm ##删除对象 aws s3 rm s3://mybucket/test.</description>
+    </item>
+    
+  </channel>
+</rss>

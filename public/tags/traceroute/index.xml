@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>traceroute on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/traceroute/</link>
+    <description>Recent content in traceroute on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sun, 28 Jun 2020 12:12:04 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/traceroute/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Traceroute命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-06-28-traceroute/</link>
+      <pubDate>Sun, 28 Jun 2020 12:12:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-06-28-traceroute/</guid>
+      <description>1. 简介 通过traceroute我们可以知道信息从你的计算机到互联网另一端的主机是走的什么路径。当然每次数据包由某一同样的出发点（source）到达某一同样的目的地(destination)走的路径可能会不一样，但基本上来说大部分时候所走的路由是相同的。linux系统中，我们称之为traceroute,在MS Windows中为tracert。 traceroute通过发送小的数据包到目的设备直到其返回，来测量其需要多长时间。一条路径上的每个设备traceroute要测3次。输出结果中包括每次测试的时间(ms)和设备的名称（如有的话）及其IP地址。
+在大多数情况下，我们会在linux主机系统下，直接执行命令行：
+traceroute hostname
+而在Windows系统下是执行tracert的命令：
+tracert hostname
+2. 命令格式 traceroute[参数][主机]
+3. 命令功能 traceroute指令让你追踪网络数据包的路由途径，预设数据包大小是40Bytes，用户可另行设置。
+具体参数格式：traceroute [-dFlnrvx][-f&amp;lt;存活数值&amp;gt;][-g&amp;lt;网关&amp;gt;&amp;hellip;][-i&amp;lt;网络界面&amp;gt;][-m&amp;lt;存活数值&amp;gt;][-p&amp;lt;通信端口&amp;gt;][-s&amp;lt;来源地址&amp;gt;][-t&amp;lt;服务类型&amp;gt;][-w&amp;lt;超时秒数&amp;gt;][主机名称或IP地址][数据包大小]
+4. 命令参数 -d 使用Socket层级的排错功能。
+-f 设置第一个检测数据包的存活数值TTL的大小。
+-F 设置勿离断位。
+-g 设置来源路由网关，最多可设置8个。
+-i 使用指定的网络界面送出数据包。
+-I 使用ICMP回应取代UDP资料信息。
+-m 设置检测数据包的最大存活数值TTL的大小。
+-n 直接使用IP地址而非主机名称。
+-p 设置UDP传输协议的通信端口。
+-r 忽略普通的Routing Table，直接将数据包送到远端主机上。
+-s 设置本地主机送出数据包的IP地址。
+-t 设置检测数据包的TOS数值。
+-v 详细显示指令的执行过程。
+-w 设置等待远端主机回报的时间。
+-x 开启或关闭数据包的正确性检验。
+5. 工作原理 Traceroute最简单的基本用法是：traceroute hostname
+Traceroute程序的设计是利用ICMP及IP header的TTL（Time To Live）栏位（field）。首先，traceroute送出一个TTL是1的IP datagram（其实，每次送出的为3个40字节的包，包括源地址，目的地址和包发出的时间标签）到目的地，当路径上的第一个路由器（router）收到这个datagram时，它将TTL减1。此时，TTL变为0了，所以该路由器会将此datagram丢掉，并送回一个「ICMP time exceeded」消息（包括发IP包的源地址，IP包的所有内容及路由器的IP地址），traceroute 收到这个消息后，便知道这个路由器存在于这个路径上，接着traceroute 再送出另一个TTL是2 的datagram，发现第2 个路由器&amp;hellip;&amp;hellip; traceroute 每次将送出的datagram的TTL 加1来发现另一个路由器，这个重复的动作一直持续到某个datagram 抵达目的地。当datagram到达目的地后，该主机并不会送回ICMP time exceeded消息，因为它已是目的地了，那么traceroute如何得知目的地到达了呢？</description>
+    </item>
+    
+  </channel>
+</rss>

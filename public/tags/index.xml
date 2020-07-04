@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/</link>
+    <description>Recent content in Tags on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 04 Jul 2020 00:16:54 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.heyuan110.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>aws</title>
+      <link>http://www.heyuan110.com/tags/aws/</link>
+      <pubDate>Sat, 04 Jul 2020 00:16:54 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/aws/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>http://www.heyuan110.com/tags/linux/</link>
+      <pubDate>Sat, 04 Jul 2020 00:16:54 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nginx</title>
+      <link>http://www.heyuan110.com/tags/nginx/</link>
+      <pubDate>Fri, 03 Jul 2020 13:19:44 +0800</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/nginx/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>curl</title>
+      <link>http://www.heyuan110.com/tags/curl/</link>
+      <pubDate>Mon, 29 Jun 2020 20:36:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/curl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>traceroute</title>
+      <link>http://www.heyuan110.com/tags/traceroute/</link>
+      <pubDate>Sun, 28 Jun 2020 12:12:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/traceroute/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>command</title>
+      <link>http://www.heyuan110.com/tags/command/</link>
+      <pubDate>Thu, 19 Mar 2020 10:55:52 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/command/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mac</title>
+      <link>http://www.heyuan110.com/tags/mac/</link>
+      <pubDate>Thu, 19 Mar 2020 10:55:52 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/mac/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>conda</title>
+      <link>http://www.heyuan110.com/tags/conda/</link>
+      <pubDate>Sat, 11 Jan 2020 20:33:33 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/conda/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>http://www.heyuan110.com/tags/python/</link>
+      <pubDate>Sat, 11 Jan 2020 20:33:33 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>http://www.heyuan110.com/tags/docker/</link>
+      <pubDate>Thu, 14 Nov 2019 20:37:13 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

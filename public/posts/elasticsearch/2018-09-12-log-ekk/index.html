@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="搭建EKK日志收集分析系统">
+<meta itemprop="description" content="EKK是一套基于AWS相关服务搭建的日志收集系统，包含Amazon Elasticsearch Service, Amazon Kinesis, and Kibana，简称EKK.相比ELK搭建维护运维复杂，EKK更加简便。下图是EKK基本架构：
+本文重点记录nginx日志怎样收集和以正确格式存到es，不会就每一步详细讲解。
+一、准备工作：  开一台ec2，选择ubuntu16.04，搭建nginx一个nginx服务，设置nginx日志格式:  log_format main &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39; &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39; &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &#39; &#39;$connection &quot;$upstream_addr&quot; &#39; &#39;upstream_response_time $upstream_response_time request_time $request_time&#39;; 最终access.log里的日志格式如下：
+192.168.13.1 - - [12/Sep/2018:03:59:12 &#43;0000] &quot;GET /v1/home HTTP/1.1&quot; 2002787 &quot;https://test.com/product/Sweet-Ice-Cream-Short-sleeve-Top-and-Pink-Shorts-for-Toddler-Baby.html&quot; &quot;Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 [FBAN/FBIOS;FBDV/iPhone7,2;FBMD/iPhone;FBSN/iOS;FBSV/11.4.1;FBSS/2;FBCR/Telekom.de;FBID/phone;FBLC/de_DE;FBOP/5;FBRV/123725744]&quot; &quot;2002:c7:6f02:9801:d506:6bda:e6ca:b6f9, 112.118.106.116&quot; 12340 &quot;127.0.0.1:9000&quot; upstream_response_time 0.11 request_time 0.11 创建可访问Kinesis stream或Kinesis firehose, AWS ES服务的IAM账号，保存awsAccessKeyId和awsSecretAccessKey。 AWS上启动ES服务TestES，创建时类型务必选择public，后面再做安全策略。 创建Kinesis firehose(如果有一个源对多个标的的需求可以使用Kinesis stream)，数据流向选择上面创建的TestES。  准备工作大概完成。">
+<meta itemprop="datePublished" content="2018-09-12T18:52:59&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-12T18:52:59&#43;00:00" />
+<meta itemprop="wordCount" content="630">
+
+
+
+<meta itemprop="keywords" content="elasticsearch,log,ekk,kibana,kinesis," /><meta property="og:title" content="搭建EKK日志收集分析系统" />
+<meta property="og:description" content="EKK是一套基于AWS相关服务搭建的日志收集系统，包含Amazon Elasticsearch Service, Amazon Kinesis, and Kibana，简称EKK.相比ELK搭建维护运维复杂，EKK更加简便。下图是EKK基本架构：
+本文重点记录nginx日志怎样收集和以正确格式存到es，不会就每一步详细讲解。
+一、准备工作：  开一台ec2，选择ubuntu16.04，搭建nginx一个nginx服务，设置nginx日志格式:  log_format main &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39; &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39; &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &#39; &#39;$connection &quot;$upstream_addr&quot; &#39; &#39;upstream_response_time $upstream_response_time request_time $request_time&#39;; 最终access.log里的日志格式如下：
+192.168.13.1 - - [12/Sep/2018:03:59:12 &#43;0000] &quot;GET /v1/home HTTP/1.1&quot; 2002787 &quot;https://test.com/product/Sweet-Ice-Cream-Short-sleeve-Top-and-Pink-Shorts-for-Toddler-Baby.html&quot; &quot;Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 [FBAN/FBIOS;FBDV/iPhone7,2;FBMD/iPhone;FBSN/iOS;FBSV/11.4.1;FBSS/2;FBCR/Telekom.de;FBID/phone;FBLC/de_DE;FBOP/5;FBRV/123725744]&quot; &quot;2002:c7:6f02:9801:d506:6bda:e6ca:b6f9, 112.118.106.116&quot; 12340 &quot;127.0.0.1:9000&quot; upstream_response_time 0.11 request_time 0.11 创建可访问Kinesis stream或Kinesis firehose, AWS ES服务的IAM账号，保存awsAccessKeyId和awsSecretAccessKey。 AWS上启动ES服务TestES，创建时类型务必选择public，后面再做安全策略。 创建Kinesis firehose(如果有一个源对多个标的的需求可以使用Kinesis stream)，数据流向选择上面创建的TestES。  准备工作大概完成。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/elasticsearch/2018-09-12-log-ekk/" />
+<meta property="article:published_time" content="2018-09-12T18:52:59+00:00" />
+<meta property="article:modified_time" content="2018-09-12T18:52:59+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="搭建EKK日志收集分析系统"/>
+<meta name="twitter:description" content="EKK是一套基于AWS相关服务搭建的日志收集系统，包含Amazon Elasticsearch Service, Amazon Kinesis, and Kibana，简称EKK.相比ELK搭建维护运维复杂，EKK更加简便。下图是EKK基本架构：
+本文重点记录nginx日志怎样收集和以正确格式存到es，不会就每一步详细讲解。
+一、准备工作：  开一台ec2，选择ubuntu16.04，搭建nginx一个nginx服务，设置nginx日志格式:  log_format main &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39; &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39; &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &#39; &#39;$connection &quot;$upstream_addr&quot; &#39; &#39;upstream_response_time $upstream_response_time request_time $request_time&#39;; 最终access.log里的日志格式如下：
+192.168.13.1 - - [12/Sep/2018:03:59:12 &#43;0000] &quot;GET /v1/home HTTP/1.1&quot; 2002787 &quot;https://test.com/product/Sweet-Ice-Cream-Short-sleeve-Top-and-Pink-Shorts-for-Toddler-Baby.html&quot; &quot;Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 [FBAN/FBIOS;FBDV/iPhone7,2;FBMD/iPhone;FBSN/iOS;FBSV/11.4.1;FBSS/2;FBCR/Telekom.de;FBID/phone;FBLC/de_DE;FBOP/5;FBRV/123725744]&quot; &quot;2002:c7:6f02:9801:d506:6bda:e6ca:b6f9, 112.118.106.116&quot; 12340 &quot;127.0.0.1:9000&quot; upstream_response_time 0.11 request_time 0.11 创建可访问Kinesis stream或Kinesis firehose, AWS ES服务的IAM账号，保存awsAccessKeyId和awsSecretAccessKey。 AWS上启动ES服务TestES，创建时类型务必选择public，后面再做安全策略。 创建Kinesis firehose(如果有一个源对多个标的的需求可以使用Kinesis stream)，数据流向选择上面创建的TestES。  准备工作大概完成。"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>搭建EKK日志收集分析系统</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.d3141168199607bf3a517216ce3c263814eecdbc8fca72a9a88700799a838219.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://github.com/heyuan110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Sep 12, 2018</span></div>
+				<h1>搭建EKK日志收集分析系统</h1>
+			</header>
+			<div class="content">
+				<p>EKK是一套基于AWS相关服务搭建的日志收集系统，包含Amazon Elasticsearch Service, Amazon Kinesis, and Kibana，简称EKK.相比ELK搭建维护运维复杂，EKK更加简便。下图是EKK基本架构：</p>
+<p><img src="https://d2908q01vomqb2.cloudfront.net/472b07b9fcf2c2451e8781e944bf5f77cd8457c8/2017/09/07/1-2.png" alt="EKK"></p>
+<p>本文重点记录nginx日志怎样收集和以正确格式存到es，不会就每一步详细讲解。</p>
+<h2 id="一准备工作">一、准备工作：<a href="#一准备工作" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<ol>
+<li>开一台ec2，选择ubuntu16.04，搭建nginx一个nginx服务，设置nginx日志格式:</li>
+</ol>
+<pre><code>log_format  main  '$remote_addr - $remote_user [$time_local] &quot;$request&quot; '
+                      '$status $body_bytes_sent &quot;$http_referer&quot; '
+                      '&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; '
+                      '$connection &quot;$upstream_addr&quot; '
+                      'upstream_response_time $upstream_response_time request_time $request_time';
+</code></pre><p>最终access.log里的日志格式如下：</p>
+<pre><code>192.168.13.1 - - [12/Sep/2018:03:59:12 +0000] 
+&quot;GET /v1/home HTTP/1.1&quot; 2002787 &quot;https://test.com/product/Sweet-Ice-Cream-Short-sleeve-Top-and-Pink-Shorts-for-Toddler-Baby.html&quot; &quot;Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 [FBAN/FBIOS;FBDV/iPhone7,2;FBMD/iPhone;FBSN/iOS;FBSV/11.4.1;FBSS/2;FBCR/Telekom.de;FBID/phone;FBLC/de_DE;FBOP/5;FBRV/123725744]&quot; &quot;2002:c7:6f02:9801:d506:6bda:e6ca:b6f9, 112.118.106.116&quot; 12340 &quot;127.0.0.1:9000&quot; upstream_response_time 0.11 request_time 0.11
+</code></pre><ol start="2">
+<li>创建可访问Kinesis stream或Kinesis firehose, AWS ES服务的IAM账号，保存awsAccessKeyId和awsSecretAccessKey。</li>
+<li>AWS上启动ES服务TestES，创建时类型务必选择public，后面再做安全策略。</li>
+<li>创建Kinesis firehose(如果有一个源对多个标的的需求可以使用Kinesis stream)，数据流向选择上面创建的TestES。</li>
+</ol>
+<p>准备工作大概完成。</p>
+<h2 id="二收集日志">二、收集日志<a href="#二收集日志" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<ol>
+<li>在ec2上安装Amazon Kinesis Agent:</li>
+</ol>
+<pre><code>1. 下载源码
+git clone https://github.com/awslabs/amazon-kinesis-agent.git
+
+2. 在aws的ubuntu16.04上需再安装java jdk
+sudo apt-get install openjdk-8-jdk
+
+3. 开始安装
+sudo ./setup --install
+
+完成没报错会有安装成功提示，并提示怎么配置和启动服务
+
+</code></pre><ol start="2">
+<li>编辑agent配置文件/etc/aws-kinesis/agent.json，默认如下：</li>
+</ol>
+<pre><code>{
+    &quot;cloudwatch.emitMetrics&quot;: true,
+    &quot;kinesis.endpoint&quot;: &quot;https://your/kinesis/endpoint&quot;, 
+    &quot;firehose.endpoint&quot;: &quot;https://your/firehose/endpoint&quot;, 
+    &quot;flows&quot;: [
+        {
+            &quot;filePattern&quot;: &quot;/tmp/app1.log*&quot;, 
+            &quot;kinesisStream&quot;: &quot;yourkinesisstream&quot;
+        }, 
+        {
+            &quot;filePattern&quot;: &quot;/tmp/app2.log*&quot;,
+            &quot;deliveryStream&quot;: &quot;yourfirehosedeliverystream&quot; 
+        }
+    ] 
+}
+</code></pre><p>cloudwatch.emitMetrics：是否开启cloudwatch监控
+kinesis.endpoint： Kinesis stream的endpoint设置
+firehose.endpoint：firehose的endpoint
+各end point地址: <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">https://docs.aws.amazon.com/general/latest/gr/rande.html</a></p>
+<p>这里不搬教程，关于上面参数详细参考<a href="https://docs.aws.amazon.com/streams/latest/dev/writing-with-agents.html">https://docs.aws.amazon.com/streams/latest/dev/writing-with-agents.html</a></p>
+<p>官方默认的那个配置有点坑，直接贴可以用的agent.json:</p>
+<p><strong>配置1</strong></p>
+<pre><code>{
+&quot;awsAccessKeyId&quot;: &quot;xxxxx&quot;,
+&quot;awsSecretAccessKey&quot;: &quot;xxxxxxxxxxxxxxxxx&quot;,
+&quot;cloudwatch.emitMetrics&quot;: false,
+&quot;firehose.endpoint&quot;: &quot;firehose.us-west-2.amazonaws.com&quot;,
+&quot;cloudwatch.endpoint&quot;: &quot;https://monitoring.us-west-2.amazonaws.com&quot;,
+&quot;kinesis.endpoint&quot;: &quot;https://kinesis.us-west-2.amazonaws.com&quot;,
+  &quot;flows&quot;: [
+    {
+      &quot;filePattern&quot;: &quot;/usr/local/programs/nginx/logs/access.log&quot;,
+      &quot;deliveryStream&quot;: &quot;api-nginx-access-log&quot;,
+      &quot;dataProcessingOptions&quot;: [
+                {
+                    &quot;optionName&quot;: &quot;LOGTOJSON&quot;,
+                    &quot;logFormat&quot;: &quot;COMMONAPACHELOG&quot;,
+                    &quot;matchPattern&quot;: &quot;^([\\d.]+) \\S+ \\S+ \\[([\\w:/]+)\\s[+\\-]\\d{4}\\] \&quot;([A-Z]+) (.+?) ([\\w./]+)\&quot; (\\d{3}) (\\d+) \&quot;(.+?)\&quot; \&quot;(.+?)\&quot; \&quot;(.+?)\&quot; (\\d+) \&quot;(.+?)\&quot; upstream_response_time (\\d.+) request_time (\\d.+)&quot;,
+                                &quot;customFieldNames&quot;: [&quot;remote_addr&quot;, &quot;datetime&quot;, &quot;request_type&quot;, &quot;request_url&quot;, &quot;http_version&quot;, &quot;response_status&quot;, &quot;body_bytes_sent&quot;, &quot;http_referer&quot;, &quot;http_user_agent&quot;, &quot;http_x_forwarded_for&quot;, &quot;connection_serial_number&quot;, &quot;upstream_addr&quot;, &quot;upstream_response_time&quot;, &quot;request_time&quot;]
+                }
+        ]
+    }
+  ]
+}
+
+</code></pre><p><strong>配置2</strong></p>
+<pre><code>{
+&quot;awsAccessKeyId&quot;: &quot;xxxxx&quot;,
+&quot;awsSecretAccessKey&quot;: &quot;xxxxxxxxxxxxxxxxxxxx&quot;,
+&quot;cloudwatch.emitMetrics&quot;: false,
+&quot;cloudwatch.endpoint&quot;: &quot;https://monitoring.us-west-2.amazonaws.com&quot;,
+&quot;kinesis.endpoint&quot;: &quot;https://kinesis.us-west-2.amazonaws.com&quot;,
+  &quot;flows&quot;: [
+    {
+      &quot;filePattern&quot;: &quot;/usr/local/programs/nginx/logs/access.log&quot;,
+      &quot;kinesisStream&quot;: &quot;api-nginx-access-log&quot;,
+      &quot;partitionKeyOption&quot;: &quot;RANDOM&quot;,
+      &quot;dataProcessingOptions&quot;: [
+                {
+                    &quot;optionName&quot;: &quot;LOGTOJSON&quot;,
+                    &quot;logFormat&quot;: &quot;COMMONAPACHELOG&quot;
+                }
+        ]
+    }
+  ]
+}
+</code></pre><p>配置1是firehose收集，配置2 kinesis stream收集。</p>
+<p>awsAccessKeyId和awsSecretAccessKey访问授权的，注意end-point是分区域的，每个区域地址不一样。</p>
+<p>logFormat用COMMONAPACHELOG默认格式无法解析到全部想要字段，需要自定义正则和字段去解析，Kinesis agent是java程序，所以这里的matchPattern要用java格式正则，这个必须要注意。</p>
+<p>找到了一个好的调试办法，打开<a href="https://tool.lu/coderunner">https://tool.lu/coderunner</a>,选择java语言粘贴如下代码：</p>
+<pre><code>import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class RegexMatches
+{
+	public static void main( String args[] ){
+
+		// 按指定模式在字符串查找
+		String line = &quot;132.31.43.24 - - [12/Sep/2018:05:58:36 +0000] \&quot;POST /v1/tracks/hello HTTP/1.1\&quot; 200 79993 \&quot;https://test.com/category/Baby-Toddlers.html?category_id=27&amp;son_category_id=%5B%5D&amp;tag_id=&amp;last_id=0&amp;filter=%7B%22On%20Sale%22%3A%5B%5D,%22Size%22%3A%5B%5D,%22Color%22%3A%5B%5D,%22Season%22%3A%5B%5D,%22Style%22%3A%5B%5D,%22Occasion%22%3A%5B%5D,%22Price%22%3A%5B%5D%7D&amp;sort=3&amp;page=1&amp;is_sale=&amp;start_price=&amp;end_price=&amp;utm_source=FB&amp;utm_medium=Dannie&amp;utm_campaign=09-06-Baby-Toddlers-12&amp;adlk_id=30051\&quot; \&quot;Mozilla/5.0 (iPhone; CPUiPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1\&quot; \&quot;17.47.23.134, 12.128.106.104\&quot; 74518 \&quot;127.0.0.1:9000\&quot; upstream_response_time 20.186 request_time 0.186&quot;;
+		
+		String pattern = &quot;^([\\d.]+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \&quot;([A-Z]+) (.+?) ([\\w./]+)\&quot; (\\d{3}) (\\d+) \&quot;(.+?)\&quot; \&quot;(.+?)\&quot; \&quot;(.+?)\&quot; (\\d+) \&quot;(.+?)\&quot; upstream_response_time (\\d.+) request_time (\\d.+)&quot;;
+
+		// 创建 Pattern 对象
+		Pattern r = Pattern.compile(pattern);
+
+		// 现在创建 matcher 对象
+		Matcher m = r.matcher(line);
+		if (m.find( )) {
+			System.out.println(&quot;remote_addr: &quot; + m.group(1) );
+			System.out.println(&quot;ident: &quot; + m.group(2) );
+			System.out.println(&quot;authuser: &quot; + m.group(3) );
+			System.out.println(&quot;datetime: &quot; + m.group(4) ); 
+			System.out.println(&quot;request_type: &quot; + m.group(5) ); 
+			System.out.println(&quot;request_url: &quot; + m.group(6) ); 
+			System.out.println(&quot;http_version: &quot; + m.group(7) ); 
+			System.out.println(&quot;response_status: &quot; + m.group(8) );
+			System.out.println(&quot;body_bytes_sent: &quot; + m.group(9) );
+			System.out.println(&quot;http_referer: &quot; + m.group(10) );
+			System.out.println(&quot;http_user_agent: &quot; + m.group(11) );
+			System.out.println(&quot;http_x_forwarded_for: &quot; + m.group(12) );
+			System.out.println(&quot;connection_serial_number: &quot; + m.group(13) );
+			System.out.println(&quot;upstream_addr: &quot; + m.group(13) );
+			System.out.println(&quot;connection_serial_number: &quot; + m.group(13) );
+			System.out.println(&quot;upstream_addr: &quot; + m.group(14) );
+			System.out.println(&quot;upstream_response_time: &quot; + m.group(15) );
+			System.out.println(&quot;request_time: &quot; + m.group(16) );
+		} else {
+			System.out.println(&quot;NO MATCH&quot;);
+		}
+	}
+}
+
+</code></pre><p>字符串要java转义过的，可以用下面网站先转义再用<a href="http://tool.what21.com/tool/javaStr.html">http://tool.what21.com/tool/javaStr.html</a></p>
+<p>可以自己改上面的源字符串和正则调试。当正则调好符合要求时把它复制到matchPattern配置里。</p>
+<p>Kinesis agent相关操作：
+启动： <code>sudo service aws-kinesis-agent start</code>
+重启：<code>sudo service aws-kinesis-agent restart</code>
+停止：<code>sudo service aws-kinesis-agent status</code></p>
+<p>每次调整了配置重启即可</p>
+<h2 id="三配置es索引模板">三、配置ES索引模板<a href="#三配置es索引模板" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>上面的数据直接从agent-&gt;firehose-&gt;eS可以直接跑通，但有字段类型问题，全部是text类型，例如我们希望进去的datetime是date类型，怎么办？通过ES template解决。创建如下的ES Template:</p>
+<pre><code> curl -i -XPUT https://192.168.11.120:9200/_template/nginx-access-log_template -d '{
+    &quot;template&quot;: &quot;*-nginx-access-log-*&quot;,
+    &quot;mappings&quot;: {
+        &quot;log&quot;: {
+            &quot;_all&quot;: { &quot;enabled&quot;: false }, 
+            &quot;properties&quot;: {
+                &quot;remote_addr&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;request_type&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;request_url&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;http_version&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;response_status&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;body_bytes_sent&quot;: {
+                    &quot;type&quot;: &quot;long&quot;
+                },
+                &quot;http_referer&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;http_user_agent&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;http_x_forwarded_for&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;connection_serial_number&quot;: {
+                    &quot;type&quot;: &quot;long&quot;
+                },
+                &quot;upstream_addr&quot;: {
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;fields&quot;: {
+                        &quot;keyword&quot;: {
+                            &quot;type&quot;: &quot;keyword&quot;
+                        }
+                    }
+                },
+                &quot;upstream_response_time&quot;: {
+                    &quot;type&quot;: &quot;double&quot;
+                },
+                &quot;request_time&quot;: {
+                    &quot;type&quot;: &quot;double&quot;
+                },
+                &quot;datetime&quot;: {
+                    &quot;type&quot;: &quot;date&quot;,
+                    &quot;format&quot;: &quot;dd/MMM/YYYY:HH:mm:ss&quot;
+                }
+            }
+        }
+    }
+}'
+
+</code></pre><p>模板名称nginx-access-log_template，设置模板套用规则*-nginx-access-log-*，例如aaaa-nginx-access-log-2018-08-02，bbbbb-ccc-nginx-access-log-2018-08-08类似的索引会自动套用，非常方便~</p>
+<p>*<em>需要注意datetime字段类型是date，format格式和常见的不太一样，这个坑被忽略爬了半天~_~,nginx log的时间默认是time_local，常见的是time_iso8601</em></p>
+<p>怎么查询模板，删除模板，查看索引，删除索引可以在es专栏查看。</p>
+<h2 id="四完成">四、完成<a href="#四完成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>贴一张日志传到kibana的截图：</p>
+<p><img src="/uploads/2018/kb.png" alt="EKK"></p>
+<p>未解决：没有国家信息，浏览器设备信息没细化，解决思路在Firehose往ES传输之间增加lambda处理</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/elasticsearch">elasticsearch</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/log">log</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/ekk">ekk</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/kibana">kibana</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/kinesis">kinesis</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>630 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2018-09-13 02:52 &#43;0800</p>
+			</footer>
+		</article>
+		<aside id="toc" class="show-toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#一准备工作">一、准备工作：</a></li>
+    <li><a href="#二收集日志">二、收集日志</a></li>
+    <li><a href="#三配置es索引模板">三、配置ES索引模板</a></li>
+    <li><a href="#四完成">四、完成</a></li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/elasticsearch/2018-09-12-elasticsearch/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Elasticsearch学习</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/elasticsearch/2018-09-11-log-elk/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>搭建ELK日志收集分析系统</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2020 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Go语言学习">
+<meta itemprop="description" content="前言 Go语言(或Golang)是Google在2007年开发的一种开源编程语言,于2009年11月10日向全球公布,2012年早些时候发布了Go 1稳定版本。现在Go的开发已经是完全开放的，并且拥有一个活跃的社区。
+GO部署简单、并发性好、语言设计良好、执行性能好
+一、GO语言结构 Go语言的基础组成有一下几个部分：
+ 包声明 引入包 函数 变量 语句和表达式 注释  例子：
+//定义包名 package main //引入fmt包 import &#34;fmt&#34; //定义函数, main为入口函数 func main() { /* 这是我的第一个简单的程序，我是注释 */ fmt.Println(&#34;Hello, World!&#34;) } 二、Go基础语法  行分隔符：一行代表一个语句结束，无需；号结尾 注释：单行//，多行/**/ 标识符关键字：标识符用来命名变量、类型等程序实体，第一个字符必须是字母或下划线而不能是数字 关键字： 25 个关键字或保留字 36 个预定义标识符  空格：声明必须使用空格隔开，变量与运算符间加入空格，程序看起来更加美观  1.数据类型 数据类型用于声明函数和变量。 数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。
+Go按类别划分有以下集中数据类型:
+ 布尔型(BOOL)  布尔型的值只可以是常量 true 或者 false。一个简单的例子：var b bool = true。
+ 数字类型  整型 int 和浮点型 float32、float64. 整型包含： 浮点型： 其他数字类型  字符串类型  字符串就是一串固定长度的字符连接起来的字符序列。 Go 的字符串是由单个字节连接起来的，字节使用 UTF-8 编码标识 Unicode 文本。">
+<meta itemprop="datePublished" content="2019-01-25T21:13:19&#43;00:00" />
+<meta itemprop="dateModified" content="2019-01-25T21:13:19&#43;00:00" />
+<meta itemprop="wordCount" content="2938">
+
+
+
+<meta itemprop="keywords" content="go," /><meta property="og:title" content="Go语言学习" />
+<meta property="og:description" content="前言 Go语言(或Golang)是Google在2007年开发的一种开源编程语言,于2009年11月10日向全球公布,2012年早些时候发布了Go 1稳定版本。现在Go的开发已经是完全开放的，并且拥有一个活跃的社区。
+GO部署简单、并发性好、语言设计良好、执行性能好
+一、GO语言结构 Go语言的基础组成有一下几个部分：
+ 包声明 引入包 函数 变量 语句和表达式 注释  例子：
+//定义包名 package main //引入fmt包 import &#34;fmt&#34; //定义函数, main为入口函数 func main() { /* 这是我的第一个简单的程序，我是注释 */ fmt.Println(&#34;Hello, World!&#34;) } 二、Go基础语法  行分隔符：一行代表一个语句结束，无需；号结尾 注释：单行//，多行/**/ 标识符关键字：标识符用来命名变量、类型等程序实体，第一个字符必须是字母或下划线而不能是数字 关键字： 25 个关键字或保留字 36 个预定义标识符  空格：声明必须使用空格隔开，变量与运算符间加入空格，程序看起来更加美观  1.数据类型 数据类型用于声明函数和变量。 数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。
+Go按类别划分有以下集中数据类型:
+ 布尔型(BOOL)  布尔型的值只可以是常量 true 或者 false。一个简单的例子：var b bool = true。
+ 数字类型  整型 int 和浮点型 float32、float64. 整型包含： 浮点型： 其他数字类型  字符串类型  字符串就是一串固定长度的字符连接起来的字符序列。 Go 的字符串是由单个字节连接起来的，字节使用 UTF-8 编码标识 Unicode 文本。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/go/talk/2019-01-25-learn-go/" />
+<meta property="article:published_time" content="2019-01-25T21:13:19+00:00" />
+<meta property="article:modified_time" content="2019-01-25T21:13:19+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go语言学习"/>
+<meta name="twitter:description" content="前言 Go语言(或Golang)是Google在2007年开发的一种开源编程语言,于2009年11月10日向全球公布,2012年早些时候发布了Go 1稳定版本。现在Go的开发已经是完全开放的，并且拥有一个活跃的社区。
+GO部署简单、并发性好、语言设计良好、执行性能好
+一、GO语言结构 Go语言的基础组成有一下几个部分：
+ 包声明 引入包 函数 变量 语句和表达式 注释  例子：
+//定义包名 package main //引入fmt包 import &#34;fmt&#34; //定义函数, main为入口函数 func main() { /* 这是我的第一个简单的程序，我是注释 */ fmt.Println(&#34;Hello, World!&#34;) } 二、Go基础语法  行分隔符：一行代表一个语句结束，无需；号结尾 注释：单行//，多行/**/ 标识符关键字：标识符用来命名变量、类型等程序实体，第一个字符必须是字母或下划线而不能是数字 关键字： 25 个关键字或保留字 36 个预定义标识符  空格：声明必须使用空格隔开，变量与运算符间加入空格，程序看起来更加美观  1.数据类型 数据类型用于声明函数和变量。 数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。
+Go按类别划分有以下集中数据类型:
+ 布尔型(BOOL)  布尔型的值只可以是常量 true 或者 false。一个简单的例子：var b bool = true。
+ 数字类型  整型 int 和浮点型 float32、float64. 整型包含： 浮点型： 其他数字类型  字符串类型  字符串就是一串固定长度的字符连接起来的字符序列。 Go 的字符串是由单个字节连接起来的，字节使用 UTF-8 编码标识 Unicode 文本。"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Go语言学习</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.d3141168199607bf3a517216ce3c263814eecdbc8fca72a9a88700799a838219.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://github.com/heyuan110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Jan 25, 2019</span></div>
+				<h1>Go语言学习</h1>
+			</header>
+			<div class="content">
+				<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/cover/go.jpg" alt="image"></p>
+<h2 id="前言">前言<a href="#前言" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>Go语言(或Golang)是Google在2007年开发的一种开源编程语言,于2009年11月10日向全球公布,2012年早些时候发布了Go 1稳定版本。现在Go的开发已经是完全开放的，并且拥有一个活跃的社区。</p>
+<p><code>GO部署简单、并发性好、语言设计良好、执行性能好</code></p>
+<h2 id="一go语言结构">一、GO语言结构<a href="#一go语言结构" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>Go语言的基础组成有一下几个部分：</p>
+<ul>
+<li>包声明</li>
+<li>引入包</li>
+<li>函数</li>
+<li>变量</li>
+<li>语句和表达式</li>
+<li>注释</li>
+</ul>
+<p>例子：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//定义包名
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="c1">//引入fmt包
+</span><span class="c1"></span><span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="c1">//定义函数, main为入口函数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="cm">/* 这是我的第一个简单的程序，我是注释 */</span>
+   <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Hello, World!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="二go基础语法">二、Go基础语法<a href="#二go基础语法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<ul>
+<li>行分隔符：一行代表一个语句结束，无需；号结尾</li>
+<li>注释：单行//，多行/**/</li>
+<li>标识符关键字：标识符用来命名变量、类型等程序实体，第一个字符必须是字母或下划线而不能是数字</li>
+<li>关键字： 25 个关键字或保留字
+<img src="media/15483963545493/15483971756507.jpg" alt="">
+36 个预定义标识符
+<img src="media/15483963545493/15483972014339.jpg" alt=""></li>
+<li>空格：声明必须使用空格隔开，变量与运算符间加入空格，程序看起来更加美观</li>
+</ul>
+<h3 id="1数据类型">1.数据类型<a href="#1数据类型" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>数据类型用于声明函数和变量。
+数据类型的出现是为了<strong>把数据分成所需内存大小不同的数据</strong>，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。</p>
+<p>Go按类别划分有以下集中数据类型:</p>
+<ul>
+<li>布尔型(BOOL)</li>
+</ul>
+<p>布尔型的值只可以是常量 true 或者 false。一个简单的例子：var b bool = true。</p>
+<ul>
+<li>数字类型</li>
+</ul>
+<p>整型 int 和浮点型 float32、float64.
+整型包含：
+<img src="media/15483963545493/15483985088545.jpg" alt="">
+浮点型：
+<img src="media/15483963545493/15483985320227.jpg" alt=""></p>
+<p>其他数字类型
+<img src="media/15483963545493/15483985582507.jpg" alt=""></p>
+<ul>
+<li>字符串类型</li>
+</ul>
+<p>字符串就是一串固定长度的字符连接起来的字符序列。
+Go 的字符串是由单个字节连接起来的，字节使用 UTF-8 编码标识 Unicode 文本。</p>
+<ul>
+<li>派生类型
+<ul>
+<li>指针类型(Pointer)</li>
+<li>数组类型</li>
+<li>结构化类型(struct)</li>
+<li>Channel类型</li>
+<li>函数类型</li>
+<li>切片类型</li>
+<li>接口类型(interface)</li>
+<li>Map类型</li>
+</ul>
+</li>
+</ul>
+<h3 id="2变量">2.变量<a href="#2变量" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>变量名由字母、数字、下划线组成，其中首个字符不能为数字</p>
+<p>申明变量的三种格式:</p>
+<ul>
+<li>指定变量类型，声明后若不赋值，使用默认值</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">v_name</span> <span class="nx">v_type</span>
+<span class="nx">v_name</span> <span class="p">=</span> <span class="nx">value</span>
+</code></pre></div><ul>
+<li>根据值自行判定变量类型： var v_name = value</li>
+<li>省略var, 注意 :=左侧的变量不应该是已经声明过的，否则会导致编译错误</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">v_name</span> <span class="o">:=</span> <span class="nx">value</span>
+<span class="nx">例如</span>
+<span class="nx">x</span> <span class="o">:=</span> <span class="mi">10</span>
+</code></pre></div><p>多变量声明</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">vname1</span><span class="p">,</span> <span class="nx">vname2</span><span class="p">,</span> <span class="nx">vname3</span> <span class="kd">type</span>
+<span class="nx">vname1</span><span class="p">,</span> <span class="nx">vname2</span><span class="p">,</span> <span class="nx">vname3</span> <span class="p">=</span> <span class="nx">v1</span><span class="p">,</span> <span class="nx">v2</span><span class="p">,</span> <span class="nx">v3</span>
+
+<span class="c1">//和python很像,不需要显示声明类型，自动推断
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">vname1</span><span class="p">,</span> <span class="nx">vname2</span><span class="p">,</span> <span class="nx">vname3</span> <span class="p">=</span> <span class="nx">v1</span><span class="p">,</span> <span class="nx">v2</span><span class="p">,</span> <span class="nx">v3</span> 
+
+<span class="c1">//出现在:=左侧的变量不应该是已经被声明过的，否则会导致编译错误
+</span><span class="c1"></span><span class="nx">vname1</span><span class="p">,</span> <span class="nx">vname2</span><span class="p">,</span> <span class="nx">vname3</span> <span class="o">:=</span> <span class="nx">v1</span><span class="p">,</span> <span class="nx">v2</span><span class="p">,</span> <span class="nx">v3</span> 
+
+<span class="c1">// 这种因式分解关键字的写法一般用于声明全局变量
+</span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
+    <span class="nx">vname1</span> <span class="nx">v_type1</span>
+    <span class="nx">vname2</span> <span class="nx">v_type2</span>
+<span class="p">)</span>
+</code></pre></div><p>局部变量声明后如果没有使用编译时会报错。</p>
+<h3 id="3常量">3.常量<a href="#3常量" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>常量是一个简单值的标识符，在程序运行时，不会被修改的量。
+常量中的数据类型只可以是布尔型、数字型（整数型、浮点型和复数）和字符串型。</p>
+<ul>
+<li>定义常量的格式：<code>const identifier [type] = value</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="o">-</span> <span class="nx">显式类型定义</span><span class="err">：</span> <span class="kd">const</span> <span class="nx">b</span> <span class="kt">string</span> <span class="p">=</span> <span class="s">&#34;abc&#34;</span>
+<span class="o">-</span> <span class="nx">隐式类型定义</span><span class="err">：</span> <span class="kd">const</span> <span class="nx">b</span> <span class="p">=</span> <span class="s">&#34;abc&#34;</span>
+
+<span class="nx">例如</span>
+<span class="kd">const</span> <span class="nx">LENGTH</span> <span class="kt">int</span> <span class="p">=</span> <span class="mi">10</span> 
+<span class="kd">const</span> <span class="nx">WIDTH</span> <span class="p">=</span> <span class="mi">10</span> 
+</code></pre></div><ul>
+<li>常量可以用作枚举，例如：</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">const</span> <span class="p">(</span>
+    <span class="nx">Unknown</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">Female</span> <span class="p">=</span> <span class="mi">1</span>
+    <span class="nx">Male</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="p">)</span>
+</code></pre></div><ul>
+<li>常量可以用函数（必须是内置函数）计算表达式的值，例如len(), cap(), unsafe.Sizeof()等函数。</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;unsafe&#34;</span>
+<span class="kd">const</span> <span class="p">(</span>
+    <span class="nx">a</span> <span class="p">=</span> <span class="s">&#34;abc&#34;</span>
+    <span class="nx">b</span> <span class="p">=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="p">=</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nf">Sizeof</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="nb">println</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>iota常量
+特殊常量，可以认为是一个可以被编译器修改的常量
+iota在const关键字出现时将被重置为0(const内部的第一行之前)，const中每新增一行常量声明将使iota计数一次(iota可理解为const语句块中的<strong>行索引</strong>)</li>
+</ul>
+<p>用作枚举值：</p>
+<pre><code>const (
+    a = iota //0
+    b = iota //1
+    c = iota //2
+)
+可简写
+const (
+    a = iota
+    b
+    c
+)
+</code></pre><h3 id="4运算符">4.运算符<a href="#4运算符" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>
+<p>算术运算符
+假定 A 值为 10，B 值为 20
+<img src="media/15483963545493/15484031841274.jpg" alt=""></p>
+</li>
+<li>
+<p>关系运算符
+假定 A 值为 10，B 值为 20。
+<img src="media/15483963545493/15484032595654.jpg" alt=""></p>
+</li>
+<li>
+<p>逻辑运算符
+假定 A 值为 True，B 值为 False
+<img src="media/15483963545493/15484033088693.jpg" alt=""></p>
+</li>
+<li>
+<p>位运算符</p>
+</li>
+</ul>
+<p>位运算符对整数在内存中的二进制位进行操作,假定 A 为60，B 为13
+<img src="media/15483963545493/15484034266782.jpg" alt=""></p>
+<p>注意右移n位时除以2的n次方对负数无效。</p>
+<p>下表列出了位运算符 &amp;, |, 和 ^ 的计算：
+<img src="media/15483963545493/15484035756694.jpg" alt=""></p>
+<p>假定 A = 60; B = 13; 其二进制数转换为：
+<img src="media/15483963545493/15484036026004.jpg" alt=""></p>
+<ul>
+<li>
+<p>赋值运算符
+<img src="media/15483963545493/15484039516433.jpg" alt=""></p>
+</li>
+<li>
+<p>其他运算符
+<img src="media/15483963545493/15484039839342.jpg" alt=""></p>
+<pre><code>package main
+  
+import &quot;fmt&quot;
+  
+func main() {
+   var a int = 4
+   var b int32
+   var c float32
+   var ptr *int
+  
+   /* 运算符实例 */
+   fmt.Printf(&quot;第 1 行 - a 变量类型为 = %T\n&quot;, a );
+   fmt.Printf(&quot;第 2 行 - b 变量类型为 = %T\n&quot;, b );
+   fmt.Printf(&quot;第 3 行 - c 变量类型为 = %T\n&quot;, c );
+  
+   /*  &amp; 和 * 运算符实例 */
+   ptr = &amp;a    /* 'ptr' 包含了 'a' 变量的地址 */
+   fmt.Printf(&quot;a 的值为  %d\n&quot;, a);
+   fmt.Printf(&quot;*ptr 为 %d\n&quot;, *ptr);
+}
+</code></pre></li>
+<li>
+<p>优先级</p>
+</li>
+</ul>
+<p>有些运算符拥有较高的优先级，二元运算符的运算方向均是从左至右.下表列出了所有运算符以及它们的优先级，由上至下代表优先级由高到低</p>
+<p><img src="media/15483963545493/15484105551893.jpg" alt=""></p>
+<p>可以通过使用括号来临时提升某个表达式的整体运算优先级</p>
+<h3 id="5条件语句">5.条件语句<a href="#5条件语句" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>条件语句的结构：
+<img src="media/15483963545493/15484106537473.jpg" alt=""></p>
+<p>GO提供以下条件判断语句
+<img src="media/15483963545493/15484106379972.jpg" alt=""></p>
+<p>if&hellip;else， switch例句</p>
+<pre><code>   if a &lt; 20 {
+       /* 如果条件为 true 则执行以下语句 */
+       fmt.Printf(&quot;a 小于 20\n&quot; );
+   } else {
+       /* 如果条件为 false 则执行以下语句 */
+       fmt.Printf(&quot;a 不小于 20\n&quot; );
+   }
+
+   switch {
+      case grade == &quot;A&quot; :
+         fmt.Printf(&quot;优秀!\n&quot; )     
+      case grade == &quot;B&quot;, grade == &quot;C&quot; :
+         fmt.Printf(&quot;良好\n&quot; )      
+      case grade == &quot;D&quot; :
+         fmt.Printf(&quot;及格\n&quot; )      
+      case grade == &quot;F&quot;:
+         fmt.Printf(&quot;不及格\n&quot; )
+      default:
+         fmt.Printf(&quot;差\n&quot; );
+   }
+   
+</code></pre><p>select是Go中的一个控制结构，类似于用于通信的switch语句。每个case必须是一个通信操作，要么是发送要么是接收。
+select随机执行一个可运行的case。如果没有case可运行，它将阻塞，直到有case可运行。一个默认的子句应该总是可运行的。</p>
+<h3 id="6循环语句">6.循环语句<a href="#6循环语句" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>循环程序的流程图
+<img src="media/15483963545493/15484112508588.jpg" alt=""></p>
+<p>for在go语言中3种形式</p>
+<ul>
+<li>for init; condition; post { }</li>
+<li>for condition { }</li>
+<li>for { }</li>
+</ul>
+<p>init： 一般为赋值表达式，给控制变量赋初值；
+condition： 关系表达式或逻辑表达式，循环控制条件；
+post： 一般为赋值表达式，给控制变量增量或减量。</p>
+<p>for 循环的 range 格式可以对 slice、map、数组、字符串等进行迭代循环。格式如下：</p>
+<pre><code>for key, value := range oldMap {
+    newMap[key] = value
+}
+</code></pre><p>for使用实例:</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+   var b int = 15
+   var a int
+
+   numbers := [6]int{1, 2, 3, 5} 
+
+   /* for 循环 */
+   for a := 0; a &lt; 10; a++ {
+      fmt.Printf(&quot;a 的值为: %d\n&quot;, a)
+   }
+
+   for a &lt; b {
+      a++
+      fmt.Printf(&quot;a 的值为: %d\n&quot;, a)
+   }
+
+   for i,x:= range numbers {
+      fmt.Printf(&quot;第 %d 位 x 的值 = %d\n&quot;, i,x)
+   }   
+}
+</code></pre><h3 id="7函数">7.函数<a href="#7函数" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>函数是基本的代码块，用于执行一个任务，go程序最少有一个main()函数</p>
+<ul>
+<li>函数定义:</li>
+</ul>
+<pre><code>func function_name( [parameter list] ) [return_types] {
+   函数体
+}
+
+func：函数由 func 开始声明
+function_name：函数名称，函数名和参数列表一起构成了函数签名。
+parameter list：参数列表，参数就像一个占位符，当函数被调用时，你可以将值传递给参数，这个值被称为实际参数。参数列表指定的是参数类型、顺序、及参数个数。参数是可选的，也就是说函数也可以不包含参数。
+return_types：返回类型，函数返回一列值。return_types 是该列值的数据类型。有些功能不需要返回值，这种情况下 return_types 不是必须的。
+函数体：函数定义的代码集合。
+</code></pre><p>实例:</p>
+<pre><code>/* 函数返回两个数的最大值 */
+func max(num1, num2 int) int {
+   /* 声明局部变量 */
+   var result int
+
+   if (num1 &gt; num2) {
+      result = num1
+   } else {
+      result = num2
+   }
+   return result 
+}
+</code></pre><ul>
+<li>函数调用、返回多值</li>
+</ul>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func swap(x, y string) (string, string) {
+   return y, x
+}
+
+func main() {
+   a, b := swap(&quot;Mahesh&quot;, &quot;Kumar&quot;)
+   fmt.Println(a, b)
+}
+</code></pre><ul>
+<li>函数参数</li>
+</ul>
+<p>函数如果使用参数，该变量可称为函数的形参。
+两种方式传参:
+(a) 值传递</p>
+<pre><code>/* 定义相互交换值的函数 */
+func swap(x, y int) int {
+   var temp int
+
+   temp = x /* 保存 x 的值 */
+   x = y    /* 将 y 值赋给 x */
+   y = temp /* 将 temp 值赋给 y*/
+
+   return temp;
+}
+</code></pre><p>(b) 引用传递</p>
+<pre><code>/* 定义交换值函数*/
+func swap(x *int, y *int) {
+   var temp int
+   temp = *x    /* 保持 x 地址上的值 */
+   *x = *y      /* 将 y 值赋给 x */
+   *y = temp    /* 将 temp 值赋给 y */
+}
+</code></pre><ul>
+<li>函数用法</li>
+</ul>
+<p>(a)函数作为值: 函数定义后可作为值来使用</p>
+<pre><code>package main
+
+import (
+   &quot;fmt&quot;
+   &quot;math&quot;
+)
+
+func main(){
+   /* 声明函数变量 */
+   getSquareRoot := func(x float64) float64 {
+      return math.Sqrt(x)
+   }
+
+   /* 使用函数 */
+   fmt.Println(getSquareRoot(9)
+}
+</code></pre><p>(b)闭包:闭包是匿名函数，可在动态编程中使用</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func getSequence() func() int {
+   i:=0
+   return func() int {
+      i+=1
+     return i  
+   }
+}
+
+func main(){
+   /* nextNumber 为一个函数，函数 i 为 0 */
+   nextNumber := getSequence()  
+
+   /* 调用 nextNumber 函数，i 变量自增 1 并返回 */
+   fmt.Println(nextNumber())
+   fmt.Println(nextNumber())
+   fmt.Println(nextNumber())
+   
+   /* 创建新的函数 nextNumber1，并查看结果 */
+   nextNumber1 := getSequence()  
+   fmt.Println(nextNumber1())
+   fmt.Println(nextNumber1())
+}
+</code></pre><p>(c)方法:方法就是一个包含了接受者的函数</p>
+<p>定类型的方法属于该类型的方法集,语法格式:</p>
+<pre><code>func (variable_name variable_data_type) function_name() [return_type]{
+   /* 函数体*/
+}
+</code></pre><p>实例:</p>
+<pre><code>package main
+
+import (
+   &quot;fmt&quot;  
+)
+
+/* 定义结构体 */
+type Circle struct {
+  radius float64
+}
+
+func main() {
+  var c1 Circle
+  c1.radius = 10.00
+  fmt.Println(&quot;圆的面积 = &quot;, c1.getArea())
+}
+
+//该 method 属于 Circle 类型对象中的方法
+func (c Circle) getArea() float64 {
+  //c.radius 即为 Circle 类型对象中的属性
+  return 3.14 * c.radius * c.radius
+}
+</code></pre><h3 id="8变量作用域">8.变量作用域<a href="#8变量作用域" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>局部变量</li>
+<li>全局变量</li>
+<li>形式参数</li>
+</ul>
+<h3 id="9数组">9.数组<a href="#9数组" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>数组是具有相同唯一类型的一组已编号且长度固定的数据项序列
+数组元素可以通过索引（位置）来读取（或者修改），索引从0开始，第一个元素索引为 0，第二个索引为 1，以此类推。
+<img src="media/15483963545493/15487334966945.jpg" alt=""></p>
+<ul>
+<li>声明</li>
+</ul>
+<p>数组声明需要指定元素类型及元素个数，语法格式：<code>var variable_name [SIZE] variable_type</code></p>
+<p>例如定义一个数组 balance 长度为 10 类型为 float32：<code>var balance [10] float32</code></p>
+<ul>
+<li>初始化</li>
+</ul>
+<p>初始化数组中 {} 中的元素个数不能大于 [] 中的数字。</p>
+<p><code>var balance = [5]float32{1000.0, 2.0, 3.4, 7.0, 50.0}</code></p>
+<p>可省略[]里的数字</p>
+<p><code> var balance = [...]float32{1000.0, 2.0, 3.4, 7.0, 50.0}</code></p>
+<ul>
+<li>读取和赋值数组元素</li>
+</ul>
+<p>数组元素通过索引读取，实例：</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var n [10]int /* n 是一个长度为 10 的数组 */
+   var i,j int
+
+   /* 为数组 n 初始化元素 */         
+   for i = 0; i &lt; 10; i++ {
+      n[i] = i + 100 /* 设置元素为 i + 100 */
+   }
+
+   /* 输出每个数组元素的值 */
+   for j = 0; j &lt; 10; j++ {
+      fmt.Printf(&quot;Element[%d] = %d\n&quot;, j, n[j] )
+   }
+}
+</code></pre><ul>
+<li>多维数组</li>
+</ul>
+<p>常用的多维数组声明方式：<code>var variable_name [SIZE1][SIZE2]...[SIZEN] variable_type</code>，例如：<code>var threedim [5][10][4]int</code></p>
+<p>初始化多维数组:</p>
+<pre><code>a = [3][4]int{  
+ {0, 1, 2, 3} ,   /*  第一行索引为 0 */
+ {4, 5, 6, 7} ,   /*  第二行索引为 1 */
+ {8, 9, 10, 11},   /* 第三行索引为 2 */
+}
+</code></pre><p>多维数组实例:</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   /* 数组 - 5 行 2 列*/
+   var a = [5][2]int{ {0,0}, {1,2}, {2,4}, {3,6},{4,8}}
+   var i, j int
+
+   /* 输出数组元素 */
+   for  i = 0; i &lt; 5; i++ {
+      for j = 0; j &lt; 2; j++ {
+         fmt.Printf(&quot;a[%d][%d] = %d\n&quot;, i,j, a[i][j] )
+      }
+   }
+}
+</code></pre><h3 id="10指针">10.指针<a href="#10指针" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>定义</li>
+</ul>
+<p>一个指针变量指向了一个值的内存地址，在使用指针前你需要声明指针</p>
+<p>格式：<code>var var_name *var-type</code></p>
+<p>var-type 为指针类型，var_name 为指针变量名，* 号用于指定变量是作为一个指针。以下是有效的指针声明：</p>
+<pre><code>var ip *int        /* 指向整型*/
+var fp *float32    /* 指向浮点型 */
+</code></pre><pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var a int= 20   /* 声明实际变量 */
+   var ip *int        /* 声明指针变量 */
+
+   ip = &amp;a  /* 指针变量的存储地址 */
+
+   fmt.Printf(&quot;a 变量的地址是: %x\n&quot;, &amp;a  )
+
+   /* 指针变量的存储地址 */
+   fmt.Printf(&quot;ip 变量储存的指针地址: %x\n&quot;, ip )
+
+   /* 使用指针访问值 */
+   fmt.Printf(&quot;*ip 变量的值: %d\n&quot;, *ip )
+}
+</code></pre><ul>
+<li>空指针</li>
+</ul>
+<p>当一个指针被定义后没有分配到任何变量时，它的值为 nil，nil指针也称为空指针, 一个指针变量通常缩写为ptr。</p>
+<p>实例：</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var  ptr *int
+
+   fmt.Printf(&quot;ptr 的值为 : %x\n&quot;, ptr  )
+}
+</code></pre><p>判断空指针</p>
+<pre><code>if(ptr != nil)     /* ptr 不是空指针 */
+if(ptr == nil)    /* ptr 是空指针 */
+</code></pre><ul>
+<li>指针数组</li>
+</ul>
+<pre><code>ackage main
+
+import &quot;fmt&quot;
+
+const MAX int = 3
+
+func main() {
+   a := []int{10,100,200}
+   var i int
+   var ptr [MAX]*int;
+
+   for  i = 0; i &lt; MAX; i++ {
+      ptr[i] = &amp;a[i] /* 整数地址赋值给指针数组 */
+   }
+
+   for  i = 0; i &lt; MAX; i++ {
+      fmt.Printf(&quot;a[%d] = %d\n&quot;, i,*ptr[i] )
+   }
+}
+</code></pre><ul>
+<li>指向指针的指针</li>
+</ul>
+<p>如果一个指针变量存放的又是另一个指针变量的地址，则称这个指针变量为指向指针的指针变量。</p>
+<p>当定义一个指向指针的指针变量时，第一个指针存放第二个指针的地址，第二个指针存放变量的地址：
+<img src="media/15483963545493/15487422095707.jpg" alt=""></p>
+<p>指向指针的指针变量格式：<code>var ptr **int;</code></p>
+<p>访问指向指针的指针变量值需要使用两个 * 号，如下所示：</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+   var a int
+   var ptr *int
+   var pptr **int
+
+   a = 3000
+
+   /* 指针 ptr 地址 */
+   ptr = &amp;a
+
+   /* 指向指针 ptr 地址 */
+   pptr = &amp;ptr
+
+   /* 获取 pptr 的值 */
+   fmt.Printf(&quot;变量 a = %d\n&quot;, a )
+   fmt.Printf(&quot;指针变量 *ptr = %d\n&quot;, *ptr )
+   fmt.Printf(&quot;指向指针的指针变量 **pptr = %d\n&quot;, **pptr)
+}
+</code></pre><ul>
+<li>指针作为函数参数</li>
+</ul>
+<p>向函数传递指针，只需要在函数定义的参数上设置为指针类型即可。</p>
+<p>以下实例演示了如何向函数传递指针，并在函数调用后修改函数内的值:</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   /* 定义局部变量 */
+   var a int = 100
+   var b int= 200
+
+   fmt.Printf(&quot;交换前 a 的值 : %d\n&quot;, a )
+   fmt.Printf(&quot;交换前 b 的值 : %d\n&quot;, b )
+
+   /* 调用函数用于交换值
+   * &amp;a 指向 a 变量的地址
+   * &amp;b 指向 b 变量的地址
+   */
+   swap(&amp;a, &amp;b);
+
+   fmt.Printf(&quot;交换后 a 的值 : %d\n&quot;, a )
+   fmt.Printf(&quot;交换后 b 的值 : %d\n&quot;, b )
+}
+
+func swap(x *int, y *int) {
+   var temp int
+   temp = *x    /* 保存 x 地址的值 */
+   *x = *y      /* 将 y 赋值给 x */
+   *y = temp    /* 将 temp 赋值给 y */
+}
+</code></pre><h3 id="11结构体">11.结构体<a href="#11结构体" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>结构体是由一系列具有相同类型或不同类型的数据构成的数据集合。</p>
+<p>数组可以存储同一类型的数据，但在结构体中可以为不同项定义不同的数据类型。</p>
+<ul>
+<li>定义结构体</li>
+</ul>
+<p>结构体定义需要使用 type 和 struct 语句：</p>
+<pre><code>type struct_variable_type struct {
+   member definition;
+   member definition;
+   ...
+   member definition;
+}
+</code></pre><p>struct 语句定义一个新的数据类型，结构体有中有一个或多个成员
+type 语句设定了结构体的名称</p>
+<ul>
+<li>使用结构体</li>
+</ul>
+<p>语法格式:</p>
+<p><code>variable_name := structure_variable_type {value1, value2...valuen}</code></p>
+<p>或</p>
+<p><code>variable_name := structure_variable_type { key1: value1, key2: value2..., keyn: valuen}</code></p>
+<p>实例如下：</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+
+func main() {
+
+    // 创建一个新的结构体
+    fmt.Println(Books{&quot;Go 语言&quot;, &quot;www.runoob.com&quot;, &quot;Go 语言教程&quot;, 6495407})
+
+    // 也可以使用 key =&gt; value 格式
+    fmt.Println(Books{title: &quot;Go 语言&quot;, author: &quot;www.runoob.com&quot;, subject: &quot;Go 语言教程&quot;, book_id: 6495407})
+
+    // 忽略的字段为 0 或 空
+   fmt.Println(Books{title: &quot;Go 语言&quot;, author: &quot;www.runoob.com&quot;})
+}
+
+</code></pre><ul>
+<li>访问结构体成员</li>
+</ul>
+<p>使用 <strong>.</strong> 操作符,格式为：<code>结构体.成员名</code></p>
+<p>实例如下:</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+
+func main() {
+   var Book1 Books        /* 声明 Book1 为 Books 类型 */
+   var Book2 Books        /* 声明 Book2 为 Books 类型 */
+
+   /* book 1 描述 */
+   Book1.title = &quot;Go 语言&quot;
+   Book1.author = &quot;www.runoob.com&quot;
+   Book1.subject = &quot;Go 语言教程&quot;
+   Book1.book_id = 6495407
+
+   /* book 2 描述 */
+   Book2.title = &quot;Python 教程&quot;
+   Book2.author = &quot;www.runoob.com&quot;
+   Book2.subject = &quot;Python 语言教程&quot;
+   Book2.book_id = 6495700
+
+   /* 打印 Book1 信息 */
+   fmt.Printf( &quot;Book 1 title : %s\n&quot;, Book1.title)
+   fmt.Printf( &quot;Book 1 author : %s\n&quot;, Book1.author)
+   fmt.Printf( &quot;Book 1 subject : %s\n&quot;, Book1.subject)
+   fmt.Printf( &quot;Book 1 book_id : %d\n&quot;, Book1.book_id)
+
+   /* 打印 Book2 信息 */
+   fmt.Printf( &quot;Book 2 title : %s\n&quot;, Book2.title)
+   fmt.Printf( &quot;Book 2 author : %s\n&quot;, Book2.author)
+   fmt.Printf( &quot;Book 2 subject : %s\n&quot;, Book2.subject)
+   fmt.Printf( &quot;Book 2 book_id : %d\n&quot;, Book2.book_id)
+}
+</code></pre><ul>
+<li>作为函数参数</li>
+</ul>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+
+func main() {
+   var Book1 Books        /* 声明 Book1 为 Books 类型 */
+   var Book2 Books        /* 声明 Book2 为 Books 类型 */
+
+   /* book 1 描述 */
+   Book1.title = &quot;Go 语言&quot;
+   Book1.author = &quot;www.runoob.com&quot;
+   Book1.subject = &quot;Go 语言教程&quot;
+   Book1.book_id = 6495407
+
+   /* book 2 描述 */
+   Book2.title = &quot;Python 教程&quot;
+   Book2.author = &quot;www.runoob.com&quot;
+   Book2.subject = &quot;Python 语言教程&quot;
+   Book2.book_id = 6495700
+
+   /* 打印 Book1 信息 */
+   printBook(Book1)
+
+   /* 打印 Book2 信息 */
+   printBook(Book2)
+}
+
+func printBook( book Books ) {
+   fmt.Printf( &quot;Book title : %s\n&quot;, book.title);
+   fmt.Printf( &quot;Book author : %s\n&quot;, book.author);
+   fmt.Printf( &quot;Book subject : %s\n&quot;, book.subject);
+   fmt.Printf( &quot;Book book_id : %d\n&quot;, book.book_id);
+}
+</code></pre><ul>
+<li>结构体指针</li>
+</ul>
+<p>指向结构体的指针类似于其他指针变量，格式如下：<code>var struct_pointer *Books</code></p>
+<p>以上定义的指针变量可以存储结构体变量的地址。查看结构体变量地址，可以将 &amp; 符号放置于结构体变量前：<code>struct_pointer = &amp;Book1;</code></p>
+<p>使用结构体指针访问结构体成员，使用 &ldquo;.&rdquo; 操作符：<code>struct_pointer.title;</code></p>
+<p>实例如下:</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+
+func main() {
+   var Book1 Books        /* Declare Book1 of type Book */
+   var Book2 Books        /* Declare Book2 of type Book */
+
+   /* book 1 描述 */
+   Book1.title = &quot;Go 语言&quot;
+   Book1.author = &quot;www.runoob.com&quot;
+   Book1.subject = &quot;Go 语言教程&quot;
+   Book1.book_id = 6495407
+
+   /* book 2 描述 */
+   Book2.title = &quot;Python 教程&quot;
+   Book2.author = &quot;www.runoob.com&quot;
+   Book2.subject = &quot;Python 语言教程&quot;
+   Book2.book_id = 6495700
+
+   /* 打印 Book1 信息 */
+   printBook(&amp;Book1)
+
+   /* 打印 Book2 信息 */
+   printBook(&amp;Book2)
+}
+func printBook( book *Books ) {
+   fmt.Printf( &quot;Book title : %s\n&quot;, book.title);
+   fmt.Printf( &quot;Book author : %s\n&quot;, book.author);
+   fmt.Printf( &quot;Book subject : %s\n&quot;, book.subject);
+   fmt.Printf( &quot;Book book_id : %d\n&quot;, book.book_id);
+}
+</code></pre><h3 id="12切片">12.切片<a href="#12切片" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>切片(slice)是对数组的抽象,长度不固定，可追加元素，可理解为动态数组</p>
+<ul>
+<li>定义切片</li>
+</ul>
+<p>可以声明一个未指定大小的数组来定义切片：<code>var identifier []type</code></p>
+<p>切片不需要说明长度。</p>
+<p>或使用make()函数来创建切片:</p>
+<pre><code>var slice1 []type = make([]type, len)
+
+也可以简写为
+
+slice1 := make([]type, len)
+</code></pre><p>也可以指定容量，其中capacity为可选参数。</p>
+<p><code>make([]T, length, capacity)</code></p>
+<ul>
+<li>
+<p>初始化切片</p>
+<p><strong>a</strong>. 直接初始化</p>
+<p><code>s :=[] int {1,2,3 }</code>, 直接初始化切片，[]表示是切片类型，{1,2,3}初始化值依次是1,2,3.其cap=len=3</p>
+<p><strong>b</strong>. 从数组初始化</p>
+<p><code>s := arr[:]</code>, 初始化切片s,是数组arr的引用</p>
+<pre><code>s := arr[startIndex:endIndex] 
+将arr中从下标startIndex到endIndex-1 下的元素创建为一个新的切片
+  
+s := arr[startIndex:] 
+缺省endIndex时将表示一直到arr的最后一个元素
+  
+s := arr[:endIndex] 
+缺省startIndex时将表示从arr的第一个元素开始
+</code></pre><p><strong>c</strong>. 从切片s初始化切片s1</p>
+<p><code>s1 := s[startIndex:endIndex] </code></p>
+<p><strong>d</strong>. 通过内置函数make()初始化切片s</p>
+<p><code>s :=make([]int,len,cap)</code>, []int 标识为其元素类型为int的切片</p>
+</li>
+<li>
+<p>切片函数</p>
+</li>
+</ul>
+<p>切片可索引，可由**len()<strong>获取长度，可计算容量，用</strong>cap()**测量切片最长可达到多少。</p>
+<p>一个切片在未初始化之前默认为 nil，长度为 0</p>
+<p>实例:</p>
+<pre><code>package main
+import &quot;fmt&quot;
+
+func main() {
+   var numbers = make([]int,3,5)
+   printSlice(numbers)
+   
+   var numbers2 []int
+   printSlice(numbers2)
+   if(numbers2 == nil){
+      fmt.Printf(&quot;切片是空的&quot;)
+   }
+}
+
+func printSlice(x []int){
+   fmt.Printf(&quot;len=%d cap=%d slice=%v\n&quot;,len(x),cap(x),x)
+}
+</code></pre><p>如果想增加切片的容量，我们必须创建一个新的更大的切片并把原分片的内容都拷贝过来。
+下面的代码描述了从拷贝切片的 <strong>copy()</strong> 方法和向切片追加新元素的 <strong>append()</strong> 方法</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var numbers []int
+   printSlice(numbers)
+
+   /* 允许追加空切片 */
+   numbers = append(numbers, 0)
+   printSlice(numbers)
+
+   /* 向切片添加一个元素 */
+   numbers = append(numbers, 1)
+   printSlice(numbers)
+
+   /* 同时添加多个元素 */
+   numbers = append(numbers, 2,3,4)
+   printSlice(numbers)
+
+   /* 创建切片 numbers1 是之前切片的两倍容量*/
+   numbers1 := make([]int, len(numbers), (cap(numbers))*2)
+
+   /* 拷贝 numbers 的内容到 numbers1 */
+   copy(numbers1,numbers)
+   printSlice(numbers1)   
+}
+
+func printSlice(x []int){
+   fmt.Printf(&quot;len=%d cap=%d slice=%v\n&quot;,len(x),cap(x),x)
+}
+</code></pre><p>可以通过设置下限及上限来设置截取切片 [lower-bound:upper-bound]，实例如下：</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+   /* 创建切片 */
+   numbers := []int{0,1,2,3,4,5,6,7,8}   
+   printSlice(numbers)
+
+   /* 打印原始切片 */
+   fmt.Println(&quot;numbers ==&quot;, numbers)
+
+   /* 打印子切片从索引1(包含) 到索引4(不包含)*/
+   fmt.Println(&quot;numbers[1:4] ==&quot;, numbers[1:4])
+
+   /* 默认下限为 0*/
+   fmt.Println(&quot;numbers[:3] ==&quot;, numbers[:3])
+
+   /* 默认上限为 len(s)*/
+   fmt.Println(&quot;numbers[4:] ==&quot;, numbers[4:])
+
+   numbers1 := make([]int,0,5)
+   printSlice(numbers1)
+
+   /* 打印子切片从索引  0(包含) 到索引 2(不包含) */
+   number2 := numbers[:2]
+   printSlice(number2)
+
+   /* 打印子切片从索引 2(包含) 到索引 5(不包含) */
+   number3 := numbers[2:5]
+   printSlice(number3)
+
+}
+
+func printSlice(x []int){
+   fmt.Printf(&quot;len=%d cap=%d slice=%v\n&quot;,len(x),cap(x),x)
+}
+</code></pre><h3 id="13范围range">13.范围（range）<a href="#13范围range" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>range 关键字用于 for 循环中迭代数组(array)、切片(slice)、通道(channel)或集合(map)的元素。</p>
+<p>数组和切片中它返回元素的索引和索引对应的值，在集合中返回key-value对的 key值。</p>
+<p>实例如下：</p>
+<pre><code>package main
+import &quot;fmt&quot;
+func main() {
+   //这是我们使用range去求一个slice的和。使用数组跟这个很类似
+   nums := []int{2, 3, 4}
+   sum := 0
+   for _, num := range nums {
+       sum += num
+   }
+   fmt.Println(&quot;sum:&quot;, sum)
+   //在数组上使用range将传入index和值两个变量。上面那个例子我们不需要使用该元素的序号，所以我们使用空白符&quot;_&quot;省略了。有时侯我们确实需要知道它的索引。
+   for i, num := range nums {
+       if num == 3 {
+           fmt.Println(&quot;index:&quot;, i)
+       }
+   }
+   //range也可以用在map的键值对上。
+   kvs := map[string]string{&quot;a&quot;: &quot;apple&quot;, &quot;b&quot;: &quot;banana&quot;}
+   for k, v := range kvs {
+       fmt.Printf(&quot;%s -&gt; %s\n&quot;, k, v)
+   }
+   //range也可以用来枚举Unicode字符串。第一个参数是字符的索引，第二个是字符（Unicode的值）本身。
+   for i, c := range &quot;go&quot; {
+       fmt.Println(i, c)
+   }
+}
+</code></pre><h3 id="14集合map">14.集合（map）<a href="#14集合map" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>map是一种无序的键值对的集合，通过key来快速检索数据。</p>
+<ul>
+<li>定义map</li>
+</ul>
+<p>可以使用内建函数 make 也可以使用 map 关键字来定义 Map:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//声明变量，默认 map 是 nil 
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">map_variable</span> <span class="kd">map</span><span class="p">[</span><span class="nx">key_data_type</span><span class="p">]</span><span class="nx">value_data_type</span>
+
+<span class="c1">//使用 make 函数
+</span><span class="c1"></span><span class="nx">map_variable</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="nx">key_data_type</span><span class="p">]</span><span class="nx">value_data_type</span><span class="p">)</span>
+</code></pre></div><p>不初始化，定义的map为nil map，不能用来存放键值对.</p>
+<p>实例如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">countryCapitalMap</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span> <span class="cm">/*创建集合 */</span>
+    <span class="nx">countryCapitalMap</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span>
+
+    <span class="cm">/* map插入key - value对,各个国家对应的首都 */</span>
+    <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="s">&#34;France&#34;</span> <span class="p">]</span> <span class="p">=</span> <span class="s">&#34;Paris&#34;</span>
+    <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="s">&#34;Italy&#34;</span> <span class="p">]</span> <span class="p">=</span> <span class="s">&#34;罗马&#34;</span>
+    <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="s">&#34;Japan&#34;</span> <span class="p">]</span> <span class="p">=</span> <span class="s">&#34;东京&#34;</span>
+    <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="s">&#34;India &#34;</span> <span class="p">]</span> <span class="p">=</span> <span class="s">&#34;新德里&#34;</span>
+
+    <span class="cm">/*使用键输出地图值 */</span> <span class="k">for</span> <span class="nx">country</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">countryCapitalMap</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">country</span><span class="p">,</span> <span class="s">&#34;首都是&#34;</span><span class="p">,</span> <span class="nx">countryCapitalMap</span> <span class="p">[</span><span class="nx">country</span><span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="cm">/*查看元素在集合中是否存在 */</span>
+    <span class="nx">captial</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="s">&#34;美国&#34;</span> <span class="p">]</span> <span class="cm">/*如果确定是真实的,则存在,否则不存在 */</span>
+    <span class="cm">/*fmt.Println(captial) */</span>
+    <span class="cm">/*fmt.Println(ok) */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;美国的首都是&#34;</span><span class="p">,</span> <span class="nx">captial</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;美国的首都不存在&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>delete() 函数</li>
+</ul>
+<p>delete() 函数用于删除集合的元素, 参数为 map 和其对应的 key。实例如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="cm">/* 创建map */</span>
+    <span class="nx">countryCapitalMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;France&#34;</span><span class="p">:</span> <span class="s">&#34;Paris&#34;</span><span class="p">,</span> <span class="s">&#34;Italy&#34;</span><span class="p">:</span> <span class="s">&#34;Rome&#34;</span><span class="p">,</span> <span class="s">&#34;Japan&#34;</span><span class="p">:</span> <span class="s">&#34;Tokyo&#34;</span><span class="p">,</span> <span class="s">&#34;India&#34;</span><span class="p">:</span> <span class="s">&#34;New delhi&#34;</span><span class="p">}</span>
+
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;原始地图&#34;</span><span class="p">)</span>
+
+    <span class="cm">/* 打印地图 */</span>
+    <span class="k">for</span> <span class="nx">country</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">countryCapitalMap</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">country</span><span class="p">,</span> <span class="s">&#34;首都是&#34;</span><span class="p">,</span> <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="nx">country</span> <span class="p">])</span>
+    <span class="p">}</span>
+
+    <span class="cm">/*删除元素*/</span> <span class="nb">delete</span><span class="p">(</span><span class="nx">countryCapitalMap</span><span class="p">,</span> <span class="s">&#34;France&#34;</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;法国条目被删除&#34;</span><span class="p">)</span>
+
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;删除元素后地图&#34;</span><span class="p">)</span>
+
+    <span class="cm">/*打印地图*/</span>
+    <span class="k">for</span> <span class="nx">country</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">countryCapitalMap</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">country</span><span class="p">,</span> <span class="s">&#34;首都是&#34;</span><span class="p">,</span> <span class="nx">countryCapitalMap</span> <span class="p">[</span> <span class="nx">country</span> <span class="p">])</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="15接口">15.接口<a href="#15接口" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>接口把所有的具有共性的方法定义在一起，任何其他类型只要实现了这些方法就是实现了这个接口。</p>
+<ul>
+<li>定义接口</li>
+</ul>
+<pre><code>/* 定义接口 */
+type interface_name interface {
+   method_name1 [return_type]
+   method_name2 [return_type]
+   method_name3 [return_type]
+   ...
+   method_namen [return_type]
+}
+
+/* 定义结构体 */
+type struct_name struct {
+   /* variables */
+}
+
+/* 实现接口方法 */
+func (struct_name_variable struct_name) method_name1() [return_type] {
+   /* 方法实现 */
+}
+...
+func (struct_name_variable struct_name) method_namen() [return_type] {
+   /* 方法实现*/
+}
+</code></pre><p>实例:</p>
+<pre><code>package main
+
+import (
+    &quot;fmt&quot;
+)
+
+type Phone interface {
+    call()
+}
+
+type NokiaPhone struct {
+}
+
+func (nokiaPhone NokiaPhone) call() {
+    fmt.Println(&quot;I am Nokia, I can call you!&quot;)
+}
+
+type IPhone struct {
+}
+
+func (iPhone IPhone) call() {
+    fmt.Println(&quot;I am iPhone, I can call you!&quot;)
+}
+
+func main() {
+    var phone Phone
+
+    phone = new(NokiaPhone)
+    phone.call()
+
+    phone = new(IPhone)
+    phone.call()
+
+}
+</code></pre><h3 id="16异常处理">16.异常处理<a href="#16异常处理" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>go通过内置的错误接口提供了非常简单的错误处理机制。
+error类型是一个接口类型，这是它的定义：</p>
+<pre><code>type error interface {
+    Error() string
+}
+</code></pre><p>函数通常在最后的返回值中返回错误信息。使用errors.New 可返回一个错误信息：</p>
+<pre><code>func Sqrt(f float64) (float64, error) {
+    if f &lt; 0 {
+        return 0, errors.New(&quot;math: square root of negative number&quot;)
+    }
+    // 实现
+}
+</code></pre><p>实例:</p>
+<pre><code>package main
+
+import (
+    &quot;fmt&quot;
+)
+
+// 定义一个 DivideError 结构
+type DivideError struct {
+    dividee int
+    divider int
+}
+
+// 实现 `error` 接口
+func (de *DivideError) Error() string {
+    strFormat := `
+    Cannot proceed, the divider is zero.
+    dividee: %d
+    divider: 0
+`
+    return fmt.Sprintf(strFormat, de.dividee)
+}
+
+// 定义 `int` 类型除法运算的函数
+func Divide(varDividee int, varDivider int) (result int, errorMsg string) {
+    if varDivider == 0 {
+        dData := DivideError{
+            dividee: varDividee,
+            divider: varDivider,
+        }
+        errorMsg = dData.Error()
+        return
+    } else {
+        return varDividee / varDivider, &quot;&quot;
+    }
+
+}
+
+func main() {
+
+    // 正常情况
+    if result, errorMsg := Divide(100, 10); errorMsg == &quot;&quot; {
+        fmt.Println(&quot;100/10 = &quot;, result)
+    }
+    // 当被除数为零的时候会返回错误信息
+    if _, errorMsg := Divide(100, 0); errorMsg != &quot;&quot; {
+        fmt.Println(&quot;errorMsg is: &quot;, errorMsg)
+    }
+
+}
+
+</code></pre><h3 id="17并发">17.并发<a href="#17并发" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>Go支持并发，我们只需要通过go关键字来开启goroutine即可。</p>
+<p>goroutine是轻量级线程，goroutine的调度是由golang运行时进行管理的。</p>
+<p>goroutine 语法格式：<code>go 函数名( 参数列表 )</code> , 例如: <code>go f(x, y, z)</code></p>
+<p>go允许使用go语句开启一个新的运行期线程， 即 goroutine，以一个不同的、新创建的 goroutine 来执行一个函数。 同一个程序中的所有 goroutine 共享同一个地址空间。</p>
+<p>实例</p>
+<pre><code>package main
+
+import (
+        &quot;fmt&quot;
+        &quot;time&quot;
+)
+
+func say(s string) {
+        for i := 0; i &lt; 5; i++ {
+                time.Sleep(100 * time.Millisecond)
+                fmt.Println(s)
+        }
+}
+
+func main() {
+        go say(&quot;world&quot;)
+        say(&quot;hello&quot;)
+}
+</code></pre><h3 id="18通道channel">18.通道(channel)<a href="#18通道channel" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>通道（channel）是用来传递数据的一个数据结构。</p>
+<p>通道可用于两个 goroutine 之间通过传递一个指定类型的值来同步运行和通讯。操作符 &lt;- 用于指定通道的方向，发送或接收。如果未指定方向，则为双向通道。
+<img src="media/15483963545493/15487532812467.jpg" alt=""></p>
+<p>声明一个通道很简单，使用chan关键字即可，通道在使用前必须先创建：
+<img src="media/15483963545493/15487533241343.jpg" alt=""></p>
+<p>默认情况下，通道是不带缓冲区的。发送端发送数据，同时接收端必须相应的接收数据。</p>
+<p>以下实例通过两个 goroutine 来计算数字之和，在 goroutine 完成计算后，它会计算两个结果的和：</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func sum(s []int, c chan int) {
+        sum := 0
+        for _, v := range s {
+                sum += v
+        }
+        c &lt;- sum // 把 sum 发送到通道 c
+}
+
+func main() {
+        s := []int{7, 2, 8, -9, 4, 0}
+
+        c := make(chan int)
+        go sum(s[:len(s)/2], c)
+        go sum(s[len(s)/2:], c)
+        x, y := &lt;-c, &lt;-c // 从通道 c 中接收
+
+        fmt.Println(x, y, x+y)
+}
+</code></pre><ul>
+<li>通道缓冲区</li>
+</ul>
+<p>通道可以设置缓冲区，通过 make 的第二个参数指定缓冲区大小：
+<img src="media/15483963545493/15487536331518.jpg" alt=""></p>
+<p>带缓冲区的通道允许发送端的数据发送和接收端的数据获取处于异步状态，就是说发送端发送的数据可以放在缓冲区里面，可以等待接收端去获取数据，而不是立刻需要接收端去获取数据。</p>
+<p>不过由于缓冲区的大小是有限的，所以还是必须有接收端来接收数据的，否则缓冲区一满，数据发送端就无法再发送数据了。</p>
+<p>**注意：**如果通道不带缓冲，发送方会阻塞直到接收方从通道中接收了值。如果通道带缓冲，发送方则会阻塞直到发送的值被拷贝到缓冲区内；如果缓冲区已满，则意味着需要等待直到某个接收方获取到一个值。接收方在有值可以接收之前会一直阻塞。</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+    // 这里我们定义了一个可以存储整数类型的带缓冲通道
+        // 缓冲区大小为2
+        ch := make(chan int, 2)
+
+        // 因为 ch 是带缓冲的通道，我们可以同时发送两个数据
+        // 而不用立刻需要去同步读取数据
+        ch &lt;- 1
+        ch &lt;- 2
+
+        // 获取这两个数据
+        fmt.Println(&lt;-ch)
+        fmt.Println(&lt;-ch)
+}
+</code></pre><ul>
+<li>遍历和关闭通道</li>
+</ul>
+<p>go通过range关键字来实现遍历读取道的数据，类似于数组或切片。格式如下：
+<img src="media/15483963545493/15487543745937.jpg" alt=""></p>
+<p>如果通道接收不到数据后ok就为false，这时通道就可以使用close()函数来关闭。</p>
+<pre><code>package main
+
+import (
+        &quot;fmt&quot;
+)
+
+func fibonacci(n int, c chan int) {
+        x, y := 0, 1
+        for i := 0; i &lt; n; i++ {
+                c &lt;- x
+                x, y = y, x+y
+        }
+        close(c)
+}
+
+func main() {
+        c := make(chan int, 10)
+        go fibonacci(cap(c), c)
+        // range 函数遍历每个从通道接收到的数据，因为 c 在发送完 10 个
+        // 数据之后就关闭了通道，所以这里我们 range 函数在接收到 10 个数据
+        // 之后就结束了。如果上面的 c 通道不关闭，那么 range 函数就不
+        // 会结束，从而在接收第 11 个数据的时候就阻塞了。
+        for i := range c {
+                fmt.Println(i)
+        }
+}
+</code></pre><h2 id="三参考">三、参考<a href="#三参考" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p><a href="https://gobyexample.com">1. gobyexample</a></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/go">go</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2938 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-01-26 05:13 &#43;0800</p>
+			</footer>
+		</article>
+		<aside id="toc" class="show-toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#一go语言结构">一、GO语言结构</a></li>
+    <li><a href="#二go基础语法">二、Go基础语法</a>
+      <ul>
+        <li><a href="#1数据类型">1.数据类型</a></li>
+        <li><a href="#2变量">2.变量</a></li>
+        <li><a href="#3常量">3.常量</a></li>
+        <li><a href="#4运算符">4.运算符</a></li>
+        <li><a href="#5条件语句">5.条件语句</a></li>
+        <li><a href="#6循环语句">6.循环语句</a></li>
+        <li><a href="#7函数">7.函数</a></li>
+        <li><a href="#8变量作用域">8.变量作用域</a></li>
+        <li><a href="#9数组">9.数组</a></li>
+        <li><a href="#10指针">10.指针</a></li>
+        <li><a href="#11结构体">11.结构体</a></li>
+        <li><a href="#12切片">12.切片</a></li>
+        <li><a href="#13范围range">13.范围（range）</a></li>
+        <li><a href="#14集合map">14.集合（map）</a></li>
+        <li><a href="#15接口">15.接口</a></li>
+        <li><a href="#16异常处理">16.异常处理</a></li>
+        <li><a href="#17并发">17.并发</a></li>
+        <li><a href="#18通道channel">18.通道(channel)</a></li>
+      </ul>
+    </li>
+    <li><a href="#三参考">三、参考</a></li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/linux/2019-04-12-linux-kerberods/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>挖矿病毒kerberods的入侵和处理</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/linux/2018-11-20-jenkins-codedeploy-autoscaling/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Jenkins &#43; AWS CodeDeploy &#43; AutoScaling 持续集成</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2020 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js"></script>
+
+</body>
+
+</html>

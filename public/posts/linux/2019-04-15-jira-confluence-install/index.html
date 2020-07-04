@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Ubuntu16.04环境Jira和Confluence搭建">
+<meta itemprop="description" content="jira和confluence都是Atlassian公司产品。jira是项目与事务跟踪工具，可以完成项目执行管理、敏捷开发管理、体系流程管理、产品Bug跟踪、提案跟踪、需求管理、客户服务等工作。confluence是一个专业的企业知识管理与协同软件，可以用于构建企业wiki，通过它可以实现团队成员之间的协作和知识共享。">
+<meta itemprop="datePublished" content="2019-04-15T13:53:32&#43;00:00" />
+<meta itemprop="dateModified" content="2019-04-15T13:53:32&#43;00:00" />
+<meta itemprop="wordCount" content="613">
+
+
+
+<meta itemprop="keywords" content="jira,confluence,linux,安全漏洞," /><meta property="og:title" content="Ubuntu16.04环境Jira和Confluence搭建" />
+<meta property="og:description" content="jira和confluence都是Atlassian公司产品。jira是项目与事务跟踪工具，可以完成项目执行管理、敏捷开发管理、体系流程管理、产品Bug跟踪、提案跟踪、需求管理、客户服务等工作。confluence是一个专业的企业知识管理与协同软件，可以用于构建企业wiki，通过它可以实现团队成员之间的协作和知识共享。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/linux/2019-04-15-jira-confluence-install/" />
+<meta property="article:published_time" content="2019-04-15T13:53:32+00:00" />
+<meta property="article:modified_time" content="2019-04-15T13:53:32+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ubuntu16.04环境Jira和Confluence搭建"/>
+<meta name="twitter:description" content="jira和confluence都是Atlassian公司产品。jira是项目与事务跟踪工具，可以完成项目执行管理、敏捷开发管理、体系流程管理、产品Bug跟踪、提案跟踪、需求管理、客户服务等工作。confluence是一个专业的企业知识管理与协同软件，可以用于构建企业wiki，通过它可以实现团队成员之间的协作和知识共享。"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Ubuntu16.04环境Jira和Confluence搭建</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.d3141168199607bf3a517216ce3c263814eecdbc8fca72a9a88700799a838219.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://github.com/heyuan110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Apr 15, 2019</span></div>
+				<h1>Ubuntu16.04环境Jira和Confluence搭建</h1>
+			</header>
+			<div class="content">
+				<p>jira和confluence都是Atlassian公司产品。jira是项目与事务跟踪工具，可以完成项目执行管理、敏捷开发管理、体系流程管理、产品Bug跟踪、提案跟踪、需求管理、客户服务等工作。confluence是一个专业的企业知识管理与协同软件，可以用于构建企业wiki，通过它可以实现团队成员之间的协作和知识共享。</p>
+<!-- raw HTML omitted -->
+<h1 id="一环境">一、环境<a href="#一环境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>前一篇讲了<a href="http://www.heyuan110.com/2019-04-12-%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92kerberods%E7%9A%84%E5%85%A5%E4%BE%B5%E5%92%8C%E5%A4%84%E7%90%86.html">挖矿病毒</a>的入侵，决定对那台服务器上相关服务拆分迁移。上面的jira和confluence共用jira账号体系，迁移时两者要注意安装顺序，最后确定的方案：</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15553972819985.jpg" alt=""></p>
+<h2 id="1系统">1.系统<a href="#1系统" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>系统：Ubuntu 16.04.5 LTS
+CPU：4核
+内存：16G</p>
+<p>上面机器配置最多可支持2000人，如果有更多人数需求，需升级配置。</p>
+<h2 id="2java环境">2.Java环境<a href="#2java环境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>需安装jdk1.8以上版本</p>
+<p>安装java</p>
+<blockquote>
+<p>sudo apt install default-jre</p>
+</blockquote>
+<p>查看java版本</p>
+<pre><code>ubuntu@ip-172-31-23-228:~$ java -version
+openjdk version &quot;1.8.0_191&quot;
+OpenJDK Runtime Environment (build 1.8.0_191-8u191-b12-2ubuntu0.16.04.1-b12)
+OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)
+</code></pre><h2 id="3mysql">3.Mysql<a href="#3mysql" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>安装mysql5.7</p>
+<blockquote>
+<p>sudo apt-get install mysql-server</p>
+</blockquote>
+<p>根据提示一步步设置，完成后记住mysql默认账号root的密码。</p>
+<h1 id="二jira">二、Jira<a href="#二jira" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="1下载文件">1.下载文件<a href="#1下载文件" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>**a)**下载jira，选择和老机器上jira相同的版本</p>
+<blockquote>
+<p>wget <a href="https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.3.8-x64.bin">https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.3.8-x64.bin</a></p>
+</blockquote>
+<p>**b)**下载jira7.3.8破解文件</p>
+<blockquote>
+<p>wget <a href="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/jira-lib-7.3.8.zip">https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/jira-lib-7.3.8.zip</a></p>
+</blockquote>
+<p>解压<code>jira-lib-7.3.8.zip</code>文件</p>
+<pre><code>ubuntu@ip-172-31-23-228:/usr/local/programs/src$ unzip jira7.3.8.zip
+Archive:  jira7.3.8.zip
+  inflating: jira7.3.8/atlassian-extras-3.2.jar
+  inflating: jira7.3.8/mysql-connector-java-5.1.39-bin.jar
+</code></pre><h2 id="2配置jira数据库">2.配置jira数据库<a href="#2配置jira数据库" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>登录mysql</p>
+<blockquote>
+<p>mysql -uroot -p</p>
+</blockquote>
+<p>执行下面的SQL</p>
+<pre><code>;创建数据库sql
+CREATE DATABASE jira CHARACTER SET utf8 COLLATE utf8_bin;
+
+;授权用户
+GRANT ALL ON jira.* TO 'jira'@'localhost' IDENTIFIED BY 'jirapassword';
+
+;刷新
+FLUSH PRIVILEGES;
+</code></pre><p>{% alert info %}
+注意创建数据库时COLLATE需使用utf8_bin
+{% endalert %}</p>
+<h2 id="3安装jira">3.安装jira<a href="#3安装jira" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>给安装包添加可执行权限</p>
+<blockquote>
+<p>chmod +x atlassian-jira-software-7.3.8-x64.bin</p>
+</blockquote>
+<p>执行安装</p>
+<blockquote>
+<p>./atlassian-jira-software-7.3.8-x64.bin</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554007889877.jpg" alt=""></p>
+<p>按照提示键入安装即可。
+如果没有自定义目录，jira的程序和应用数据分表装到了两个目录：</p>
+<p>应用：<code>/opt/atlassian/jira</code>
+应用数据: <code>/var/atlassian/application-data/jira</code></p>
+<p>如果要修改jira默认端口，修改配置文件<code>/opt/atlassian/jira/conf/server.xml</code></p>
+<h2 id="4破解jira">4.破解jira<a href="#4破解jira" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>先停掉jira服务</p>
+<blockquote>
+<p>sudo /etc/init.d/jira stop</p>
+</blockquote>
+<p>**a)**用破解文件atlassian-extras-3.2.jar替换<code>/opt/atlassian/jira/atlassian-jira/WEB-INF/lib/atlassian-extras-3.2.jar</code>文件</p>
+<pre><code>#先备份原文件
+mv /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/atlassian-extras-3.2.jar /tmp/atlassian-extras-3.2.jar
+
+#替换文件
+cp /破解文件目录/atlassian-extras-3.2.jar /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/atlassian-extras-3.2.jar
+</code></pre><p>**b)**确保jira可访问mysql，将mysql-connector-java-5.1.39-bin.jar拷贝<code>/opt/atlassian/jira/atlassian-jira/WEB-INF/lib/</code>路径下</p>
+<pre><code>cp /破解文件目录/mysql-connector-java-5.1.39-bin.jar /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/mysql-connector-java-5.1.39-bin.jar
+</code></pre><p>启动Jira服务, 默认端口8080</p>
+<blockquote>
+<p>sudo /etc/init.d/jira start</p>
+</blockquote>
+<p>按下图向导配置:
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554025003672.jpg" alt=""></p>
+<p>配置数据库
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554025207183.jpg" alt=""></p>
+<p>设置应用程序属性
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554025578020.jpg" alt=""></p>
+<p>生成JIRA使用许可证
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554026788338.jpg" alt=""></p>
+<p>打开Atlassian官网获取许可证
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554028462386.jpg" alt=""></p>
+<p>继续下一步配置完邮件(也可先跳过)，选择语言，至此Jira的安装和破解完成。</p>
+<h2 id="5老机器jira数据备份新机器jira数据恢复">5.老机器jira数据备份，新机器jira数据恢复<a href="#5老机器jira数据备份新机器jira数据恢复" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>**a)**管理员账号登录老机器jira</p>
+<p>点击右上角的&quot;系统&rdquo;-&ldquo;导入导出&rdquo;-&ldquo;备份系统&rdquo;，Jira默认会打开自动备份的功能，备份路径为<code>/var/atlassian/application-data/jira/export</code>；入如果没有打开，也可以手动进行备份，如下，可以自定义备份的文件名。</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554034483507.jpg" alt=""></p>
+<p>{% alert info %}
+注意:这里的备份数据不包括附件。
+jira附件都保存到服务器的/var/atlassian/application-data/jira/data/attachments路径下，这里的附件数据需要手动写脚本进行备份。点击右上角的&quot;系统&rdquo;-&ldquo;高级&rdquo;-&ldquo;附件&quot;就可以看到jira附件的设置。
+{% endalert %}</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554036917962.jpg" alt=""></p>
+<p>将jira的备份文件jira-backup.zip和attachments.zip文件拷贝到新机器。</p>
+<p>**b)**管理员账号登录新机器jira</p>
+<p>停止jira服务，将附件备份文件attachments.zip解压替换<code>/var/atlassian/application-data/jira/data/attachments</code>目录(可先备份)。</p>
+<p>将备份文件jira-backup.zip拷贝到<code>/var/atlassian/application-data/jira/import</code>路径下。</p>
+<p>启动jira服务，点击右上角的&quot;系统&rdquo;-&ldquo;导入导出&rdquo;-&ldquo;恢复系统&rdquo;，</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554041476782.jpg" alt=""></p>
+<p>点击 [复原]开始恢复。</p>
+<h1 id="三confluence">三、Confluence<a href="#三confluence" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>老机器上是confluence6.3.1版本，这个版本的WebDAV和widgetconnector都存在漏洞，如果继续安装这个版本，恢复完数据估计很快又会沦为矿机。</p>
+<p>针对上面两个漏洞官方在每个小版本里都发布了修复版，和6.3.1比较近的版本6.6.12就是一个修复了漏洞版本，所以决定下载并破解confluence6.6.12。</p>
+<h2 id="1下载文件-1">1.下载文件<a href="#1下载文件-1" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>**a)**下载confluence，选择和老机器上confluence相同的版本</p>
+<blockquote>
+<p>wget <a href="https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-6.6.12-x64.bin">https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-6.6.12-x64.bin</a></p>
+</blockquote>
+<p>**b)**下载mysql链接库和破解工具</p>
+<blockquote>
+<p>wget <a href="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/confluence-crack-tool.zip">https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/confluence-crack-tool.zip</a></p>
+</blockquote>
+<p>解压<code>unzip confluence-crack-tool.zip</code>可以看到mysql链接库和破解工具confluence_keygen</p>
+<h2 id="2配置confluence数据库">2.配置confluence数据库<a href="#2配置confluence数据库" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>登录mysql</p>
+<blockquote>
+<p>mysql -uroot -p</p>
+</blockquote>
+<p>执行下面的SQL</p>
+<pre><code>;创建数据库sql
+CREATE DATABASE confluence CHARACTER SET utf8 COLLATE utf8_bin;
+
+;授权用户
+GRANT ALL ON confluence.* TO 'confluence'@'localhost' IDENTIFIED BY 'confluencepassword';
+
+;刷新
+FLUSH PRIVILEGES;
+</code></pre><p>{% alert info %}
+注意创建数据库时COLLATE需使用utf8_bin
+{% endalert %}</p>
+<h2 id="3安装confluence">3.安装confluence<a href="#3安装confluence" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>给安装包添加可执行权限</p>
+<blockquote>
+<p>chmod +x atlassian-confluence-6.6.12-x64.bin</p>
+</blockquote>
+<p>执行安装</p>
+<blockquote>
+<p>./atlassian-confluence-6.6.12-x64.bin</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554719813856.jpg" alt=""></p>
+<p>（截图用的6.3.1版本，仅参考）按照提示键入安装即可。（注意第一次确认是否继续，第二次选择安装方式(选1express安装)，第三次是否启动服务）
+如果没有自定义目录，jira的程序和应用数据分表装到了两个目录：</p>
+<p>应用：<code>/opt/atlassian/confluence</code>
+应用数据: <code>/var/atlassian/application-data/confluence</code></p>
+<p>默认监听的端口是8090，如果要修改confluence默认端口，修改配置文件<code>/opt/atlassian/confluence/conf/server.xml</code></p>
+<p>最后提示安装完成并启动了服务。</p>
+<h2 id="4破解confluence">4.破解confluence<a href="#4破解confluence" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>打开http://ip:8090(未配置完成前强烈建议用ip+port访问，不要用域名，重装过几次每次用域名访问配置到数据库那一步一定会报超时错误！用ip就不会)，</p>
+<p>先停掉confluence服务</p>
+<blockquote>
+<p>sudo /etc/init.d/confluence stop</p>
+</blockquote>
+<p>设置语言
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554744214183.jpg" alt=""></p>
+<p>选择产品
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554744447563.jpg" alt=""></p>
+<p>不要选择任何插件
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554744812861.jpg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554745162747.jpg" alt=""></p>
+<p>到这一步，<strong>记录服务器ID</strong>,不要关掉页面</p>
+<p>停止confluence服务</p>
+<blockquote>
+<p>sudo /etc/init.d/confluence stop</p>
+</blockquote>
+<p>**a)**替换库文件</p>
+<p>将confluence库文件<code>/opt/atlassian/confluence/confluence/WEB-INF/lib/atlassian-extras-decoder-v2-3.2.jar</code>通过scp拷贝到本地(可使用scp,rsync,ftp等)</p>
+<p>下面在本地电脑操作：</p>
+<ol>
+<li>
+<p>将拷贝到本地的atlassian-extras-decoder-v2-3.2.jar改名为atlassian-extras-2.4.jar（因为破解工具只认这个版本的名称）</p>
+</li>
+<li>
+<p>运行confluence_keygen.jar(mac里有java环境直接双击打开，win和linux可用java命令打开)，填好ServerID，其他随便填。点击gen生成key并拷贝出来记录好。点击patch，选择刚重命名为atlassian-extras-2.4.jar的文件进行破解</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555684266000.jpg" alt=""></p>
+<ol start="3">
+<li>破解完成，将破解的文件atlassian-extras-2.4.jar回传到服务器</li>
+</ol>
+<p>下面在服务器操作：</p>
+<p>在服务器上将回传的atlassian-extras-2.4.jar重命名为atlassian-extras-decoder-v2-3.2.jar</p>
+<blockquote>
+<p>mv atlassian-extras-2.4.jar atlassian-extras-decoder-v2-3.3.0.jar</p>
+</blockquote>
+<p>然后覆盖回原路径：</p>
+<blockquote>
+<p>cp -a  atlassian-extras-decoder-v2-3.3.0.jar /opt/atlassian/confluence/confluence/WEB-INF/lib/</p>
+</blockquote>
+<p>**b)**确保jira可访问mysql，将mysql-connector-java-5.1.39-bin.jar(放在破解工具目录)拷贝<code>/opt/atlassian/confluence/lib/</code>路径下</p>
+<p>启动confluence服务</p>
+<blockquote>
+<p>sudo /etc/init.d/confluence start</p>
+</blockquote>
+<p>回到输入key的界面，输入上面记录的key，点击下一步</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555689505079.jpg" alt=""></p>
+<p>然后进行配置数据库：我选择的是我自己的数据库，这里需要对数据库进行一些配置。如果选择内置的话，就是使用嵌入式的数据库，不用配置什么东西，等一段（挺长的）时间，就好了。</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555689819609.jpg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555690078229.jpg" alt=""></p>
+<p>在测试成功后，下一步比较慢，需要往数据库写好多表。</p>
+<p>注意：这一步因为用域名访问每次都报错，都必须删除重新安装，强烈建议用ip+port访问</p>
+<p>连接数据库的配置文件：/var/atlassian/application-data/confluence/confluence.cfg.xml。</p>
+<p>推荐使用示范站点，先熟悉Confluence，然后再自行进行设置
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555691635256.jpg" alt=""></p>
+<p>可以选择confluence中管理用户，也可选择jira链接，不过强烈建议选第一个，后面要链接再自己取加，
+这个地方的坑一会在最后面记录。因为我们是基于jira用户，所以选择了第二个。
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555691997258.jpg" alt=""></p>
+<p>填完信息开始同步jira用户
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15554790883441.jpg" alt=""></p>
+<p>（我之前在这一步也失败过,所以我才说建议先创建内部账号。。。）</p>
+<p>如果同步完成没报错，继续下一步配置完邮件(也可先跳过)，选择语言，至此Jira的安装和破解完成。</p>
+<p>可以打开http://ip:port/admin/license.action查看破解情况
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555696667314.jpg" alt=""></p>
+<h2 id="5老机器confluence数据备份新机器confluence数据恢复">5.老机器confluence数据备份，新机器confluence数据恢复<a href="#5老机器confluence数据备份新机器confluence数据恢复" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>**a)**管理员账号登录老机器confluence</p>
+<p>点击右上角的&quot;一般配置&rdquo;-&ldquo;每日备份管理&rdquo;，如下图（默认配置）：
+<img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555697603764.jpg" alt=""></p>
+<p>默认每天会自动备份一个zip打包的数据，存放在服务器的/var/atlassian/application-data/confluence/backups路径下。还可以点击&quot;编辑&quot;进行自定义。</p>
+<p>默认每天2点左右都会整体备份一次！恢复或迁移的时候，可以直接用这里的zip打包数据进行恢复。除此之外，还可以点击&quot;一般配置&rdquo;-&ldquo;备份与还原&quot;里面的备份进行手动备份。</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555698570656.jpg" alt=""></p>
+<p>{% alert info %}
+注意:最好将附件也从原机器备份过来。附件都保存在服务器的/var/atlassian/application-data/confluence/attachments路径下。
+{% endalert %}</p>
+<p>将confluence的备份文件confluence-backup.zip和attachments.zip文件拷贝到新机器。</p>
+<p>**b)**管理员账号登录新机器confluence</p>
+<p>停止confluence服务，将附件备份文件attachments.zip解压替换<code>/var/atlassian/application-data/confluence/attachments</code>目录(可先备份)。</p>
+<p>将备份文件confluence-backup.zip拷贝到<code>/var/atlassian/application-data/confluence/restore</code>路径下。</p>
+<p>启动confluence服务，点击&quot;一般配置&rdquo;-&ldquo;备份与还原&quot;里面的恢复进行数据恢复，</p>
+<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555701266334.jpg" alt=""></p>
+<p>如果文件放到restore目录下了，会显示在图中列表里，选择文件，点击 [还原]开始恢复。</p>
+<h1 id="四问题总结">四、问题总结<a href="#四问题总结" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="1-confluence致命漏洞和修复">1. confluence致命漏洞和修复<a href="#1-confluence致命漏洞和修复" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>最近各大安全平台爆出Confluence Server远程代码执行漏洞</p>
+<pre><code>Atlassian 公司的 Confluence Server 和 Data Center 产品中使用的 widgetconnecter 组件 (版本&lt;=3.1.3) 中存在服务器端模板注入 (SSTI) 漏洞。攻击者可以利用该漏洞实现对目标系统进行路径遍历攻击、服务端请求伪造 (SSRF)、远程代码执行 (RCE)。
+</code></pre><p>攻击者可以通过构造恶意的 HTTP 请求参数，对目标系统实施（路径遍历、任意文件读取以及远程命令执行）攻击。该类攻击可导致目标系统中的敏感信息被泄露，以及执行攻击者构造的恶意代码。</p>
+<p>尽快升级到confluence官方修复版，目前官方修复版本：</p>
+<p>版本 6.6.12 及更高版本的 6.6.x.
+版本 6.12.3 及更高版本的 6.12.x
+版本 6.13.3 及更高版本的 6.13.x
+版本 6.14.2 及更高版本</p>
+<p><em>参考:</em>
+<em>1.<a href="https://confluence.atlassian.com/doc/confluence-security-advisory-2019-03-20-966660264.html">https://confluence.atlassian.com/doc/confluence-security-advisory-2019-03-20-966660264.html</a></em>
+<em>2.<a href="https://www.chainnews.com/articles/426052160451.htm">https://www.chainnews.com/articles/426052160451.htm</a></em>
+<em>3.<a href="http://news.ssssafe.com/archives/834">http://news.ssssafe.com/archives/834</a></em>
+<em>4.<a href="http://copyfuture.com/blogs-details/3a44938fcd7518cdda0f1390099382cd">http://copyfuture.com/blogs-details/3a44938fcd7518cdda0f1390099382cd</a></em></p>
+<h2 id="2-confluence数据库字符乱码">2. confluence数据库字符乱码<a href="#2-confluence数据库字符乱码" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>在恢复数据时到一半就报错<code>duplicate entry '???' for key xxx</code>,去数据库查看，发现很多记录是?，查看数据库编码为latin（拉丁文），修改mysql5.7配置</p>
+<blockquote>
+<p>vi /etc/mysql/mysql.conf.d/mysqld.cnf</p>
+</blockquote>
+<p>在mysqld下增加字符相关配置，修改log的size，配置如下</p>
+<pre><code>#set character
+symbolic-links=0
+collation_server=utf8_unicode_ci
+character_set_server=utf8
+skip-character-set-client-handshake
+transaction-isolation=READ-COMMITTED
+
+key_buffer_size         = 32M
+max_allowed_packet      = 128M
+thread_stack            = 192K
+thread_cache_size       = 8
+innodb_log_file_size    = 512M
+
+</code></pre><p>重启mysql，再导入不会报错。</p>
+<p><em>参考：<a href="https://confluence.atlassian.com/jirakb/health-check-database-collation-in-mysql-943951422.html">https://confluence.atlassian.com/jirakb/health-check-database-collation-in-mysql-943951422.html</a></em></p>
+<h2 id="3-confluence账户体系">3. confluence账户体系<a href="#3-confluence账户体系" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>confluence包含两套账户体系：confluence内部的用户、外部链接的用户(jira,ldap等)
+confluence内部用户：创建、更新都只对confluence生效，目录属于Confluence Internal Directory。
+外部链接的用户：和jira共用账户体系，通过应用程序链接授权和同步用户到confluence，在添加程序链接时可以设置单向同步还是双向同步。</p>
+<p>强烈建议在confluence搭建时一定要先创建一个内部用户管理员账号，而且只有内部用户管理员才可以编辑非内部目录链接，编辑连接（http://host:port/plugins/servlet/embedded-crowd/directories/list）。</p>
+<p>添加jira外部用户链接步骤：</p>
+<ol>
+<li>在jira里添加[JIRA用户服务器]，打开http://jira.xxxx.com/secure/admin/ConfigureCrowdServer.jspa，(修改url成你自己jira的域名)。添加一个新应用程序：
+<ul>
+<li>输入Confluence在访问Jira时将使用的应用程序名称和密码（可自己定义），</li>
+<li>输入Confluence服务器的IP地址(如果和jira在同一台服务器，最好用内网ip)</li>
+<li>保存。</li>
+</ul>
+</li>
+<li>在confluence里添加用户目录, 打开http://host:port/plugins/servlet/embedded-crowd/directories/list，(修改url成你自己confluece的域名)。添加一个用户目录：
+<ul>
+<li>选择类型（jira）</li>
+<li>填应用名称，填服务器的URL（Jira服务器地址，如果和confluence在同一台服务器，建议填内网），第1步中设置的应用程序名称，密码</li>
+<li>其他项看情况自己选择，点测试设置，通过后保存</li>
+</ul>
+</li>
+</ol>
+<p><em>参考:</em>
+<em>1.https://confluence.atlassian.com/doc/connecting-to-crowd-or-jira-for-user-management-229838465.html#ConnectingtoCrowdorJIRAforUserManagement-ConnectingConfluencetoJIRAforUserManagement</em>
+<em>2.https://www.cnblogs.com/kevingrace/p/5569932.html</em></p>
+<h2 id="4-confluence无法登录解决办法">4. confluence无法登录解决办法<a href="#4-confluence无法登录解决办法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>遇到一个很尴尬的问题，confluence全部安装完成运行，也设置好了confluence内部用户管理员账号，
+可还原备份数据后，新的内部管理员账号被删除，外部链接设置也被还原成老的配置，导致用内部管理员账号无法登录，用老账号也无法登录！</p>
+<p>第一次选择了重装，到还原这一步又是同样的问题，最后去官网找到了解决方案，大致思路：</p>
+<ol>
+<li>通过sql直接在数据库创建内部用户管理员账号</li>
+<li>用内部管理员账号登录进去后修改jira外部用户链接配置</li>
+</ol>
+<p>相关SQL:</p>
+<pre><code>#1.创建用户confluence-admin，密码admin
+insert into cwd_user(id, user_name, lower_user_name, active, created_date, updated_date, first_name, lower_first_name, last_name, lower_last_name, display_name, lower_display_name, email_address, lower_email_address, directory_id, credential) values (1212121, 'confluence-admin', 'confluence-admin', 'T', '2009-11-26 17:42:08', '2009-11-26 17:42:08', 'A. D.', 'a. d.', 'Ministrator', 'ministrator', 'A. D. Ministrator', 'a. d. ministrator', 'confluence-admin@xxxx.com', 'confluence-admin@xxxx.com', (select id from cwd_directory where directory_name='Confluence Internal Directory'), 'x61Ey612Kl2gpFL56FT9weDnpSo4AV8j8+qx2AuTHdRyY036xxzTTrw10Wq3+4qQyB+XURPWx1ONxp3Y3pB37A==');
+
+#2.添加映射关系
+insert into user_mapping values ('2c9681954172cf560000000000000001', 'confluence-admin', 'confluence-admin');
+
+#3.非必须步骤:创建组，这一步可以自己去数据库先看看，可能已经创建过了
+insert into cwd_group(id, group_name, lower_group_name, active, local, created_date, updated_date, description, group_type, directory_id)
+values ( '888888','confluence-administrators','confluence-administrators','T','F','2011-03-21 12:20:29','2011-03-21 12:20:29',NULL,'GROUP',(select id from cwd_directory where directory_name='Confluence Internal Directory'));
+insert into cwd_group(id, group_name, lower_group_name, active, local, created_date, updated_date, description, group_type, directory_id)
+values ( '999999','confluence-users','confluence-users','T','F','2011-03-21 12:20:29','2011-03-21 12:20:29',NULL,'GROUP',(select id from cwd_directory where directory_name='Confluence Internal Directory'));
+
+#4.将用户添加到组confluence-users和confluence-administrators
+insert into cwd_membership (id, parent_id, child_user_id) values (163841, (select id from cwd_group where group_name='confluence-users' and directory_id=(select id from cwd_directory where directory_name='Confluence Internal Directory')), 1212121);
+insert into cwd_membership (id, parent_id, child_user_id) values (163842, (select id from cwd_group where group_name='confluence-administrators' and directory_id=(select id from cwd_directory where directory_name='Confluence Internal Directory')), 1212121);
+
+#5.验证一下是否添加成功
+select u.id, u.user_name, u.active from cwd_user u
+join cwd_membership m on u.id=m.child_user_id join cwd_group g on m.parent_id=g.id join cwd_directory d on d.id=g.directory_id
+where g.group_name = 'confluence-administrators' and d.directory_name='Confluence Internal Directory';
+
+#查目录
+select d.id, d.directory_name, m.list_index from cwd_directory d join cwd_app_dir_mapping m on d.id=m.directory_id;
+select id, directory_name, active from cwd_directory where id = 98306;
+
+</code></pre><p>详细步骤参考官网：</p>
+<p><em><a href="https://confluence.atlassian.com/conf64/restore-passwords-to-recover-admin-user-rights-936511358.html">https://confluence.atlassian.com/conf64/restore-passwords-to-recover-admin-user-rights-936511358.html</a></em></p>
+<h2 id="5相关参考">5.相关参考<a href="#5相关参考" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<ol>
+<li><a href="https://www.cnblogs.com/kevingrace/p/8862531.html">Jira/Confluence的备份、恢复和迁移</a></li>
+<li><a href="https://blog.51cto.com/moerjinrong/2149177?utm_source=oschina-app">linux安装破解Confluence-6.8.5</a></li>
+</ol>
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/jira">jira</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/confluence">confluence</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/linux">linux</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E">安全漏洞</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>613 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-15 21:53 &#43;0800</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/linux/2019-05-13-linux-shell-vars/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Shell脚本中$符开头变量解释</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/linux/2019-04-12-linux-kerberods/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>挖矿病毒kerberods的入侵和处理</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2020 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js"></script>
+
+</body>
+
+</html>
