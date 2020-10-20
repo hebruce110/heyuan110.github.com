@@ -1,6 +1,7 @@
 ---
 title: Ubuntu16.04环境Jira和Confluence搭建
 date: 2019-04-15 13:53:32
+toc: true
 tags:
     - jira
     - confluence
@@ -13,13 +14,13 @@ jira和confluence都是Atlassian公司产品。jira是项目与事务跟踪工�
 
 <!-- toc -->
 
-# 一、环境
+## 一、环境
 
 前一篇讲了[挖矿病毒](http://www.heyuan110.com/2019-04-12-%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92kerberods%E7%9A%84%E5%85%A5%E4%BE%B5%E5%92%8C%E5%A4%84%E7%90%86.html)的入侵，决定对那台服务器上相关服务拆分迁移。上面的jira和confluence共用jira账号体系，迁移时两者要注意安装顺序，最后确定的方案：
 
 ![](https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15553972819985.jpg)
 
-## 1.系统
+### 1.系统
 
 系统：Ubuntu 16.04.5 LTS
 CPU：4核
@@ -27,7 +28,7 @@ CPU：4核
 
 上面机器配置最多可支持2000人，如果有更多人数需求，需升级配置。
 
-## 2.Java环境
+### 2.Java环境
 
 需安装jdk1.8以上版本
 
@@ -44,7 +45,7 @@ OpenJDK Runtime Environment (build 1.8.0_191-8u191-b12-2ubuntu0.16.04.1-b12)
 OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)
 ```
 
-## 3.Mysql
+### 3.Mysql
 
 安装mysql5.7
 
@@ -52,9 +53,9 @@ OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)
 
 根据提示一步步设置，完成后记住mysql默认账号root的密码。
 
-# 二、Jira
+## 二、Jira
 
-## 1.下载文件
+### 1.下载文件
 
 **a)**下载jira，选择和老机器上jira相同的版本
 
@@ -73,7 +74,7 @@ Archive:  jira7.3.8.zip
   inflating: jira7.3.8/mysql-connector-java-5.1.39-bin.jar
 ```
 
-## 2.配置jira数据库
+### 2.配置jira数据库
 
 登录mysql
 
@@ -96,7 +97,7 @@ FLUSH PRIVILEGES;
 注意创建数据库时COLLATE需使用utf8_bin
 {% endalert %}
 
-## 3.安装jira
+### 3.安装jira
 
 给安装包添加可执行权限
 
@@ -116,7 +117,7 @@ FLUSH PRIVILEGES;
 
 如果要修改jira默认端口，修改配置文件`/opt/atlassian/jira/conf/server.xml`
 
-## 4.破解jira
+### 4.破解jira
 
 先停掉jira服务
 
@@ -159,7 +160,7 @@ cp /破解文件目录/mysql-connector-java-5.1.39-bin.jar /opt/atlassian/jira/a
 
 继续下一步配置完邮件(也可先跳过)，选择语言，至此Jira的安装和破解完成。
 
-## 5.老机器jira数据备份，新机器jira数据恢复
+### 5.老机器jira数据备份，新机器jira数据恢复
 
 **a)**管理员账号登录老机器jira
 
@@ -188,13 +189,13 @@ jira附件都保存到服务器的/var/atlassian/application-data/jira/data/atta
 
 点击 [复原]开始恢复。
 
-# 三、Confluence
+## 三、Confluence
 
 老机器上是confluence6.3.1版本，这个版本的WebDAV和widgetconnector都存在漏洞，如果继续安装这个版本，恢复完数据估计很快又会沦为矿机。
 
 针对上面两个漏洞官方在每个小版本里都发布了修复版，和6.3.1比较近的版本6.6.12就是一个修复了漏洞版本，所以决定下载并破解confluence6.6.12。
 
-## 1.下载文件
+### 1.下载文件
 
 **a)**下载confluence，选择和老机器上confluence相同的版本
 
@@ -206,7 +207,7 @@ jira附件都保存到服务器的/var/atlassian/application-data/jira/data/atta
 
 解压`unzip confluence-crack-tool.zip`可以看到mysql链接库和破解工具confluence_keygen
 
-## 2.配置confluence数据库
+### 2.配置confluence数据库
 
 登录mysql
 
@@ -229,7 +230,7 @@ FLUSH PRIVILEGES;
 注意创建数据库时COLLATE需使用utf8_bin
 {% endalert %}
 
-## 3.安装confluence
+### 3.安装confluence
 
 给安装包添加可执行权限
 
@@ -251,7 +252,7 @@ FLUSH PRIVILEGES;
 
 最后提示安装完成并启动了服务。
 
-## 4.破解confluence
+### 4.破解confluence
 
 打开http://ip:8090(未配置完成前强烈建议用ip+port访问，不要用域名，重装过几次每次用域名访问配置到数据库那一步一定会报超时错误！用ip就不会)，
 
@@ -340,7 +341,7 @@ FLUSH PRIVILEGES;
 ![](https://raw.githubusercontent.com/heyuan110/static-source/master/media/15553944919153/15555696667314.jpg)
 
 
-## 5.老机器confluence数据备份，新机器confluence数据恢复
+### 5.老机器confluence数据备份，新机器confluence数据恢复
 
 **a)**管理员账号登录老机器confluence
 
@@ -371,9 +372,9 @@ FLUSH PRIVILEGES;
 
 如果文件放到restore目录下了，会显示在图中列表里，选择文件，点击 [还原]开始恢复。
 
-# 四、问题总结
+## 四、问题总结
 
-## 1. confluence致命漏洞和修复
+### 1. confluence致命漏洞和修复
 
 最近各大安全平台爆出Confluence Server远程代码执行漏洞
 
@@ -395,7 +396,7 @@ Atlassian 公司的 Confluence Server 和 Data Center 产品中使用的 widgetc
 *3.<http://news.ssssafe.com/archives/834>*
 *4.<http://copyfuture.com/blogs-details/3a44938fcd7518cdda0f1390099382cd>*
 
-## 2. confluence数据库字符乱码
+### 2. confluence数据库字符乱码
 
 在恢复数据时到一半就报错`duplicate entry '???' for key xxx`,去数据库查看，发现很多记录是?，查看数据库编码为latin（拉丁文），修改mysql5.7配置
 
@@ -423,7 +424,7 @@ innodb_log_file_size    = 512M
 
 *参考：<https://confluence.atlassian.com/jirakb/health-check-database-collation-in-mysql-943951422.html>*
 
-## 3. confluence账户体系
+### 3. confluence账户体系
 
 confluence包含两套账户体系：confluence内部的用户、外部链接的用户(jira,ldap等)
 confluence内部用户：创建、更新都只对confluence生效，目录属于Confluence Internal Directory。
@@ -446,7 +447,7 @@ confluence内部用户：创建、更新都只对confluence生效，目录属于
 *1.https://confluence.atlassian.com/doc/connecting-to-crowd-or-jira-for-user-management-229838465.html#ConnectingtoCrowdorJIRAforUserManagement-ConnectingConfluencetoJIRAforUserManagement*
 *2.https://www.cnblogs.com/kevingrace/p/5569932.html*
 
-## 4. confluence无法登录解决办法
+### 4. confluence无法登录解决办法
 
 遇到一个很尴尬的问题，confluence全部安装完成运行，也设置好了confluence内部用户管理员账号，
 可还原备份数据后，新的内部管理员账号被删除，外部链接设置也被还原成老的配置，导致用内部管理员账号无法登录，用老账号也无法登录！
@@ -490,7 +491,7 @@ select id, directory_name, active from cwd_directory where id = 98306;
 
 *https://confluence.atlassian.com/conf64/restore-passwords-to-recover-admin-user-rights-936511358.html*
 
-## 5.相关参考
+### 5.相关参考
 
 1. [Jira/Confluence的备份、恢复和迁移](https://www.cnblogs.com/kevingrace/p/8862531.html)
 2. [linux安装破解Confluence-6.8.5](https://blog.51cto.com/moerjinrong/2149177?utm_source=oschina-app)

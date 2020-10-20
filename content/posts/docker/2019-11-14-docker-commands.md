@@ -22,20 +22,20 @@ Docker常用命令记录
 
 ## 2.镜像(images)
 
-#### 获取镜像
+### 获取镜像
 
 docker pull [OPTIONS] NAME[:TAG|@DIGEST]
 
 例如：`docker pull ubuntu:16.04`
 
-#### 列出镜像
+### 列出镜像
 
 - 查看所有镜像: `docker images`或`docker image ls`, 显示摘要`docker images --digests`
 - 查看特定镜像:`docker image ls xxxx`或`docker image xxxx`
 - 查看镜像、容器、数据卷所占用的空间:`docker system df`
 - 列出虚悬镜像（仓库名和标签名为<none>）:`docker image ls -f dangling=true`,清楚此类镜像`docker image prune`
 
-#### 删除镜像
+### 删除镜像
 
 命令`docker image rm [OPTIONS] IMAGE [IMAGE...]` 或 `docker rmi -f xxxx`
 例如：
@@ -58,7 +58,7 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 
 ## 3. 容器(container)
 
-#### 创建新容器
+### 创建新容器
 
 - 使用docker镜像nginx:latest以后台模式启动一个容器,并将容器命名为mynginx。
 
@@ -96,7 +96,7 @@ root@ubuntu:~# docker run -it nginx:latest /bin/bash
 
 参考<http://www.runoob.com/docker/docker-run-command.html>
 
-#### 其他命令：
+### 其他命令：
 
 ```
 //查看所有容器
@@ -137,7 +137,7 @@ docker cp /www/xxxx test-container:/www
 
 ## 常用docker
 
-#### 1. Grafana
+### 1. Grafana
 
 ```
 //创建相关目录，和配置文件
@@ -155,7 +155,7 @@ docker cp /www/xxxx test-container:/www
  docker.patpat.vip:9503/grafana:1.20.0:5.4.2
 ```
 
-#### 2. Portainer
+### 2. Portainer
 
 ```
 docker run -d -p 9000:9000 \
@@ -165,7 +165,7 @@ docker run -d -p 9000:9000 \
    docker.patpat.vip:9503/portainer:1.20.0
 ```
 
-#### 3. Prometheus
+### 3. Prometheus
 
 ```
 //下载默认配置
@@ -194,7 +194,7 @@ docker run -d --name=alertmanager \
     
 ```
 
-#### 4. Mysql
+### 4. Mysql
 
 启动mysql5.6镜像
 ```
@@ -226,7 +226,7 @@ docker.patpat.vip:9503/mysql:5.7.28
 --name 给容器命名，mysql5719；
 -d 表示容器在后台运行
 
-#### 5. PHP
+### 5. PHP
 
 ```
 docker run -d -p 9091:9000 --name webconsole-php \
@@ -237,7 +237,7 @@ docker run -d -p 9091:9000 --name webconsole-php \
 docker.patpat.vip:9503/php:7.2-fpm
 ```
 
-#### 6. Nginx
+### 6. Nginx
 
 docker run -d -p 8001:80 --name webconsole-nginx \
 -v /var/www/webconsole:/usr/share/nginx/html \
@@ -246,7 +246,7 @@ docker run -d -p 8001:80 --name webconsole-nginx \
 --privileged=true -d docker.patpat.vip:9503/nginx:1.15
 
 
-#### 7. Mongo
+### 7. Mongo
 
 ```
 docker run -d \
@@ -274,7 +274,7 @@ https://stackoverflow.com/questions/44358328/how-i-can-access-docker-data-volume
 
 `docker run --rm -it -v /:/vm-root alpine:edg sh`
 
-#### 8. Redis
+### 8. Redis
 
 ```
 docker run --name redis -d -p 6379:6379 -v redis-data:/data docker.patpat.vip:9503/redis:5.0.3

@@ -1,6 +1,7 @@
 ---
 title: Linux(MacOS)命令笔记
 date: 2020-03-19 10:55:52
+toc: true
 tags:
     - linux
     - mac
@@ -9,7 +10,6 @@ tags:
 
 linux中许多常用命令是必须掌握的，很多用过没有记录下来很快就忘记，再次使用又到处搜索，本文主要列出我日常使用过的一些命令，会持续更新。<!--more-->
 
-<!-- toc -->
 
 ## 1. netstat命令
 
@@ -55,13 +55,13 @@ kill -9 [PID]
 
 ## 4. pv
 
-#### 安装
+### 4.1 安装
 ubuntu:
 
 ```
 sudo apt-get install pv
 ```
-#### 使用
+### 4.2 使用
 
 - 拷贝 `pv ~/a.log > ~/b.log`
 - 拷贝限制速率 `pv -L 2m ~/a.log > ~/b.log`

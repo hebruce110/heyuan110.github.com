@@ -13,16 +13,16 @@ tags:
 
 ![](https://raw.githubusercontent.com/heyuan110/static-source/master/media/15604059653679/15604059653679.jpg)
 
-#### 环境
+## 1.环境
 
 系统：ubuntu16.04
 docker：18.02.0-ce
 
-#### 获取nexus3镜像
+## 2.获取nexus3镜像
 
 `docker pull sonatype/nexus3`
 
-#### 启动镜像
+## 3.启动镜像
 
 ```
 docker run -id --privileged=true --name=nexus3 --restart=always -p 9500:8081 -p 9501:9501 -p 9502:9502 -p 9503:9503 -v /usr/local/programs/nexus3/nexus-data:/nexus-data sonatype/nexus3:latest
@@ -39,7 +39,7 @@ docker run -id --privileged=true --name=nexus3 --restart=always -p 9500:8081 -p 
 
 数据：在宿主机创建目录/usr/local/programs/nexus3/nexus-data，/nexus-data为docker容器数据存储目录。所以-v设置映射关系后数据将会存到宿主机/usr/local/programs/nexus3/nexus-data
 
-#### 配置私有仓库
+## 4.配置私有仓库
 
 访问<http://localhost:9500>默认账号admin/admin123
 
@@ -53,9 +53,9 @@ docker run -id --privileged=true --name=nexus3 --restart=always -p 9500:8081 -p 
 
 **注意**：创建仓库时如果勾选匿名可pull项，需找到security->realms页面(<http://localhost:9500/#admin/security/realms>)，将docker bearer token realm项添加到右边激活，否则匿名docker pull会报错无权限.
 
-#### 用户侧docker添加私有仓
+## 5. 用户侧docker添加私有仓
 
-##### mac和win
+### mac和win
 
 打开docker的设置，选择daemon，在insecure registries里添加
 
@@ -67,7 +67,7 @@ http://localhost:9503
 
 重启docker。
 
-##### ubuntu
+### ubuntu
 
 命令`vi /etc/docker/daemon.json`，插入下面内容:
 
@@ -82,9 +82,9 @@ http://localhost:9503
 
 执行`sudo service docker restart`重启docker。
 
-#### 管理镜像
+## 6.管理镜像
 
-##### 添加镜像
+### 添加镜像
 
 先登录到localhost:9501私有仓，执行`docker login localhost:9501`登录，看到login success表示登录成功。
 
@@ -96,11 +96,11 @@ http://localhost:9503
 
 可以打开<http://localhost:9500/#browse/browse>查看上传镜像。
  
-##### 拉取镜像
+### 拉取镜像
 
 从docker group端口9503拉取，例如：`docker pull localhost:9503/php:7.0`
 
-##### 搜索镜像
+### 搜索镜像
 从docker group端口9503搜索，例如：`docker search localhost:9503/php:7.0`，会从docker group包含的仓库按照设置的优先级搜索。
 
 

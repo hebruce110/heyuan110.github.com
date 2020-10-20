@@ -92,9 +92,14 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
     weight = 11
 
   [[menu.nav]]
+    name = "Docker系列"
+    url = "docker-categories/"
+    weight = 12
+
+  [[menu.nav]]
     name = "Linux系列"
     url = "linux-categories/"
-    weight = 11
+    weight = 13
 
 
 
