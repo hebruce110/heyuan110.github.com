@@ -8,6 +8,9 @@ tags:
     - 搜索
 ---
 
+![](https://raw.githubusercontent.com/heyuan110/static-source/master/cover/es.jpg)
+
+
 Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。
 
 
@@ -22,13 +25,14 @@ ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（
 
 ## 二、常用查询命令
 
-#### 1. 查看_cat相关命令
+### 1. 查看_cat相关命令
 
 > `GET /_cat/` 
 
 结果:
 
->```
+```
+>
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/_cat/
 HTTP/1.1 200 OK
 content-type: text/plain; charset=UTF-8
@@ -64,13 +68,13 @@ content-length: 493
 /_cat/templates
 ```
 
-#### 2.查看集群健康
+### 2.查看集群健康
 
 > `GET /_cat/health?v`
 
 结果：
 
->```
+```
 ➜  ~ curl -XGET http://192.168.11.119:9200/_cat/health\?v
 epoch      timestamp cluster       status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent
 1533717572 08:39:32  elasticsearch yellow          1         1    315 315    0    0      315             0                  -                 50.0%
@@ -84,12 +88,13 @@ red：不是所有索引的primary shard都是active状态的，部分索引有�
 
 我们现在就一台服务器，就启动了一个es进程，相当于就只有一个node。现在es中有一个index，就是kibana自己内置建立的index。由于默认的配置是给每个index分配5个primary shard和5个replica shard，而且primary shard和replica shard不能在同一台机器上（为了容错）。现在kibana自己建立的index是1个primary shard和1个replica shard。当前就一个node，所以只有1个primary shard被分配了和启动了，但是一个replica shard没有第二台机器去启动。
 
-#### 3. 查看集群有哪些索引
+### 3. 查看集群有哪些索引
 
 >`GET /_cat/indices\?v`
+
 结果:
 
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/_cat/indices\?v
 HTTP/1.1 200 OK
 content-type: text/plain; charset=UTF-8
@@ -105,13 +110,13 @@ yellow open   db_search                                WKYGbjjLSZmh0s_LyuT2tQ   
 yellow open   de_28_category_product                   IUCYcmTIR6K4AzUpAWJmHg   5   1      12659           27     22.5mb         22.5mb
 ```
 
-#### 4. 创建索引
+### 4. 创建索引
 
->`PUT /test_index?pretty`
+`PUT /test_index?pretty`
 
 结果：
 
->```
+```
 ➜  ~ curl -i -XPUT http://192.168.11.119:9200/test_index\?pretty
 HTTP/1.1 200 OK
 content-type: application/json; charset=UTF-8
@@ -121,15 +126,17 @@ content-length: 60
   "shards_acknowledged" : true
 ```
 
-#### 5.删除索引
 
->`DELETE /test_index?pretty`
+### 5.删除索引
 
-#### 6. 新增文档并建立索引
+`DELETE /test_index?pretty`
+
+
+### 6. 新增文档并建立索引
 
 语法格式：
 
->```
+```
 PUT /index/type/id
 {
     "json数据"
@@ -138,7 +145,7 @@ PUT /index/type/id
 
 index索引名、type类型名、id数据的id
 
->```
+```
 PUT /test_index/user/1
 {
     "name": "小明",
@@ -149,7 +156,7 @@ PUT /test_index/user/1
 
 结果如下：
 
->```
+```
 ➜  ~ curl -i -XPUT http://192.168.11.119:9200/test_index/user/1 -d '{
     "name": "小明",
     "email": "xiaoming@test.com",
@@ -165,13 +172,13 @@ content-length: 143
 >{"_index":"test_index","_type":"user","_id":"1","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"created":true}%
 ```
 
-#### 6.查询新增的文档
+### 6.1 查询新增的文档
 
->`GET /索引/类型/字段值`
+`GET /索引/类型/字段值`
 
 例如：
 
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/1\?pretty
 HTTP/1.1 200 OK
 content-type: application/json; charset=UTF-8
@@ -193,11 +200,11 @@ content-length: 232
 }
 ```
 
-#### 7.修改文档
+### 7.修改文档
 
 修改分为全部修改或部分修改，全部修改就是直接替换，需要带上全部字段才能修改，例如：
 
->```
+```
 ➜  ~  curl -i -XPUT http://192.168.11.119:9200/test_index/user/1 -d '{
     "name": "小明",
     "email": "xiaoming@test.com",
@@ -213,7 +220,7 @@ content-length: 144
 注意全部修改用的是PUT方法.
 部分修改就是只更新部分,用的POST方法，参数部分增加了一个doc的key，例如:
 
->```
+```
 ➜  ~ curl -i -XPOST http://192.168.11.119:9200/test_index/user/1/_update -d '{
         "doc":{
             "email": "xiaoming@demo.com"
@@ -226,13 +233,13 @@ content-length: 128
 {"_index":"test_index","_type":"user","_id":"1","_version":3,"result":"updated","_shards":{"total":2,"successful":1,"failed":0}}
 ```
 
-#### 8.删除文档
+### 8.删除文档
 
->`DELETE /test_index/user/1`
+`DELETE /test_index/user/1`
 
 例如：
 
->```
+```
 ➜  ~ curl -i -XDELETE http://192.168.11.119:9200/test_index/user/2
 HTTP/1.1 200 OK
 content-type: application/json; charset=UTF-8
@@ -240,12 +247,13 @@ content-length: 141
 {"found":true,"_index":"test_index","_type":"user","_id":"2","_version":2,"result":"deleted","_shards":{"total":2,"successful":1,"failed":0}}
 ```
 
-#### 9.查询字符串
->`GET /test_index/user`
+### 9.查询字符串
+
+`GET /test_index/user`
 
 例如：
 
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty
 HTTP/1.1 200 OK
 content-type: application/json; charset=UTF-8
@@ -308,7 +316,7 @@ hits.hits：包含了匹配搜索的document的详细数据
 
 搜索名字为bruce的用户，而且按照email倒序
 
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty\&q=name:'bruce'&sort=email:desc
 [1] 26574
 HTTP/1.1 200 OK
@@ -347,19 +355,19 @@ content-length: 479
 
 通过这个例子发现这样搜索是不区分大小写的.适用于临时的在命令行使用一些工具，比如curl，快速的发出请求，来检索想要的信息；但是如果查询请求很复杂，是很难去构建,在实际的生产环境中，几乎很少使用查询字符串.
 
-#### 11. 查询索引的表和字段定义
+### 10. 查询索引的表和字段定义
 
  查询es所有的表和字段定义
->`GET /_mapping`
+`GET /_mapping`
 
 查询某个索引的表定义
->`GET /test_index/_mapping`
+`GET /test_index/_mapping`
 
 查询某个索引的表的字段定义
->`GET /test_index/user/_mapping`
+`GET /test_index/user/_mapping`
 
 例如：
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/_mapping\?pretty
 HTTP/1.1 200 OK
 content-type: application/json; charset=UTF-8
@@ -426,13 +434,13 @@ content-length: 1267
 ```
 
 
-#### 12.查询DSL(Domain Specified Language，特定领域的语言 )
+### 11.查询DSL(Domain Specified Language，特定领域的语言 )
 
 http request body：请求体，可以用json的格式来构建查询语法，比较方便，可以构建各种复杂的语法，比查询字符串肯定强大多了
 
-- **12.1查询所有文档**
+- **11.1查询所有文档**
 
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty -d '
 {
   "query": {
@@ -490,11 +498,11 @@ content-length: 1895
 
 注意match_all是包含在query字典里的，query处于root节点位置
 
-- **12.2查询包含输入字符的文档**
+- **11.2查询包含输入字符的文档**
 
 query还是处于root节点，增加一个键值sort排序与query同级，示例：
 
->```
+```
 ➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty -d '
 {
   "query": {
@@ -531,7 +539,7 @@ content-length: 193
 
 查询包含Br字符的文档（行），并对结果以email倒序。第一次运行上面语句时报错`Fielddata is disabled on text fields by default. Set fielddata=true on [email] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory."`,经查询资料，应该是5.x后对排序、聚合相关操作用单独的数据结构fileddata缓存到内存里，需调接口开启使用到的字段，[官方解释](https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html), 执行下面的操作开启:
 
->```
+```
 ➜  ~ curl -i -XPUT http://192.168.11.119:9200/test_index/_mapping/user\?pretty -d '
 {
   "properties": {
@@ -571,11 +579,11 @@ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search?pretty -d '
 '
 ```
 
-- **12.3查询过滤器**
+- **11.3查询过滤器**
 
 搜索商品名包含Rhinestone，售卖价格小于3大于等于1的商品，结果按售卖价升序，构造DSL语句：
 
->```
+```
 curl -i -XGET http://192.168.11.119:9200/en_es_category_products/product/_search?pretty -d '
 {
   "query": {
@@ -619,7 +627,7 @@ range操作符包含:
 
 查询结果:
 
->```
+```
 HTTP/1.1 200 OK
 Warning: 299 Elasticsearch-5.5.2-b2f0c09 "Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header." "Wed, 08 Aug 2018 13:15:52 GMT"
 content-type: application/json; charset=UTF-8
@@ -672,7 +680,5 @@ content-length: 1141
 ```
 
 注意参数嵌套了好几层，很容易写错，query、_source、sort都处于root级，query/bool下包含must、filter两级
-
-
 
 
