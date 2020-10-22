@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>zsh on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/zsh/</link>
+    <description>Recent content in zsh on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 17 Jun 2015 17:03:18 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/zsh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ZSH配置和使用</title>
+      <link>http://www.heyuan110.com/posts/linux/2015-06-17-shell-zsh/</link>
+      <pubDate>Wed, 17 Jun 2015 17:03:18 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2015-06-17-shell-zsh/</guid>
+      <description>&lt;p&gt;如果你使用Linux操作系统，那就免不了要和终端打交道，而shell是与系统交互的外壳，也是Linux的精髓，那么花一点时间使用配置一个强大的shell，绝对是物超所值的。通常系统默认安装的shell时bash，当然还有其他的shell。相对linux系统自带的bash，我更喜欢zsh(shell中的高富帅)，能安装各种插件，精美的主题，自定义各种快捷方式, zsh安装配置的方法也很简单，下面的方法我在ubuntu和mac上亲测有效。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;装完后看看你的vi吧，发两张截图&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

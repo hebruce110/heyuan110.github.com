@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>charles on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/charles/</link>
+    <description>Recent content in charles on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 15 Aug 2015 11:33:11 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/charles/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网络抓包工具Charles</title>
+      <link>http://www.heyuan110.com/posts/macos/charles/</link>
+      <pubDate>Sat, 15 Aug 2015 11:33:11 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/macos/charles/</guid>
+      <description>&lt;p&gt;Charles是Mac下常用的网络抓包工具，常用来模拟数据和网络辅助接口调试，作为代理抓取网络请求数据，这篇文章记录了几个实用场景，希望对你有帮助。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://pan.baidu.com/s/1mgszWRu&#34;&gt;Charles下载传送门&lt;/a&gt;。经常会有这样的场景:&lt;/p&gt;
+&lt;p&gt;场景一: 想看看其他的App是怎样设计请求，怎样设计返回数据格式，某一个功能点请求分几个实现的。最近我在用某听书软件听鬼故事（^0^）,它们限制非VIP每天只能下100篇离线，我试着用charles拦截修改返回数据，把我自己变成超级VIP了，然后, 没然后了&amp;hellip;.&lt;/p&gt;
+&lt;p&gt;场景二: 一个请求发起直接返回各种看起来奇葩的错误，检查半天代码好像也没问题，直接就大嘴巴叫后台的兄弟服务挂了，后台一看，好好的啊&amp;hellip;&lt;/p&gt;
+&lt;p&gt;场景三: 开发新的功能，接口也先大概定义好了，可后台兄弟忙着和妹子聊天（&lt;em&gt;^&lt;/em&gt;），接口还没写好啊&amp;hellip;,虽然可以在代码里写死demo数据，但后台接口写好了，难道又去改一遍?有木有更好的方式呢？先把请求都写好，能正常返回数据，解析好结果绑定到界面，最后接口写好了直接就对接，charles可以帮助我们这么干。&lt;/p&gt;
+&lt;p&gt;场景四: 除了WIFI我们还要测试2G,3G,4G等各种复杂网络条件下的情况，可手机上网资费不便宜啊，可以让charles限制网速模拟网络环境。&lt;/p&gt;
+&lt;p&gt;就列举这么几个场景吧，下面进入本文的正题&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

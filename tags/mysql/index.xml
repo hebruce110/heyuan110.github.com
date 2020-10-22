@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mysql on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/mysql/</link>
+    <description>Recent content in mysql on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Fri, 06 Sep 2019 20:10:21 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL里EXPLAIN解读</title>
+      <link>http://www.heyuan110.com/posts/mysql/2019-09-06-mysql-explain/</link>
+      <pubDate>Fri, 06 Sep 2019 20:10:21 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/mysql/2019-09-06-mysql-explain/</guid>
+      <description>如何分析一条SQL执行过程?如果评价SQL执行性能好坏？EXPLAIN就是一个很好的工具，它的使用法也很简单，再SQL语句前加上EXPLAIN关键字就可以。
+我用的是Mac系统IDE工具Sequel Pro。
+来看第一个例子
+EXPLAIN SELECT o.id,c.`customers_firstname`,c.`customers_lastname` FROM oms_orders o LEFT JOIN sys_customers c on c.id = o.user_id WHERE o.created_at &amp;gt; &#39;2019-09-05&#39; 执行结果： EXPLAIN列的解释：
+ id：SELECT 标识符，下面具体分析 select_type: SELECT 类型，下面会具体分析 table: 查询所使用的表 type: JOIN 的类型，下面会具体分析 possible_keys: 可能使用的索引，但不一定会真正使用 key: 真正使用的索引 key_len: 所使用的索引长度 ref: 与索引比较的列 rows: 预估需要扫描的行数 Extra: 额外信息  </description>
+    </item>
+    
+    <item>
+      <title>数据仓库Amazon Redshift</title>
+      <link>http://www.heyuan110.com/posts/datawarehouse/2018-08-09-dw-redshift/</link>
+      <pubDate>Thu, 09 Aug 2018 14:06:44 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/datawarehouse/2018-08-09-dw-redshift/</guid>
+      <description>前言 Amazon Redshift 是一个快速、可扩展的数据仓库，可以简单、经济高效地分析数据仓库和数据湖中的所有数据。Redshift 通过在高性能磁盘上使用 Machine Learning、大规模并行查询执行和列式存储可提供比其他数据仓库快十倍的性能。
+1.对系统表优化：vacuum • VACUUM操作分两个阶段执行：（1）对未排序区域中的行进行排序；（2）如有必要（95%），会将表结尾处的新排序的行与现有行合并。因此，如果您按排序键顺序加载数据，则 VACUUM操作的速度会很快。 VACUUM类型 • VACUUM DELETE ONLY：仅删除 vacuum。回收磁盘空间，但对新行不排序。 • VACUUM SORT ONLY：仅排序 vacuum。对新行排序，但不回收磁盘空间。 • VACUUM FULL：完全 vacuum。默认的vacuum。相当于VACUUM DELETE ONLY+ VACUUM SORT ONLY，但比两者串行运行更加高效。 • VACUUM REINDEX：完全 vacuum 重建索引。对交错排序键的表有意义，它重新分析表的排序键列中的值分配，然后执行完全 VACUUM 操作。VACUUM REINDEX 花费的时间比 VACUUM FULL 长得多。
+估算vacuum大概多长时间运行完毕： select * from SVV_VACUUM_PROGRESS;
+vacuum结束后查看效果： select table_name, (elapsed_time/1000000) as elapsed_time_s, sort_partitions, row_delta, sortedrow_delta, block_delta from SVV_VACUUM_SUMMARY order by xid;
+查看vacuum结束后磁盘的回收率： select * from SVL_VACUUM_PERCENTAGE order by xid;</description>
+    </item>
+    
+  </channel>
+</rss>

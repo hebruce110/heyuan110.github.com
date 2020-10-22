@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="cf-2fa-verify" content="9940932432">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Nginx实现部分页面https">
+<meta itemprop="description" content="由于业务需要，在checkout页面需要实现https加密访问，之前只做过nginx的全站https，对于部分页面https搜索方法有说在代码里直接写成https，有说服务器上直接配置的，做了对比觉得还是nginx上直接配置靠谱，开始动手.
+需求: 全站除了checkout页面https，其他都采取http访问, 如果不符合这个规则的，按照规则强制跳转.
+思路: http访问时，在nginx里判断路径包含/checkout，就强制将http转到https；https访问时，判断非checkout，就强制调到http。思路是没有问题，问题是我想用nginx的location实现，研究了半天没找到很好的方案实现[非checkout]. 不过最后还是实现了~_~,用到了nginx的proxy_pass，下面讲具体实现，最后会放出完整的配置,也许还有问题，欢迎提出.
+直接把nginx配置放上来, server_name自行做修改，用了反向代理proxy_pass到负载均衡服务器.
+server { server_name heyuan110.com; rewrite ^/(.*) http://www.heyuan110.com/$1 permanent; } server { listen 80; server_name www.heyuan110.com; gzip on; gzip_min_length 1k; gzip_buffers 16 64k; gzip_http_version 1.1; gzip_comp_level 4; gzip_types text/plain application/javascript application/x-javascript text/css application/xml; gzip_vary on; access_log /var/log/nginx/access.log; error_log /var/log/nginx/error.log; location ~* /news/show/* { return 301 https://$host$request_uri; } location / { proxy_pass http://web; proxy_connect_timeout 600; proxy_read_timeout 600; proxy_send_timeout 600; proxy_buffer_size 64k; proxy_buffers 4 32k; proxy_busy_buffers_size 64k; proxy_temp_file_write_size 64k; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_redirect off; } location = /robots.">
+<meta itemprop="datePublished" content="2016-04-22T20:33:37+00:00" />
+<meta itemprop="dateModified" content="2016-04-22T20:33:37+00:00" />
+<meta itemprop="wordCount" content="233">
+
+
+
+<meta itemprop="keywords" content="nginx,https," />
+<meta property="og:title" content="Nginx实现部分页面https" />
+<meta property="og:description" content="由于业务需要，在checkout页面需要实现https加密访问，之前只做过nginx的全站https，对于部分页面https搜索方法有说在代码里直接写成https，有说服务器上直接配置的，做了对比觉得还是nginx上直接配置靠谱，开始动手.
+需求: 全站除了checkout页面https，其他都采取http访问, 如果不符合这个规则的，按照规则强制跳转.
+思路: http访问时，在nginx里判断路径包含/checkout，就强制将http转到https；https访问时，判断非checkout，就强制调到http。思路是没有问题，问题是我想用nginx的location实现，研究了半天没找到很好的方案实现[非checkout]. 不过最后还是实现了~_~,用到了nginx的proxy_pass，下面讲具体实现，最后会放出完整的配置,也许还有问题，欢迎提出.
+直接把nginx配置放上来, server_name自行做修改，用了反向代理proxy_pass到负载均衡服务器.
+server { server_name heyuan110.com; rewrite ^/(.*) http://www.heyuan110.com/$1 permanent; } server { listen 80; server_name www.heyuan110.com; gzip on; gzip_min_length 1k; gzip_buffers 16 64k; gzip_http_version 1.1; gzip_comp_level 4; gzip_types text/plain application/javascript application/x-javascript text/css application/xml; gzip_vary on; access_log /var/log/nginx/access.log; error_log /var/log/nginx/error.log; location ~* /news/show/* { return 301 https://$host$request_uri; } location / { proxy_pass http://web; proxy_connect_timeout 600; proxy_read_timeout 600; proxy_send_timeout 600; proxy_buffer_size 64k; proxy_buffers 4 32k; proxy_busy_buffers_size 64k; proxy_temp_file_write_size 64k; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_redirect off; } location = /robots." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/linux/nginx/2016-04-22-nginx-https/" />
+<meta property="article:published_time" content="2016-04-22T20:33:37+00:00" />
+<meta property="article:modified_time" content="2016-04-22T20:33:37+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Nginx实现部分页面https"/>
+<meta name="twitter:description" content="由于业务需要，在checkout页面需要实现https加密访问，之前只做过nginx的全站https，对于部分页面https搜索方法有说在代码里直接写成https，有说服务器上直接配置的，做了对比觉得还是nginx上直接配置靠谱，开始动手.
+需求: 全站除了checkout页面https，其他都采取http访问, 如果不符合这个规则的，按照规则强制跳转.
+思路: http访问时，在nginx里判断路径包含/checkout，就强制将http转到https；https访问时，判断非checkout，就强制调到http。思路是没有问题，问题是我想用nginx的location实现，研究了半天没找到很好的方案实现[非checkout]. 不过最后还是实现了~_~,用到了nginx的proxy_pass，下面讲具体实现，最后会放出完整的配置,也许还有问题，欢迎提出.
+直接把nginx配置放上来, server_name自行做修改，用了反向代理proxy_pass到负载均衡服务器.
+server { server_name heyuan110.com; rewrite ^/(.*) http://www.heyuan110.com/$1 permanent; } server { listen 80; server_name www.heyuan110.com; gzip on; gzip_min_length 1k; gzip_buffers 16 64k; gzip_http_version 1.1; gzip_comp_level 4; gzip_types text/plain application/javascript application/x-javascript text/css application/xml; gzip_vary on; access_log /var/log/nginx/access.log; error_log /var/log/nginx/error.log; location ~* /news/show/* { return 301 https://$host$request_uri; } location / { proxy_pass http://web; proxy_connect_timeout 600; proxy_read_timeout 600; proxy_send_timeout 600; proxy_buffer_size 64k; proxy_buffers 4 32k; proxy_busy_buffers_size 64k; proxy_temp_file_write_size 64k; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_redirect off; } location = /robots."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Nginx实现部分页面https</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.d3141168199607bf3a517216ce3c263814eecdbc8fca72a9a88700799a838219.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/docker-categories/">Docker系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://github.com/heyuan110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Apr 22, 2016</span></div>
+				<h1>Nginx实现部分页面https</h1>
+			</header>
+			<div class="content">
+				<p>由于业务需要，在checkout页面需要实现https加密访问，之前只做过nginx的全站https，对于部分页面https搜索方法有说在代码里直接写成https，有说服务器上直接配置的，做了对比觉得还是nginx上直接配置靠谱，开始动手.</p>
+<p>需求: 全站除了checkout页面https，其他都采取http访问, 如果不符合这个规则的，按照规则强制跳转.</p>
+<p>思路: http访问时，在nginx里判断路径包含/checkout，就强制将http转到https；https访问时，判断非checkout，就强制调到http。思路是没有问题，问题是我想用nginx的location实现，研究了半天没找到很好的方案实现[非checkout]. 不过最后还是实现了~_~,用到了nginx的proxy_pass，下面讲具体实现，最后会放出完整的配置,也许还有问题，欢迎提出.</p>
+<p>直接把nginx配置放上来, server_name自行做修改，用了反向代理proxy_pass到负载均衡服务器.</p>
+<div class="highlight"><pre class="chroma"><code class="language-nginx" data-lang="nginx">
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">server_name</span> <span class="s">heyuan110.com</span><span class="p">;</span>
+    <span class="kn">rewrite</span> <span class="s">^/(.*)</span> <span class="s">http://www.heyuan110.com/</span><span class="nv">$1</span> <span class="s">permanent</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span>       <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span>  <span class="s">www.heyuan110.com</span><span class="p">;</span>
+
+    <span class="kn">gzip</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">gzip_min_length</span> <span class="mi">1k</span><span class="p">;</span>
+    <span class="kn">gzip_buffers</span> <span class="mi">16</span> <span class="mi">64k</span><span class="p">;</span>
+    <span class="kn">gzip_http_version</span> <span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+    <span class="kn">gzip_comp_level</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="kn">gzip_types</span> <span class="s">text/plain</span> <span class="s">application/javascript</span> <span class="s">application/x-javascript</span> <span class="s">text/css</span> <span class="s">application/xml</span><span class="p">;</span>
+    <span class="kn">gzip_vary</span> <span class="no">on</span><span class="p">;</span>
+
+    <span class="kn">access_log</span>  <span class="s">/var/log/nginx/access.log</span><span class="p">;</span>
+    <span class="kn">error_log</span>   <span class="s">/var/log/nginx/error.log</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="s">/news/show/*</span> <span class="p">{</span>
+        <span class="kn">return</span>  <span class="mi">301</span> <span class="s">https://</span><span class="nv">$host$request_uri</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+           <span class="kn">proxy_pass</span>        <span class="s">http://web</span><span class="p">;</span>
+           <span class="kn">proxy_connect_timeout</span> <span class="mi">600</span><span class="p">;</span>
+           <span class="kn">proxy_read_timeout</span> <span class="mi">600</span><span class="p">;</span>
+           <span class="kn">proxy_send_timeout</span> <span class="mi">600</span><span class="p">;</span>
+           <span class="kn">proxy_buffer_size</span> <span class="mi">64k</span><span class="p">;</span>
+           <span class="kn">proxy_buffers</span>  <span class="mi">4</span> <span class="mi">32k</span><span class="p">;</span>
+           <span class="kn">proxy_busy_buffers_size</span> <span class="mi">64k</span><span class="p">;</span>
+           <span class="kn">proxy_temp_file_write_size</span> <span class="mi">64k</span><span class="p">;</span>
+           <span class="kn">proxy_set_header</span>   <span class="s">Host</span>             <span class="nv">$host</span><span class="p">;</span>
+           <span class="kn">proxy_set_header</span>   <span class="s">X-Real-IP</span>        <span class="nv">$remote_addr</span><span class="p">;</span>
+           <span class="kn">proxy_set_header</span>   <span class="s">X-Forwarded-For</span>  <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+           <span class="kn">proxy_redirect</span>     <span class="no">off</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="p">=</span> <span class="s">/robots.txt</span> <span class="p">{</span>
+        <span class="kn">return</span> <span class="mi">200</span> <span class="s">&#34;User-agent:</span> <span class="s">*\nDisallow:&#34;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="p">~</span> <span class="sr">^/nginx_status/</span> <span class="p">{</span>
+        <span class="kn">stub_status</span> <span class="no">on</span><span class="p">;</span>
+        <span class="kn">access_log</span> <span class="no">off</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="c1">#    location ~* \.(ttf|woff|ttf|svg|eot)$ {
+</span><span class="c1">#       add_header &#39;Access-Control-Allow-Origin&#39; &#39;*&#39;;
+</span><span class="c1">#       add_header &#39;Access-Control-Allow-Credentials&#39; &#39;true&#39;;
+</span><span class="c1">#       add_header &#39;Access-Control-Allow-Methods&#39; &#39;GET,POST,HEAD&#39;;
+</span><span class="c1">#    }
+</span><span class="c1"></span>
+<span class="c1">#    location ~ \.(gif|jpg|jpeg|js|css|png|bmp|ico)$ {
+</span><span class="c1">#        expires 30d;
+</span><span class="c1">#    }
+</span><span class="c1"></span>
+<span class="c1">#     location ~* \.(jpg|jpeg|gif|css|png|js|ico|html|woff)$ {
+</span><span class="c1">#       expires max;
+</span><span class="c1">#     }
+</span><span class="c1"></span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span>       <span class="mi">443</span> <span class="s">ssl</span><span class="p">;</span>
+    <span class="kn">server_name</span>  <span class="s">www.heyuan110.com</span><span class="p">;</span>
+
+    <span class="kn">access_log</span>  <span class="s">/var/log/nginx/sslaccess.log</span><span class="p">;</span>
+    <span class="kn">error_log</span>   <span class="s">/var/log/nginx/sslerror.log</span><span class="p">;</span>
+
+    <span class="kn">ssl</span> <span class="no">on</span><span class="p">;</span>
+<span class="kn">ssl_prefer_server_ciphers</span> <span class="s">On</span><span class="p">;</span>
+<span class="kn">ssl_protocols</span> <span class="s">TLSv1</span> <span class="s">TLSv1.1</span> <span class="s">TLSv1.2</span><span class="p">;</span>
+<span class="c1">#ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
+</span><span class="c1"></span><span class="kn">ssl_ciphers</span> <span class="s">ALL:!ADH:!EXP:!LOW:!RC2:!3DES:!SEED:!RC4:+HIGH:+MEDIUM</span><span class="p">;</span>
+    <span class="kn">ssl_certificate</span> <span class="s">/usr/local/nginx/conf/ssl/website_ssl.crt</span><span class="p">;</span>
+    <span class="kn">ssl_certificate_key</span> <span class="s">/usr/local/nginx/conf/ssl/website_ssl.key</span><span class="p">;</span>
+<span class="c1">#    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+</span><span class="c1">#    ssl_prefer_server_ciphers on;
+</span><span class="c1">#    keepalive_timeout   70;
+</span><span class="c1"></span>
+    <span class="kn">location</span> <span class="p">~</span><span class="sr">*</span> <span class="s">/news/show/*</span> <span class="p">{</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://web</span><span class="p">;</span>
+        <span class="kn">proxy_read_timeout</span> <span class="mi">300</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="kn">proxy_redirect</span>     <span class="no">off</span><span class="p">;</span>
+
+        <span class="c1">### Most PHP, Python, Rails, Java App can use this header -&gt; https ###
+</span><span class="c1"></span>        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-Proto</span>  <span class="nv">$scheme</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="p">~</span> <span class="sr">\.(css|js|gif|jpg|woff|woff2|png|ico)$</span> <span class="p">{</span>
+        <span class="kn">proxy_pass</span>  <span class="s">http://web</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+      <span class="kn">return</span>  <span class="mi">301</span> <span class="s">http://</span><span class="nv">$server_name$request_uri</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+</code></pre></div>
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/nginx">nginx</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/https">https</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>233 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2016-04-22 20:33 &#43;0000</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/datawarehouse/2018-08-09-dw-redshift/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>数据仓库Amazon Redshift</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/macos/charles/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>网络抓包工具Charles</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2020 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js"></script>
+
+</body>
+
+</html>

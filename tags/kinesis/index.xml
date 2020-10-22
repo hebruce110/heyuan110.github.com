@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kinesis on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/kinesis/</link>
+    <description>Recent content in kinesis on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 12 Sep 2018 18:52:59 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/kinesis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>搭建EKK日志收集分析系统</title>
+      <link>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-log-ekk/</link>
+      <pubDate>Wed, 12 Sep 2018 18:52:59 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-log-ekk/</guid>
+      <description>EKK是一套基于AWS相关服务搭建的日志收集系统，包含Amazon Elasticsearch Service, Amazon Kinesis, and Kibana，简称EKK.相比ELK搭建维护运维复杂，EKK更加简便。下图是EKK基本架构：
+本文重点记录nginx日志怎样收集和以正确格式存到es，不会就每一步详细讲解。
+一、准备工作：  开一台ec2，选择ubuntu16.04，搭建nginx一个nginx服务，设置nginx日志格式:  log_format main &#39;$remote_addr - $remote_user [$time_local] &amp;quot;$request&amp;quot; &#39; &#39;$status $body_bytes_sent &amp;quot;$http_referer&amp;quot; &#39; &#39;&amp;quot;$http_user_agent&amp;quot; &amp;quot;$http_x_forwarded_for&amp;quot; &#39; &#39;$connection &amp;quot;$upstream_addr&amp;quot; &#39; &#39;upstream_response_time $upstream_response_time request_time $request_time&#39;; 最终access.log里的日志格式如下：
+192.168.13.1 - - [12/Sep/2018:03:59:12 +0000] &amp;quot;GET /v1/home HTTP/1.1&amp;quot; 2002787 &amp;quot;https://test.com/product/Sweet-Ice-Cream-Short-sleeve-Top-and-Pink-Shorts-for-Toddler-Baby.html&amp;quot; &amp;quot;Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 [FBAN/FBIOS;FBDV/iPhone7,2;FBMD/iPhone;FBSN/iOS;FBSV/11.4.1;FBSS/2;FBCR/Telekom.de;FBID/phone;FBLC/de_DE;FBOP/5;FBRV/123725744]&amp;quot; &amp;quot;2002:c7:6f02:9801:d506:6bda:e6ca:b6f9, 112.118.106.116&amp;quot; 12340 &amp;quot;127.0.0.1:9000&amp;quot; upstream_response_time 0.11 request_time 0.11 创建可访问Kinesis stream或Kinesis firehose, AWS ES服务的IAM账号，保存awsAccessKeyId和awsSecretAccessKey。 AWS上启动ES服务TestES，创建时类型务必选择public，后面再做安全策略。 创建Kinesis firehose(如果有一个源对多个标的的需求可以使用Kinesis stream)，数据流向选择上面创建的TestES。  准备工作大概完成。</description>
+    </item>
+    
+  </channel>
+</rss>

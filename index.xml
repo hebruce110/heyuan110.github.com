@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/</link>
+    <description>Recent content on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sat, 04 Jul 2020 00:16:54 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《Docker 系列》</title>
+      <link>http://www.heyuan110.com/docker-categories/</link>
+      <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/docker-categories/</guid>
+      <description> Docker学习笔记） Docker常用命令） Docker私有仓库搭建）  </description>
+    </item>
+    
+    <item>
+      <title>AWS CLI常用命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-07-04-aws-cli/</link>
+      <pubDate>Sat, 04 Jul 2020 00:16:54 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-07-04-aws-cli/</guid>
+      <description>AWS CLI常用命令
+S3 官方参考https://docs.amazonaws.cn/cli/latest/userguide/cli-services-s3-commands.html
+##查看默认的bucket aws s3 ls ##查看默认环境的abert-test内容 aws s3 ls s3://abert-test ##查看目录大小,列出每个文件大小 aws s3 ls --summarize --human-readable --recursive s3://bucket-name ##上传本地文件 aws s3 cp bstest.txt s3://abert-test ##复制文件 aws s3 cp s3://mybucket/test.txt s3://mybucket/test2.txt ##递归拷贝 aws s3 cp s3://mybucket . --recursive ##排除拷贝 aws s3 cp myDir s3://mybucket/ --recursive --exclude &amp;quot;*.jpg&amp;quot; ##拷贝并添加ACL权限控制 aws s3 cp s3://mybucket/test.txt s3://mybucket/test2.txt --acl public-read-write ## 移动 ## 将桶testbucket下面所有文件移动到testbucket2 aws s3 mv s3://testbucket/ s3//testbucket2/ --recursive #rm ##删除对象 aws s3 rm s3://mybucket/test.</description>
+    </item>
+    
+    <item>
+      <title>Nginx报No route to host错误</title>
+      <link>http://www.heyuan110.com/posts/linux/nginx/nginx-error-noroutetohost/</link>
+      <pubDate>Fri, 03 Jul 2020 13:19:44 +0800</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/nginx/nginx-error-noroutetohost/</guid>
+      <description>最近调整了后端站点架构为：user-------&amp;gt;nginx proxy server--------》internal host ------(cname)----》elb host，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复， 经过检查发现集群里部分机器往后转发时报如下错误:
+ 2020/06/08 16:31:20 [error] 13741#0: *116374839 connect() failed (113: No route to host) while connecting to upstream, client: 2607:xxxx:969:f1f0:c3d:70ec:178f:fd24, server: localhost, request: &amp;quot;POST /v1.4/source HTTP/1.1&amp;quot;, upstream: &amp;quot;http://172.31.xx.xx:80/v1.4/source&amp;quot;, host: &amp;quot;api.xxxx.com&amp;quot; 网上搜索找到的资料都讲防火墙原因，经过仔细排查排除了。通过仔细分析出现异常时的监控发现，在异常时间点aws elb的ip发生了变化，于是将症状和云服务的SA沟通，他说AWS ELB的IP是会变化的（之前以为是固定的）， 建议nginx上的upstream需要动态去刷新，并建议使用nginx的jdomain模块来做动态解析，参考地址https://www.nginx.com/resources/wiki/modules/domain_resolve/，我们加上这个模块后重新部署nginx问题就没再出现。
+其实原因很简单，nginx proxy指向域名时，nginx会缓存域名解析到的ip，如果域名对应的ip改变了而proxy nginx又没刷新缓存的ip，后面流量继续往旧ip转发，就会报错了，增加的动态解析模块指定dns和时间间隔去获取最新的ip并更新到缓存里，这样就保证了域名指向的ip变更proxy nginx能及时更新缓存ip。</description>
+    </item>
+    
+    <item>
+      <title>Curl命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-06-29-curl/</link>
+      <pubDate>Mon, 29 Jun 2020 20:36:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-06-29-curl/</guid>
+      <description>curl是linux下必备神器，例如：
+指定IP访问URL，HTTP和HTTPS的区别：
+curl -vosa &amp;quot;http://hikpai.hikvision.com/dashboard/workplace&amp;quot; -x 125.77.145.14:80
+curl -vosa &amp;quot;https://125.77.145.14/dashboard/workplace&amp;quot; -H &amp;quot;host:hikpai.hikvision.com&amp;quot; -k
+curl -vo /dev/null &amp;quot;https://125.77.145.14/dashboard/workplace&amp;quot; -H &amp;quot;host:hikpai.hikvision.com&amp;quot; -k
+在以下选项中，(H) 表示仅适用 HTTP/HTTPS ，(F) 表示仅适用于 FTP
+更多相关参数解释：
+ --anyauth 选择 &amp;quot;any&amp;quot; 认证方法 (H) -a, --append 添加要上传的文件 (F/SFTP) --basic 使用HTTP基础认证（Basic Authentication）(H) --cacert FILE CA 证书，用于每次请求认证 (SSL) --capath DIR CA 证书目录 (SSL) -E, --cert CERT[:PASSWD] 客户端证书文件及密码 (SSL) --cert-type TYPE 证书文件类型 (DER/PEM/ENG) (SSL) --ciphers LIST SSL 秘钥 (SSL) --compressed 请求压缩 (使用 deflate 或 gzip) -K, --config FILE 指定配置文件 --connect-timeout SECONDS 连接超时设置 -C, --continue-at OFFSET 断点续转 -b, --cookie STRING/FILE Cookies字符串或读取Cookies的文件位置 (H) -c, --cookie-jar FILE 操作结束后，要写入 Cookies 的文件位置 (H) --create-dirs 创建必要的本地目录层次结构 --crlf 在上传时将 LF 转写为 CRLF --crlfile FILE 从指定的文件获得PEM格式CRL列表 -d, --data DATA HTTP POST 数据 (H) --data-ascii DATA ASCII 编码 HTTP POST 数据 (H) --data-binary DATA binary 编码 HTTP POST 数据 (H) --data-urlencode DATA url 编码 HTTP POST 数据 (H) --delegation STRING GSS-API 委托权限 --digest 使用数字身份验证 (H) --disable-eprt 禁止使用 EPRT 或 LPRT (F) --disable-epsv 禁止使用 EPSV (F) -D, --dump-header FILE 将头信息写入指定的文件 --egd-file FILE 为随机数据设置EGD socket路径(SSL) --engine ENGINGE 加密引擎 (SSL).</description>
+    </item>
+    
+    <item>
+      <title>Traceroute命令</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-06-28-traceroute/</link>
+      <pubDate>Sun, 28 Jun 2020 12:12:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-06-28-traceroute/</guid>
+      <description>1. 简介 通过traceroute我们可以知道信息从你的计算机到互联网另一端的主机是走的什么路径。当然每次数据包由某一同样的出发点（source）到达某一同样的目的地(destination)走的路径可能会不一样，但基本上来说大部分时候所走的路由是相同的。linux系统中，我们称之为traceroute,在MS Windows中为tracert。 traceroute通过发送小的数据包到目的设备直到其返回，来测量其需要多长时间。一条路径上的每个设备traceroute要测3次。输出结果中包括每次测试的时间(ms)和设备的名称（如有的话）及其IP地址。
+在大多数情况下，我们会在linux主机系统下，直接执行命令行：
+traceroute hostname
+而在Windows系统下是执行tracert的命令：
+tracert hostname
+2. 命令格式 traceroute[参数][主机]
+3. 命令功能 traceroute指令让你追踪网络数据包的路由途径，预设数据包大小是40Bytes，用户可另行设置。
+具体参数格式：traceroute [-dFlnrvx][-f&amp;lt;存活数值&amp;gt;][-g&amp;lt;网关&amp;gt;&amp;hellip;][-i&amp;lt;网络界面&amp;gt;][-m&amp;lt;存活数值&amp;gt;][-p&amp;lt;通信端口&amp;gt;][-s&amp;lt;来源地址&amp;gt;][-t&amp;lt;服务类型&amp;gt;][-w&amp;lt;超时秒数&amp;gt;][主机名称或IP地址][数据包大小]
+4. 命令参数 -d 使用Socket层级的排错功能。
+-f 设置第一个检测数据包的存活数值TTL的大小。
+-F 设置勿离断位。
+-g 设置来源路由网关，最多可设置8个。
+-i 使用指定的网络界面送出数据包。
+-I 使用ICMP回应取代UDP资料信息。
+-m 设置检测数据包的最大存活数值TTL的大小。
+-n 直接使用IP地址而非主机名称。
+-p 设置UDP传输协议的通信端口。
+-r 忽略普通的Routing Table，直接将数据包送到远端主机上。
+-s 设置本地主机送出数据包的IP地址。
+-t 设置检测数据包的TOS数值。
+-v 详细显示指令的执行过程。
+-w 设置等待远端主机回报的时间。
+-x 开启或关闭数据包的正确性检验。
+5. 工作原理 Traceroute最简单的基本用法是：traceroute hostname
+Traceroute程序的设计是利用ICMP及IP header的TTL（Time To Live）栏位（field）。首先，traceroute送出一个TTL是1的IP datagram（其实，每次送出的为3个40字节的包，包括源地址，目的地址和包发出的时间标签）到目的地，当路径上的第一个路由器（router）收到这个datagram时，它将TTL减1。此时，TTL变为0了，所以该路由器会将此datagram丢掉，并送回一个「ICMP time exceeded」消息（包括发IP包的源地址，IP包的所有内容及路由器的IP地址），traceroute 收到这个消息后，便知道这个路由器存在于这个路径上，接着traceroute 再送出另一个TTL是2 的datagram，发现第2 个路由器&amp;hellip;&amp;hellip; traceroute 每次将送出的datagram的TTL 加1来发现另一个路由器，这个重复的动作一直持续到某个datagram 抵达目的地。当datagram到达目的地后，该主机并不会送回ICMP time exceeded消息，因为它已是目的地了，那么traceroute如何得知目的地到达了呢？</description>
+    </item>
+    
+    <item>
+      <title>《Go 系列》</title>
+      <link>http://www.heyuan110.com/go-categories/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/go-categories/</guid>
+      <description> 一：基础知识  Go基础学习    </description>
+    </item>
+    
+    <item>
+      <title>《Linux系列》</title>
+      <link>http://www.heyuan110.com/linux-categories/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/linux-categories/</guid>
+      <description> Shell脚本中$符开头变量解释  </description>
+    </item>
+    
+    <item>
+      <title>Linux(MacOS)命令笔记</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</link>
+      <pubDate>Thu, 19 Mar 2020 10:55:52 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</guid>
+      <description>&lt;p&gt;linux中许多常用命令是必须掌握的，很多用过没有记录下来很快就忘记，再次使用又到处搜索，本文主要列出我日常使用过的一些命令，会持续更新。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>关于</title>
+      <link>http://www.heyuan110.com/about/</link>
+      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/about/</guid>
+      <description>联系方式：  邮箱：bruce.he@qq.com  </description>
+    </item>
+    
+    <item>
+      <title>多版本Python环境管理-Conda</title>
+      <link>http://www.heyuan110.com/posts/python/2020-01-11-python-conda/</link>
+      <pubDate>Sat, 11 Jan 2020 20:33:33 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/python/2020-01-11-python-conda/</guid>
+      <description>随着Python3被越来越多开发者接受和应用，存在着需要在python2和python3环境切换的需要，利好消息，Conda能完美解决python这个问题。
+Conda是什么 Anaconda安装 </description>
+    </item>
+    
+  </channel>
+</rss>

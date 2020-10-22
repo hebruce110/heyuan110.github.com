@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="cf-2fa-verify" content="9940932432">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Nginx报No route to host错误">
+<meta itemprop="description" content="最近调整了后端站点架构为：user-------&gt;nginx proxy server--------》internal host ------(cname)----》elb host，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复， 经过检查发现集群里部分机器往后转发时报如下错误:
+ 2020/06/08 16:31:20 [error] 13741#0: *116374839 connect() failed (113: No route to host) while connecting to upstream, client: 2607:xxxx:969:f1f0:c3d:70ec:178f:fd24, server: localhost, request: &quot;POST /v1.4/source HTTP/1.1&quot;, upstream: &quot;http://172.31.xx.xx:80/v1.4/source&quot;, host: &quot;api.xxxx.com&quot; 网上搜索找到的资料都讲防火墙原因，经过仔细排查排除了。通过仔细分析出现异常时的监控发现，在异常时间点aws elb的ip发生了变化，于是将症状和云服务的SA沟通，他说AWS ELB的IP是会变化的（之前以为是固定的）， 建议nginx上的upstream需要动态去刷新，并建议使用nginx的jdomain模块来做动态解析，参考地址https://www.nginx.com/resources/wiki/modules/domain_resolve/，我们加上这个模块后重新部署nginx问题就没再出现。
+其实原因很简单，nginx proxy指向域名时，nginx会缓存域名解析到的ip，如果域名对应的ip改变了而proxy nginx又没刷新缓存的ip，后面流量继续往旧ip转发，就会报错了，增加的动态解析模块指定dns和时间间隔去获取最新的ip并更新到缓存里，这样就保证了域名指向的ip变更proxy nginx能及时更新缓存ip。">
+<meta itemprop="datePublished" content="2020-07-03T13:19:44+08:00" />
+<meta itemprop="dateModified" content="2020-07-03T13:19:44+08:00" />
+<meta itemprop="wordCount" content="44">
+
+
+
+<meta itemprop="keywords" content="nginx,linux," />
+<meta property="og:title" content="Nginx报No route to host错误" />
+<meta property="og:description" content="最近调整了后端站点架构为：user-------&gt;nginx proxy server--------》internal host ------(cname)----》elb host，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复， 经过检查发现集群里部分机器往后转发时报如下错误:
+ 2020/06/08 16:31:20 [error] 13741#0: *116374839 connect() failed (113: No route to host) while connecting to upstream, client: 2607:xxxx:969:f1f0:c3d:70ec:178f:fd24, server: localhost, request: &quot;POST /v1.4/source HTTP/1.1&quot;, upstream: &quot;http://172.31.xx.xx:80/v1.4/source&quot;, host: &quot;api.xxxx.com&quot; 网上搜索找到的资料都讲防火墙原因，经过仔细排查排除了。通过仔细分析出现异常时的监控发现，在异常时间点aws elb的ip发生了变化，于是将症状和云服务的SA沟通，他说AWS ELB的IP是会变化的（之前以为是固定的）， 建议nginx上的upstream需要动态去刷新，并建议使用nginx的jdomain模块来做动态解析，参考地址https://www.nginx.com/resources/wiki/modules/domain_resolve/，我们加上这个模块后重新部署nginx问题就没再出现。
+其实原因很简单，nginx proxy指向域名时，nginx会缓存域名解析到的ip，如果域名对应的ip改变了而proxy nginx又没刷新缓存的ip，后面流量继续往旧ip转发，就会报错了，增加的动态解析模块指定dns和时间间隔去获取最新的ip并更新到缓存里，这样就保证了域名指向的ip变更proxy nginx能及时更新缓存ip。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/linux/nginx/nginx-error-noroutetohost/" />
+<meta property="article:published_time" content="2020-07-03T13:19:44+08:00" />
+<meta property="article:modified_time" content="2020-07-03T13:19:44+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Nginx报No route to host错误"/>
+<meta name="twitter:description" content="最近调整了后端站点架构为：user-------&gt;nginx proxy server--------》internal host ------(cname)----》elb host，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复， 经过检查发现集群里部分机器往后转发时报如下错误:
+ 2020/06/08 16:31:20 [error] 13741#0: *116374839 connect() failed (113: No route to host) while connecting to upstream, client: 2607:xxxx:969:f1f0:c3d:70ec:178f:fd24, server: localhost, request: &quot;POST /v1.4/source HTTP/1.1&quot;, upstream: &quot;http://172.31.xx.xx:80/v1.4/source&quot;, host: &quot;api.xxxx.com&quot; 网上搜索找到的资料都讲防火墙原因，经过仔细排查排除了。通过仔细分析出现异常时的监控发现，在异常时间点aws elb的ip发生了变化，于是将症状和云服务的SA沟通，他说AWS ELB的IP是会变化的（之前以为是固定的）， 建议nginx上的upstream需要动态去刷新，并建议使用nginx的jdomain模块来做动态解析，参考地址https://www.nginx.com/resources/wiki/modules/domain_resolve/，我们加上这个模块后重新部署nginx问题就没再出现。
+其实原因很简单，nginx proxy指向域名时，nginx会缓存域名解析到的ip，如果域名对应的ip改变了而proxy nginx又没刷新缓存的ip，后面流量继续往旧ip转发，就会报错了，增加的动态解析模块指定dns和时间间隔去获取最新的ip并更新到缓存里，这样就保证了域名指向的ip变更proxy nginx能及时更新缓存ip。"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Nginx报No route to host错误</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.d3141168199607bf3a517216ce3c263814eecdbc8fca72a9a88700799a838219.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/docker-categories/">Docker系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://github.com/heyuan110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Jul 3, 2020</span></div>
+				<h1>Nginx报No route to host错误</h1>
+			</header>
+			<div class="content">
+				<p>最近调整了后端站点架构为：<code>user-------&gt;nginx proxy server--------》internal host ------(cname)----》elb host</code>，跑一段时间后经常出现诡异的情况，访问时不时会挂掉，只要重启nginx proxy集群里所有机器的nginx就能恢复，
+经过检查发现集群里部分机器往后转发时报如下错误:</p>
+<pre><code> 2020/06/08 16:31:20 [error] 13741#0: *116374839 connect() failed (113: No route to host) while connecting to upstream, client: 2607:xxxx:969:f1f0:c3d:70ec:178f:fd24, server: localhost, request: &quot;POST /v1.4/source HTTP/1.1&quot;, upstream: &quot;http://172.31.xx.xx:80/v1.4/source&quot;, host: &quot;api.xxxx.com&quot;
+</code></pre><p>网上搜索找到的资料都讲防火墙原因，经过仔细排查排除了。通过仔细分析出现异常时的监控发现，在异常时间点aws elb的ip发生了变化，于是将症状和云服务的SA沟通，他说AWS ELB的IP是会变化的（之前以为是固定的），
+建议nginx上的upstream需要动态去刷新，并建议使用nginx的jdomain模块来做动态解析，参考地址<a href="https://www.nginx.com/resources/wiki/modules/domain_resolve/">https://www.nginx.com/resources/wiki/modules/domain_resolve/</a>，我们加上这个模块后重新部署nginx问题就没再出现。</p>
+<p>其实原因很简单，nginx proxy指向域名时，nginx会缓存域名解析到的ip，如果域名对应的ip改变了而proxy nginx又没刷新缓存的ip，后面流量继续往旧ip转发，就会报错了，增加的动态解析模块指定dns和时间间隔去获取最新的ip并更新到缓存里，这样就保证了域名指向的ip变更proxy nginx能及时更新缓存ip。</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/nginx">nginx</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/linux">linux</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>44 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-07-03 05:19 &#43;0000</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/linux/2020-07-04-aws-cli/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>AWS CLI常用命令</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/linux/2020-06-29-curl/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Curl命令</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2020 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js"></script>
+
+</body>
+
+</html>

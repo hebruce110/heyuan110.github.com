@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>supervisor on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/supervisor/</link>
+    <description>Recent content in supervisor on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sun, 07 Oct 2018 00:35:04 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/supervisor/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Supervisor安装配置与使用</title>
+      <link>http://www.heyuan110.com/posts/linux/2018-10-07-supervisor/</link>
+      <pubDate>Sun, 07 Oct 2018 00:35:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2018-10-07-supervisor/</guid>
+      <description>Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。
+安装 服务器上所有应用统一安装到目录/usr/local/programs/，所以采用源码安装
+提前配置好python(2.7)环境，下载相关文件：
+  wget wget https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg &amp;ndash;no-check-certificate
+  wget https://pypi.python.org/packages/80/37/964c0d53cbd328796b1aeb7abea4c0f7b0e8c7197ea9b0b9967b7d004def/supervisor-3.3.1.tar.gz
+  按下面步骤执行:
+ 1. sh setuptools-0.6c11-py2.7.egg 2. tar -axvf supervisor-3.3.1.tar.gz 3. cd supervisor-3.3.1 4. python setup.py install 5. echo_supervisord_conf &amp;gt; /usr/local/programs/supervisoretc/supervisord.conf 6. supervisord -c /usr/local/programs/supervisoretc/supervisord.conf 7. supervisorctl 8. done 配置文件supervisord.conf：
+ ; Sample supervisor config file. ; ; For more information on the config file, please see: ; http://supervisord.</description>
+    </item>
+    
+  </channel>
+</rss>

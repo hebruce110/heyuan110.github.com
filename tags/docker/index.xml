@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>docker on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/docker/</link>
+    <description>Recent content in docker on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 14 Nov 2019 20:37:13 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker常用命令</title>
+      <link>http://www.heyuan110.com/posts/docker/2019-11-14-docker-commands/</link>
+      <pubDate>Thu, 14 Nov 2019 20:37:13 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/docker/2019-11-14-docker-commands/</guid>
+      <description>Docker常用命令记录
+1. 启动、重启或停止docker服务 启动： service docker start
+停止：service docker stop
+重启：service docker restart
+2.镜像(images) 获取镜像 docker pull [OPTIONS] NAME[:TAG|@DIGEST]
+例如：docker pull ubuntu:16.04
+列出镜像  查看所有镜像: docker images或docker image ls, 显示摘要docker images --digests 查看特定镜像:docker image ls xxxx或docker image xxxx 查看镜像、容器、数据卷所占用的空间:docker system df 列出虚悬镜像（仓库名和标签名为）:docker image ls -f dangling=true,清楚此类镜像docker image prune  删除镜像 命令docker image rm [OPTIONS] IMAGE [IMAGE...] 或 docker rmi -f xxxx 例如：
+root@ubuntu:~# docker image ls redis REPOSITORY TAG IMAGE ID CREATED SIZE redis latest ce25c7293564 5 days ago 95MB  根据完整ID删除：docker image rm 578c3e61a98c 根据短ID删除：docker image rm 578c3 根据镜像名删除：docker image rm redis docker image ls配合删除：删除所有镜像docker image rm $(docker image ls -q),删除所有仓库名为redis的镜像docker image rm $(docker image ls -q redis) 删除所有未打 dangling 标签的镜像docker rmi $(docker images -q -f dangling=true)  docker ps -a | grep &amp;ldquo;Exited&amp;rdquo; | awk &amp;lsquo;{print $1 }&#39;|xargs docker stop docker ps -a | grep &amp;ldquo;Exited&amp;rdquo; | awk &amp;lsquo;{print $1 }&#39;|xargs docker rm docker images|grep none|awk &amp;lsquo;{print $3 }&#39;|xargs docker rmi</description>
+    </item>
+    
+    <item>
+      <title>Nexus3构建Docker私服</title>
+      <link>http://www.heyuan110.com/posts/docker/2019-06-12-next3-dockerhub/</link>
+      <pubDate>Wed, 12 Jun 2019 20:50:36 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/docker/2019-06-12-next3-dockerhub/</guid>
+      <description>Nexus是有名的Maven仓库管理器。如果你使用Maven，你可以从Maven中央仓库下载所需要的构件（artifact），但这通常不是一个好的做法，你应该在本地架设一个Maven仓库服务器，在代理远程仓库的同时维护本地仓库，以节省带宽和时间，Nexus就可以满足这样的需要。此外，他还提供了强大的仓库管理功能，构件搜索功能，它基于REST，友好的UI是一个extjs的REST客户端，它占用较少的内存，基于简单文件系统而非数据库。这些优点使其日趋成为最流行的Maven仓库管理器。除此之外，最新Nexus3还可以管理多种格式的镜像，如下：
+1.环境 系统：ubuntu16.04 docker：18.02.0-ce
+2.获取nexus3镜像 docker pull sonatype/nexus3
+3.启动镜像 docker run -id --privileged=true --name=nexus3 --restart=always -p 9500:8081 -p 9501:9501 -p 9502:9502 -p 9503:9503 -v /usr/local/programs/nexus3/nexus-data:/nexus-data sonatype/nexus3:latest 端口(注意映射了多个端口)：
+ 9500: nexus3网页端 9501：docker(hosted)私有仓库，可以pull和push 9502：docker(proxy)代理远程仓，只能pull 9503：docker(group)私有仓库和代理的组，只能pull  运维人员维护镜像试用9501端口，项目pull镜像使用9503端口，全部可匿名pull。
+数据：在宿主机创建目录/usr/local/programs/nexus3/nexus-data，/nexus-data为docker容器数据存储目录。所以-v设置映射关系后数据将会存到宿主机/usr/local/programs/nexus3/nexus-data
+4.配置私有仓库 访问http://localhost:9500默认账号admin/admin123
+几种repository的类型
+ hosted，本地仓库，自己创建的镜像上传到这一类型的仓库。 proxy，代理仓库，它们被用来代理远程的公共仓库，如dockerhub官方仓库。 group，仓库组，用来合并多个hosted/proxy仓库，当你的项目希望在多个repository使用资源时就不需要多次引用了，只需要引用一个group即可。  创建仓库前先创建对应的blob stores，在创建仓库时选择对应的blob，创建group组时调整好优先级，一般是host高于proxy。
+注意：创建仓库时如果勾选匿名可pull项，需找到security-&amp;gt;realms页面(http://localhost:9500/#admin/security/realms)，将docker bearer token realm项添加到右边激活，否则匿名docker pull会报错无权限.
+5. 用户侧docker添加私有仓 mac和win 打开docker的设置，选择daemon，在insecure registries里添加
+http://localhost:9503 如果是运维人员，要push镜像，再添加一条 http://localhost:9501
+重启docker。
+ubuntu 命令vi /etc/docker/daemon.json，插入下面内容:
+{ &amp;quot;insecure-registries&amp;quot;: [ &amp;quot;http://localhost:9501&amp;quot;, &amp;quot;http://localhost:9503&amp;quot; ] } 执行sudo service docker restart重启docker。</description>
+    </item>
+    
+    <item>
+      <title>Docker学习笔记</title>
+      <link>http://www.heyuan110.com/posts/docker/2019-05-13-learn-docker/</link>
+      <pubDate>Mon, 13 May 2019 20:33:33 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/docker/2019-05-13-learn-docker/</guid>
+      <description>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从Apache2.0协议开源。Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。
+1.Docker 包括三个基本概念   镜像(Image)
+  容器(Container)
+  仓库(Repository)
+  2.镜像(Image) Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资 源、配置等文件外，还包含了一些为运行时准备的一些配置参数(如匿名卷、环境 变量、用户等)。镜像不包含任何动态数据，其内容在构建之后也不会被改变。
+镜像并非是像一个 ISO 那样的打包文件，镜像只是一个虚拟的概念，其 实际体现并非由一个文件组成，而是由一组文件系统组成，或者说，由多层文件系 统联合组成。
+镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。在构建镜像的时候，需要额外小心，每一层尽量只包含该层需要添加的东西，任何额外的东西应该在该层构建结束前清理掉。
+3.Docker 容器 镜像(Image)和容器(Container)的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被 创建、启动、停止、删除、暂停等。
+容器也是分层存储。每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为容器存储层。
+容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。容器不应该向其存储层内写入任何数据，容器存储 层要保持无状态化。所有的文件写入操作，都应该使用 数据卷(Volume)、或者 绑定宿主目录，在这些位置的读写会跳过容器存储层，直接对宿主(或网络存储)发 生读写，其性能和稳定性更高。
+4.Docker Registry 镜像构建完成后，可以很容易的在当前宿主上运行，但是，如果需要在其它服务器 上使用这个镜像，我们就需要一个集中的存储、分发镜像的服务，Docker Registry 就是这样的服务。 一个 Docker Registry 中可以包含多个仓库(Repository);每个仓库可以包含多 个标签(Tag);每个标签对应一个镜像。
+5. Docker commit docker commit 的语法格式为:
+docker commit [选项] &amp;lt;容器ID或容器名&amp;gt; [&amp;lt;仓库名&amp;gt;[:&amp;lt;标签&amp;gt;]]  例如：
+$ docker commit \ --author &amp;quot;Tao Wang &amp;lt;twang2218@gmail.</description>
+    </item>
+    
+  </channel>
+</rss>
