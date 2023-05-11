@@ -35,7 +35,7 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
   dateformNumTime = "2006-01-02 15:04 -0700"
 
   # Metadata mostly used in document's head
-  description = "bruce,heyuan110,laravel,vue,ios,博客,go,golang,源码分析,系列教程"
+  description = "bruce,hebruce110,laravel,vue,ios,博客,go,golang,源码分析,系列教程"
   # images = [""]
   themeColor = "#494f5c"
 
@@ -61,7 +61,7 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
 
   [[params.social]]
     name = "github"
-    url = "https://github.com/heyuan110"
+    url = "https://github.com/hebruce110"
 
 [menu]
 

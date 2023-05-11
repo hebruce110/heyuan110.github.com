@@ -13,8 +13,8 @@ deploy:
     on:
         branch: code
     local_dir: public
-    repo: heyuan110/heyuan110.github.com
+    repo: hebruce110/heyuan110.github.com
     fqdn: www.heyuan110.com
     target_branch: master
     email: heyuan110@gmail.com
-    name: heyuan110
+    name: hebruce110
