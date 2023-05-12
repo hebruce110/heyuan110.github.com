@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>logstash on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/logstash/</link>
+    <description>Recent content in logstash on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 Sep 2018 20:02:19 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/logstash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>搭建ELK日志收集分析系统</title>
+      <link>http://www.heyuan110.com/posts/elasticsearch/2018-09-11-log-elk/</link>
+      <pubDate>Tue, 11 Sep 2018 20:02:19 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/elasticsearch/2018-09-11-log-elk/</guid>
+      <description>日志主要包含系统日志、应用日志和安全日志。运维和开发人员通过日志可以了解服务器、程序运行情况，发现错误及检查错误发生原因。一个可靠、安全、可扩展的日志收集分析解决方案在程序或系统异常时能够让一切都变得轻松起来。
+对比了ELK几种搭建模式：
+filebeat-&amp;gt;elasticsearch-&amp;gt;kibana filebeat-&amp;gt;logstash-&amp;gt;kafaka&amp;amp;zookeeper-&amp;gt;logstash-&amp;gt;elasticsearch-&amp;gt;kibana filebeat-&amp;gt;kafaka&amp;amp;zookeeper-&amp;gt;logstash-&amp;gt;elasticsearch-&amp;gt;kibana 架构 从左到右分别为：
+1)、数据采集层，将采集到的日志分别发送到kafka broker的集群队列上去
+2)、数据缓存层，将采集到的日志临时转存到本地的kafka broker集群中(相当于队列的生产者)
+3)、数据处理转发层，logstash实时去kafka broker集群拉去日志，在经过本地logstash后进行日志分析处理，然后转发到后端elasticsearch(相当于队列的消费者)
+4)、数据存储展示层，elasticsearch将收集到的日志进行本地存储，然后通过kibana展示出来；由于elasticsearch采用集群的方式，前端通过nginx在反向代理kibana的访问地址，使用户访问入口只有一个
+资源列表 服务器名称 IP地址 角色 功能 kz1 172.31.2.2 kafka+zookeeper kafka broker节点1 kz2 172.31.2.3 kafka+zookeeper kafka broker节点2 logstash-web 172.31.2.4 logstash 处理转发web相关日志 logstash-app 172.31.2.5 logstash 处理转发app相关日志 es-node1 172.31.2.6 elasticsearch+kibana 数据存储展示 es-node2 172.31.2.7 elasticsearch+kibana 数据存储展示 硬件配置 服务器类型 实例类型 CPU 内存 Disk Kafka broker集群 r5.xlarge 4 32 1T Logstash c5.2xlarge 8 16 100G Elasticsearch+kibana r5.xlarge 4 32 2T 部署前的准备工作 分别在这6台服务器上进行设置
+1)、主机名设置 $ sudo vim /etc/hosts</description>
+    </item>
+    
+  </channel>
+</rss>

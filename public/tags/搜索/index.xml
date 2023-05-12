@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>搜索 on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/%E6%90%9C%E7%B4%A2/</link>
+    <description>Recent content in 搜索 on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 12 Sep 2018 18:52:59 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/%E6%90%9C%E7%B4%A2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Elasticsearch学习</title>
+      <link>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-elasticsearch/</link>
+      <pubDate>Wed, 12 Sep 2018 18:52:59 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/elasticsearch/2018-09-12-elasticsearch/</guid>
+      <description>Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。
+一、ES组成 ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）,简化如下:
+索引 -&amp;gt; 数据库 类型 -&amp;gt; 表 文档 -&amp;gt; 行 字段 -&amp;gt; 列
+二、常用查询命令 1. 查看_cat相关命令 GET /_cat/
+结果:
+&amp;gt; ➜ ~ curl -i -XGET http://192.168.11.119:9200/_cat/ HTTP/1.1 200 OK content-type: text/plain; charset=UTF-8 content-length: 493 &amp;gt;=^.^= /_cat/allocation /_cat/shards /_cat/shards/{index} /_cat/master /_cat/nodes /_cat/tasks /_cat/indices /_cat/indices/{index} /_cat/segments /_cat/segments/{index} /_cat/count /_cat/count/{index} /_cat/recovery /_cat/recovery/{index} /_cat/health /_cat/pending_tasks /_cat/aliases /_cat/aliases/{alias} /_cat/thread_pool /_cat/thread_pool/{thread_pools} /_cat/plugins /_cat/fielddata /_cat/fielddata/{fields} /_cat/nodeattrs /_cat/repositories /_cat/snapshots/{repository} /_cat/templates 2.查看集群健康 GET /_cat/health?v
+结果：</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>command on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/command/</link>
+    <description>Recent content in command on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 19 Mar 2020 10:55:52 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/command/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux(MacOS)命令笔记</title>
+      <link>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</link>
+      <pubDate>Thu, 19 Mar 2020 10:55:52 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</guid>
+      <description>&lt;p&gt;linux中许多常用命令是必须掌握的，很多用过没有记录下来很快就忘记，再次使用又到处搜索，本文主要列出我日常使用过的一些命令，会持续更新。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

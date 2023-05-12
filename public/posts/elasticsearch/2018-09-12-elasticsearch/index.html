@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="cf-2fa-verify" content="9940932432">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Elasticsearch学习">
+<meta itemprop="description" content="Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。
+一、ES组成 ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）,简化如下:
+索引 -&gt; 数据库 类型 -&gt; 表 文档 -&gt; 行 字段 -&gt; 列
+二、常用查询命令 1. 查看_cat相关命令 GET /_cat/
+结果:
+&gt; ➜ ~ curl -i -XGET http://192.168.11.119:9200/_cat/ HTTP/1.1 200 OK content-type: text/plain; charset=UTF-8 content-length: 493 &gt;=^.^= /_cat/allocation /_cat/shards /_cat/shards/{index} /_cat/master /_cat/nodes /_cat/tasks /_cat/indices /_cat/indices/{index} /_cat/segments /_cat/segments/{index} /_cat/count /_cat/count/{index} /_cat/recovery /_cat/recovery/{index} /_cat/health /_cat/pending_tasks /_cat/aliases /_cat/aliases/{alias} /_cat/thread_pool /_cat/thread_pool/{thread_pools} /_cat/plugins /_cat/fielddata /_cat/fielddata/{fields} /_cat/nodeattrs /_cat/repositories /_cat/snapshots/{repository} /_cat/templates 2.查看集群健康 GET /_cat/health?v
+结果："><meta itemprop="datePublished" content="2018-09-12T18:52:59+00:00" />
+<meta itemprop="dateModified" content="2018-09-12T18:52:59+00:00" />
+<meta itemprop="wordCount" content="1462">
+<meta itemprop="keywords" content="elasticsearch,搜索," /><meta property="og:title" content="Elasticsearch学习" />
+<meta property="og:description" content="Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。
+一、ES组成 ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）,简化如下:
+索引 -&gt; 数据库 类型 -&gt; 表 文档 -&gt; 行 字段 -&gt; 列
+二、常用查询命令 1. 查看_cat相关命令 GET /_cat/
+结果:
+&gt; ➜ ~ curl -i -XGET http://192.168.11.119:9200/_cat/ HTTP/1.1 200 OK content-type: text/plain; charset=UTF-8 content-length: 493 &gt;=^.^= /_cat/allocation /_cat/shards /_cat/shards/{index} /_cat/master /_cat/nodes /_cat/tasks /_cat/indices /_cat/indices/{index} /_cat/segments /_cat/segments/{index} /_cat/count /_cat/count/{index} /_cat/recovery /_cat/recovery/{index} /_cat/health /_cat/pending_tasks /_cat/aliases /_cat/aliases/{alias} /_cat/thread_pool /_cat/thread_pool/{thread_pools} /_cat/plugins /_cat/fielddata /_cat/fielddata/{fields} /_cat/nodeattrs /_cat/repositories /_cat/snapshots/{repository} /_cat/templates 2.查看集群健康 GET /_cat/health?v
+结果：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/elasticsearch/2018-09-12-elasticsearch/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-09-12T18:52:59+00:00" />
+<meta property="article:modified_time" content="2018-09-12T18:52:59+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Elasticsearch学习"/>
+<meta name="twitter:description" content="Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。
+一、ES组成 ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）,简化如下:
+索引 -&gt; 数据库 类型 -&gt; 表 文档 -&gt; 行 字段 -&gt; 列
+二、常用查询命令 1. 查看_cat相关命令 GET /_cat/
+结果:
+&gt; ➜ ~ curl -i -XGET http://192.168.11.119:9200/_cat/ HTTP/1.1 200 OK content-type: text/plain; charset=UTF-8 content-length: 493 &gt;=^.^= /_cat/allocation /_cat/shards /_cat/shards/{index} /_cat/master /_cat/nodes /_cat/tasks /_cat/indices /_cat/indices/{index} /_cat/segments /_cat/segments/{index} /_cat/count /_cat/count/{index} /_cat/recovery /_cat/recovery/{index} /_cat/health /_cat/pending_tasks /_cat/aliases /_cat/aliases/{alias} /_cat/thread_pool /_cat/thread_pool/{thread_pools} /_cat/plugins /_cat/fielddata /_cat/fielddata/{fields} /_cat/nodeattrs /_cat/repositories /_cat/snapshots/{repository} /_cat/templates 2.查看集群健康 GET /_cat/health?v
+结果："/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Elasticsearch学习</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.cb0663fd19952012fdb4a1345792a808ae19eb828578bde6eeae217ff1fb1e8b.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/docker-categories/">Docker系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://github.com/hebruce110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Sep 12, 2018</span></div>
+				<h1>Elasticsearch学习</h1>
+			</header>
+			<div class="content">
+				<p><img src="https://raw.githubusercontent.com/heyuan110/static-source/master/cover/es.jpg" alt=""></p>
+<p>Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎(以下简称ES),是目前全文搜索引擎的首选。它可以快速存储、搜索和分析海量数据，Github，StackOverflow都在采用它。</p>
+<h2 id="一es组成">一、ES组成<a href="#一es组成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>ES对照RMDB快速了解ES基本组成，它可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）,简化如下:</p>
+<p>索引  <strong>-&gt;</strong>  数据库
+类型  <strong>-&gt;</strong>  表
+文档  <strong>-&gt;</strong>  行
+字段  <strong>-&gt;</strong>  列</p>
+<h2 id="二常用查询命令">二、常用查询命令<a href="#二常用查询命令" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="1-查看_cat相关命令">1. 查看_cat相关命令<a href="#1-查看_cat相关命令" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<blockquote>
+<p><code>GET /_cat/</code></p>
+</blockquote>
+<p>结果:</p>
+<pre tabindex="0"><code>&gt;
+➜  ~ curl -i -XGET http://192.168.11.119:9200/_cat/
+HTTP/1.1 200 OK
+content-type: text/plain; charset=UTF-8
+content-length: 493
+
+&gt;=^.^=
+/_cat/allocation
+/_cat/shards
+/_cat/shards/{index}
+/_cat/master
+/_cat/nodes
+/_cat/tasks
+/_cat/indices
+/_cat/indices/{index}
+/_cat/segments
+/_cat/segments/{index}
+/_cat/count
+/_cat/count/{index}
+/_cat/recovery
+/_cat/recovery/{index}
+/_cat/health
+/_cat/pending_tasks
+/_cat/aliases
+/_cat/aliases/{alias}
+/_cat/thread_pool
+/_cat/thread_pool/{thread_pools}
+/_cat/plugins
+/_cat/fielddata
+/_cat/fielddata/{fields}
+/_cat/nodeattrs
+/_cat/repositories
+/_cat/snapshots/{repository}
+/_cat/templates
+</code></pre><h3 id="2查看集群健康">2.查看集群健康<a href="#2查看集群健康" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<blockquote>
+<p><code>GET /_cat/health?v</code></p>
+</blockquote>
+<p>结果：</p>
+<pre tabindex="0"><code>➜  ~ curl -XGET http://192.168.11.119:9200/_cat/health\?v
+epoch      timestamp cluster       status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent
+1533717572 08:39:32  elasticsearch yellow          1         1    315 315    0    0      315             0                  -                 50.0%
+</code></pre><p>green：每个索引的primary shard和replica shard都是active状态的
+yellow：每个索引的primary shard都是active状态的，但是部分replica shard不是active状态，处于不可用的状态
+red：不是所有索引的primary shard都是active状态的，部分索引有数据丢失了</p>
+<p>为什么现在会处于一个yellow状态？</p>
+<p>我们现在就一台服务器，就启动了一个es进程，相当于就只有一个node。现在es中有一个index，就是kibana自己内置建立的index。由于默认的配置是给每个index分配5个primary shard和5个replica shard，而且primary shard和replica shard不能在同一台机器上（为了容错）。现在kibana自己建立的index是1个primary shard和1个replica shard。当前就一个node，所以只有1个primary shard被分配了和启动了，但是一个replica shard没有第二台机器去启动。</p>
+<h3 id="3-查看集群有哪些索引">3. 查看集群有哪些索引<a href="#3-查看集群有哪些索引" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<blockquote>
+<p><code>GET /_cat/indices\?v</code></p>
+</blockquote>
+<p>结果:</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/_cat/indices\?v
+HTTP/1.1 200 OK
+content-type: text/plain; charset=UTF-8
+content-length: 8840
+
+&gt;health status index                                    uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   es_es_category_products                  u2TdPYcXS5yyFF8P3a3jYQ   5   1      95311         7103      156mb          156mb
+yellow open   web_product_ar_new                       8qhhh9C7QvuwEEu-YYrIgA   5   1      37610           77     55.6mb         55.6mb
+yellow open   en_27_category_product                   VtVXVTuHQ3-xyNw4txpEXg   5   1      41206           20       68mb           68mb
+yellow open   ar_27_category_product                   Id43cmuDQnKYkhaCepxrIg   5   1      41206           17     67.9mb         67.9mb
+yellow open   it_28_category_product                   Gltx9R80Qn6PI22i6-Mflg   5   1      12659           25     22.5mb         22.5mb
+yellow open   db_search                                WKYGbjjLSZmh0s_LyuT2tQ   5   1     230133            0     28.7mb         28.7mb
+yellow open   de_28_category_product                   IUCYcmTIR6K4AzUpAWJmHg   5   1      12659           27     22.5mb         22.5mb
+</code></pre><h3 id="4-创建索引">4. 创建索引<a href="#4-创建索引" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p><code>PUT /test_index?pretty</code></p>
+<p>结果：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XPUT http://192.168.11.119:9200/test_index\?pretty
+HTTP/1.1 200 OK
+content-type: application/json; charset=UTF-8
+content-length: 60
+{
+  &#34;acknowledged&#34; : true,
+  &#34;shards_acknowledged&#34; : true
+</code></pre><h3 id="5删除索引">5.删除索引<a href="#5删除索引" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p><code>DELETE /test_index?pretty</code></p>
+<h3 id="6-新增文档并建立索引">6. 新增文档并建立索引<a href="#6-新增文档并建立索引" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>语法格式：</p>
+<pre tabindex="0"><code>PUT /index/type/id
+{
+    &#34;json数据&#34;
+}
+</code></pre><p>index索引名、type类型名、id数据的id</p>
+<pre tabindex="0"><code>PUT /test_index/user/1
+{
+    &#34;name&#34;: &#34;小明&#34;,
+    &#34;email&#34;: &#34;xiaoming@test.com&#34;,
+    &#34;tags&#34;: [&#34;篮球&#34;,&#34;游泳&#34;]
+}
+</code></pre><p>结果如下：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XPUT http://192.168.11.119:9200/test_index/user/1 -d &#39;{
+    &#34;name&#34;: &#34;小明&#34;,
+    &#34;email&#34;: &#34;xiaoming@test.com&#34;,
+    &#34;tags&#34;: [&#34;篮球&#34;,&#34;游泳&#34;]
+}&#39;
+
+&gt;HTTP/1.1 201 Created
+Location: /test_index/user/1
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 08:58:29 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 143
+
+&gt;{&#34;_index&#34;:&#34;test_index&#34;,&#34;_type&#34;:&#34;user&#34;,&#34;_id&#34;:&#34;1&#34;,&#34;_version&#34;:1,&#34;result&#34;:&#34;created&#34;,&#34;_shards&#34;:{&#34;total&#34;:2,&#34;successful&#34;:1,&#34;failed&#34;:0},&#34;created&#34;:true}%
+</code></pre><h3 id="61-查询新增的文档">6.1 查询新增的文档<a href="#61-查询新增的文档" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p><code>GET /索引/类型/字段值</code></p>
+<p>例如：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/1\?pretty
+HTTP/1.1 200 OK
+content-type: application/json; charset=UTF-8
+content-length: 232
+{
+  &#34;_index&#34; : &#34;test_index&#34;,
+  &#34;_type&#34; : &#34;user&#34;,
+  &#34;_id&#34; : &#34;1&#34;,
+  &#34;_version&#34; : 1,
+  &#34;found&#34; : true,
+  &#34;_source&#34; : {
+    &#34;name&#34; : &#34;小明&#34;,
+    &#34;email&#34; : &#34;xiaoming@test.com&#34;,
+    &#34;tags&#34; : [
+      &#34;篮球&#34;,
+      &#34;游泳&#34;
+    ]
+  }
+}
+</code></pre><h3 id="7修改文档">7.修改文档<a href="#7修改文档" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>修改分为全部修改或部分修改，全部修改就是直接替换，需要带上全部字段才能修改，例如：</p>
+<pre tabindex="0"><code>➜  ~  curl -i -XPUT http://192.168.11.119:9200/test_index/user/1 -d &#39;{
+    &#34;name&#34;: &#34;小明&#34;,
+    &#34;email&#34;: &#34;xiaoming@test.com&#34;,
+    &#34;tags&#34;: [&#34;篮球&#34;,&#34;游泳&#34;,&#34;足球&#34;]
+}&#39;
+HTTP/1.1 200 OK
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 09:15:45 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 144
+{&#34;_index&#34;:&#34;test_index&#34;,&#34;_type&#34;:&#34;user&#34;,&#34;_id&#34;:&#34;1&#34;,&#34;_version&#34;:2,&#34;result&#34;:&#34;updated&#34;,&#34;_shards&#34;:{&#34;total&#34;:2,&#34;successful&#34;:1,&#34;failed&#34;:0},&#34;created&#34;:false}
+</code></pre><p>注意全部修改用的是PUT方法.
+部分修改就是只更新部分,用的POST方法，参数部分增加了一个doc的key，例如:</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XPOST http://192.168.11.119:9200/test_index/user/1/_update -d &#39;{
+        &#34;doc&#34;:{
+            &#34;email&#34;: &#34;xiaoming@demo.com&#34;
+        }
+}&#39;
+HTTP/1.1 200 OK
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 09:18:26 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 128
+{&#34;_index&#34;:&#34;test_index&#34;,&#34;_type&#34;:&#34;user&#34;,&#34;_id&#34;:&#34;1&#34;,&#34;_version&#34;:3,&#34;result&#34;:&#34;updated&#34;,&#34;_shards&#34;:{&#34;total&#34;:2,&#34;successful&#34;:1,&#34;failed&#34;:0}}
+</code></pre><h3 id="8删除文档">8.删除文档<a href="#8删除文档" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p><code>DELETE /test_index/user/1</code></p>
+<p>例如：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XDELETE http://192.168.11.119:9200/test_index/user/2
+HTTP/1.1 200 OK
+content-type: application/json; charset=UTF-8
+content-length: 141
+{&#34;found&#34;:true,&#34;_index&#34;:&#34;test_index&#34;,&#34;_type&#34;:&#34;user&#34;,&#34;_id&#34;:&#34;2&#34;,&#34;_version&#34;:2,&#34;result&#34;:&#34;deleted&#34;,&#34;_shards&#34;:{&#34;total&#34;:2,&#34;successful&#34;:1,&#34;failed&#34;:0}}
+</code></pre><h3 id="9查询字符串">9.查询字符串<a href="#9查询字符串" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p><code>GET /test_index/user</code></p>
+<p>例如：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty
+HTTP/1.1 200 OK
+content-type: application/json; charset=UTF-8
+content-length: 793
+{
+  &#34;took&#34; : 1,
+  &#34;timed_out&#34; : false,
+  &#34;_shards&#34; : {
+    &#34;total&#34; : 5,
+    &#34;successful&#34; : 5,
+    &#34;failed&#34; : 0
+  },
+  &#34;hits&#34; : {
+    &#34;total&#34; : 2,
+    &#34;max_score&#34; : 1.0,
+    &#34;hits&#34; : [
+      {
+        &#34;_index&#34; : &#34;test_index&#34;,
+        &#34;_type&#34; : &#34;user&#34;,
+        &#34;_id&#34; : &#34;2&#34;,
+        &#34;_score&#34; : 1.0,
+        &#34;_source&#34; : {
+          &#34;name&#34; : &#34;小王&#34;,
+          &#34;email&#34; : &#34;xiaowang@test.com&#34;,
+          &#34;tags&#34; : [
+            &#34;游泳&#34;
+          ]
+        }
+      },
+      {
+        &#34;_index&#34; : &#34;test_index&#34;,
+        &#34;_type&#34; : &#34;user&#34;,
+        &#34;_id&#34; : &#34;1&#34;,
+        &#34;_score&#34; : 1.0,
+        &#34;_source&#34; : {
+          &#34;name&#34; : &#34;小明&#34;,
+          &#34;email&#34; : &#34;xiaoming@demo.com&#34;,
+          &#34;tags&#34; : [
+            &#34;篮球&#34;,
+            &#34;游泳&#34;,
+            &#34;足球&#34;
+          ]
+        }
+      }
+    ]
+  }
+}
+</code></pre><p>查询返回值参数说明</p>
+<pre tabindex="0"><code>took：耗费了几毫秒
+timed_out：是否超时，这里是没有
+_shards：数据拆成了5个分片，所以对于搜索请求，会打到所有的primary shard（或者是它的某个replica shard也可以）
+hits.total：查询结果的数量，3个document
+hits.max_score：score的含义，就是document对于一个search的相关度的匹配分数，越相关，就越匹配，分数也高
+hits.hits：包含了匹配搜索的document的详细数据
+</code></pre><p>搜索名字为bruce的用户，而且按照email倒序</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty\&amp;q=name:&#39;bruce&#39;&amp;sort=email:desc
+[1] 26574
+HTTP/1.1 200 OK
+content-type: application/json; charset=UTF-8
+content-length: 479
+{
+  &#34;took&#34; : 1,
+  &#34;timed_out&#34; : false,
+  &#34;_shards&#34; : {
+    &#34;total&#34; : 5,
+    &#34;successful&#34; : 5,
+    &#34;failed&#34; : 0
+  },
+  &#34;hits&#34; : {
+    &#34;total&#34; : 1,
+    &#34;max_score&#34; : 1.1727304,
+    &#34;hits&#34; : [
+      {
+        &#34;_index&#34; : &#34;test_index&#34;,
+        &#34;_type&#34; : &#34;user&#34;,
+        &#34;_id&#34; : &#34;4&#34;,
+        &#34;_score&#34; : 1.1727304,
+        &#34;_source&#34; : {
+          &#34;name&#34; : &#34;Bruce&#34;,
+          &#34;email&#34; : &#34;bruce@test.com&#34;,
+          &#34;tags&#34; : [
+            &#34;Hello&#34;
+          ]
+        }
+      }
+    ]
+  }
+}
+[1]  + 26574 done       curl -i -XGET
+</code></pre><p>通过这个例子发现这样搜索是不区分大小写的.适用于临时的在命令行使用一些工具，比如curl，快速的发出请求，来检索想要的信息；但是如果查询请求很复杂，是很难去构建,在实际的生产环境中，几乎很少使用查询字符串.</p>
+<h3 id="10-查询索引的表和字段定义">10. 查询索引的表和字段定义<a href="#10-查询索引的表和字段定义" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>查询es所有的表和字段定义
+<code>GET /_mapping</code></p>
+<p>查询某个索引的表定义
+<code>GET /test_index/_mapping</code></p>
+<p>查询某个索引的表的字段定义
+<code>GET /test_index/user/_mapping</code></p>
+<p>例如：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/_mapping\?pretty
+HTTP/1.1 200 OK
+content-type: application/json; charset=UTF-8
+content-length: 1267
+{
+  &#34;test_index&#34; : {
+    &#34;mappings&#34; : {
+      &#34;user&#34; : {
+        &#34;properties&#34; : {
+          &#34;email&#34; : {
+            &#34;type&#34; : &#34;text&#34;,
+            &#34;fields&#34; : {
+              &#34;keyword&#34; : {
+                &#34;type&#34; : &#34;keyword&#34;,
+                &#34;ignore_above&#34; : 256
+              }
+            }
+          },
+          &#34;name&#34; : {
+            &#34;type&#34; : &#34;text&#34;,
+            &#34;fields&#34; : {
+              &#34;keyword&#34; : {
+                &#34;type&#34; : &#34;keyword&#34;,
+                &#34;ignore_above&#34; : 256
+              }
+            }
+          },
+          &#34;tags&#34; : {
+            &#34;type&#34; : &#34;text&#34;,
+            &#34;fields&#34; : {
+              &#34;keyword&#34; : {
+                &#34;type&#34; : &#34;keyword&#34;,
+                &#34;ignore_above&#34; : 256
+              }
+            }
+          }
+        }
+      },
+      &#34;role&#34; : {
+        &#34;properties&#34; : {
+          &#34;flag&#34; : {
+            &#34;type&#34; : &#34;text&#34;,
+            &#34;fields&#34; : {
+              &#34;keyword&#34; : {
+                &#34;type&#34; : &#34;keyword&#34;,
+                &#34;ignore_above&#34; : 256
+              }
+            }
+          },
+          &#34;name&#34; : {
+            &#34;type&#34; : &#34;text&#34;,
+            &#34;fields&#34; : {
+              &#34;keyword&#34; : {
+                &#34;type&#34; : &#34;keyword&#34;,
+                &#34;ignore_above&#34; : 256
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre><h3 id="11查询dsldomain-specified-language特定领域的语言-">11.查询DSL(Domain Specified Language，特定领域的语言 )<a href="#11查询dsldomain-specified-language特定领域的语言-" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>http request body：请求体，可以用json的格式来构建查询语法，比较方便，可以构建各种复杂的语法，比查询字符串肯定强大多了</p>
+<ul>
+<li><strong>11.1查询所有文档</strong></li>
+</ul>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty -d &#39;
+{
+  &#34;query&#34;: {
+                &#34;match_all&#34;: {
+                }
+  }
+}
+&#39;
+HTTP/1.1 200 OK
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 12:58:15 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 1895
+{
+  &#34;took&#34; : 1,
+  &#34;timed_out&#34; : false,
+  &#34;_shards&#34; : {
+    &#34;total&#34; : 5,
+    &#34;successful&#34; : 5,
+    &#34;failed&#34; : 0
+  },
+  &#34;hits&#34; : {
+    &#34;total&#34; : 6,
+    &#34;max_score&#34; : 1.0,
+    &#34;hits&#34; : [
+      {
+        &#34;_index&#34; : &#34;test_index&#34;,
+        &#34;_type&#34; : &#34;user&#34;,
+        &#34;_id&#34; : &#34;5&#34;,
+        &#34;_score&#34; : 1.0,
+        &#34;_source&#34; : {
+          &#34;name&#34; : &#34;bruce&#34;,
+          &#34;email&#34; : &#34;bruce@test.com&#34;,
+          &#34;tags&#34; : [
+            &#34;游泳1&#34;
+          ]
+        }
+      },
+      {
+        &#34;_index&#34; : &#34;test_index&#34;,
+        &#34;_type&#34; : &#34;user&#34;,
+        &#34;_id&#34; : &#34;3&#34;,
+        &#34;_score&#34; : 1.0,
+        &#34;_source&#34; : {
+          &#34;name&#34; : &#34;Alex&#34;,
+          &#34;email&#34; : &#34;alex@test.com&#34;,
+          &#34;tags&#34; : [
+            &#34;吃饭&#34;
+          ]
+        }
+      }
+    ]
+  }
+}
+</code></pre><p>注意match_all是包含在query字典里的，query处于root节点位置</p>
+<ul>
+<li><strong>11.2查询包含输入字符的文档</strong></li>
+</ul>
+<p>query还是处于root节点，增加一个键值sort排序与query同级，示例：</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XGET http://192.168.11.119:9200/test_index/user/_search\?pretty -d &#39;
+{
+  &#34;query&#34;: {
+         &#34;match&#34;: {
+            &#34;name&#34; : &#34;br&#34;
+          }
+  },
+  &#34;sort&#34;: [
+           {
+             &#34;email&#34; : &#34;desc&#34;
+           }
+  ]
+}
+&#39;
+HTTP/1.1 200 OK
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 13:03:30 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 193
+{
+  &#34;took&#34; : 1,
+  &#34;timed_out&#34; : false,
+  &#34;_shards&#34; : {
+    &#34;total&#34; : 5,
+    &#34;successful&#34; : 5,
+    &#34;failed&#34; : 0
+  },
+  &#34;hits&#34; : {
+    &#34;total&#34; : 0,
+    &#34;max_score&#34; : null,
+    &#34;hits&#34; : [ ]
+  }
+}
+</code></pre><p>查询包含Br字符的文档（行），并对结果以email倒序。第一次运行上面语句时报错<code>Fielddata is disabled on text fields by default. Set fielddata=true on [email] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory.&quot;</code>,经查询资料，应该是5.x后对排序、聚合相关操作用单独的数据结构fileddata缓存到内存里，需调接口开启使用到的字段，<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html">官方解释</a>, 执行下面的操作开启:</p>
+<pre tabindex="0"><code>➜  ~ curl -i -XPUT http://192.168.11.119:9200/test_index/_mapping/user\?pretty -d &#39;
+{
+  &#34;properties&#34;: {
+    &#34;email&#34;: {
+      &#34;type&#34;: &#34;text&#34;,
+      &#34;fielddata&#34;: true
+    }
+  }
+}&#39;
+HTTP/1.1 200 OK
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 13:11:11 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 28
+{
+  &#34;acknowledged&#34; : true
+}
+</code></pre><p>很多查询出来结果集很大，需要做分页，用DSL很简单，和query同级增加from和size键值，分表表示起始值和步长，示例</p>
+<pre tabindex="0"><code>curl -i -XGET http://192.168.11.119:9200/test_index/user/_search?pretty -d &#39;
+{
+  &#34;query&#34;: {
+   		&#34;match_all&#34;: {
+   		} 
+  },
+  &#34;from&#34; : 1,
+  &#34;size&#34; : 2,
+  &#34;_source&#34; : [&#34;email&#34;],
+  &#34;sort&#34;: [
+  		{
+  			&#34;email&#34; : &#34;asc&#34;
+  		}
+  ]
+}
+&#39;
+</code></pre><ul>
+<li><strong>11.3查询过滤器</strong></li>
+</ul>
+<p>搜索商品名包含Rhinestone，售卖价格小于3大于等于1的商品，结果按售卖价升序，构造DSL语句：</p>
+<pre tabindex="0"><code>curl -i -XGET http://192.168.11.119:9200/en_es_category_products/product/_search?pretty -d &#39;
+{
+  &#34;query&#34;: {
+   		&#34;bool&#34;: {
+   			&#34;must&#34; : {
+   				&#34;match&#34; : {
+   					&#34;product_name&#34; : &#34;Rhinestone&#34;
+   				}
+   			},
+   			&#34;filter&#34; : {
+   				&#34;range&#34; : {
+   					&#34;store_price&#34; : {
+   					   &#34;gte&#34; :  1
+   						&#34;lt&#34; : 3
+   					}
+   				}
+   			}
+   		}
+  },
+  &#34;_source&#34; : [
+  		&#34;product_id&#34;,
+  		&#34;product_name&#34;,
+  		&#34;store_price&#34;,
+  		&#34;icon&#34;
+  ],
+    &#34;sort&#34;: [
+  		{
+  			&#34;store_price&#34; : &#34;asc&#34;
+  		}
+  ]
+}
+&#39;
+</code></pre><p>range操作符包含:</p>
+<pre><code>* gt :: 大于
+* gte:: 大于等于
+* lt :: 小于
+* lte:: 小于等于
+</code></pre>
+<p>查询结果:</p>
+<pre tabindex="0"><code>HTTP/1.1 200 OK
+Warning: 299 Elasticsearch-5.5.2-b2f0c09 &#34;Content type detection for rest requests is deprecated. Specify the content type using the [Content-Type] header.&#34; &#34;Wed, 08 Aug 2018 13:15:52 GMT&#34;
+content-type: application/json; charset=UTF-8
+content-length: 1141
+{
+  &#34;took&#34; : 2,
+  &#34;timed_out&#34; : false,
+  &#34;_shards&#34; : {
+    &#34;total&#34; : 5,
+    &#34;successful&#34; : 5,
+    &#34;failed&#34; : 0
+  },
+  &#34;hits&#34; : {
+    &#34;total&#34; : 2,
+    &#34;max_score&#34; : null,
+    &#34;hits&#34; : [
+      {
+        &#34;_index&#34; : &#34;en_es_category_products&#34;,
+        &#34;_type&#34; : &#34;product&#34;,
+        &#34;_id&#34; : &#34;22100&#34;,
+        &#34;_score&#34; : null,
+        &#34;_source&#34; : {
+          &#34;product_id&#34; : 22100,
+          &#34;icon&#34; : &#34;http://patpatdev.s3.amazonaws.com/Product/22100/1688I-SL-003-00008-001.jpg/1464845443.jpg&#34;,
+          &#34;store_price&#34; : &#34;2.99&#34;,
+          &#34;product_name&#34; : &#34;U-shape Silver Faux Perarl &amp; Rhinestone Clip&#34;
+        },
+        &#34;sort&#34; : [
+          2.99
+        ]
+      },
+      {
+        &#34;_index&#34; : &#34;en_es_category_products&#34;,
+        &#34;_type&#34; : &#34;product&#34;,
+        &#34;_id&#34; : &#34;354460&#34;,
+        &#34;_score&#34; : null,
+        &#34;_source&#34; : {
+          &#34;product_id&#34; : 354460,
+          &#34;icon&#34; : &#34;http://patpatdev.s3.us-west-1.amazonaws.com/product/000766000119/5b0e5b0e49e8f.jpg&#34;,
+          &#34;store_price&#34; : &#34;2.99&#34;,
+          &#34;product_name&#34; : &#34;Pretty Star Decor Rhinestone Stud Hairband for Women&#34;
+        },
+        &#34;sort&#34; : [
+          2.99
+        ]
+      }
+    ]
+  }
+}
+</code></pre><p>注意参数嵌套了好几层，很容易写错，query、_source、sort都处于root级，query/bool下包含must、filter两级</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/elasticsearch">elasticsearch</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/%E6%90%9C%E7%B4%A2">搜索</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1462 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2018-09-13 02:52 &#43;0800</p>
+			</footer>
+		</article>
+		<aside id="toc" class="show-toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#一es组成">一、ES组成</a></li>
+    <li><a href="#二常用查询命令">二、常用查询命令</a>
+      <ul>
+        <li><a href="#1-查看_cat相关命令">1. 查看_cat相关命令</a></li>
+        <li><a href="#2查看集群健康">2.查看集群健康</a></li>
+        <li><a href="#3-查看集群有哪些索引">3. 查看集群有哪些索引</a></li>
+        <li><a href="#4-创建索引">4. 创建索引</a></li>
+        <li><a href="#5删除索引">5.删除索引</a></li>
+        <li><a href="#6-新增文档并建立索引">6. 新增文档并建立索引</a></li>
+        <li><a href="#61-查询新增的文档">6.1 查询新增的文档</a></li>
+        <li><a href="#7修改文档">7.修改文档</a></li>
+        <li><a href="#8删除文档">8.删除文档</a></li>
+        <li><a href="#9查询字符串">9.查询字符串</a></li>
+        <li><a href="#10-查询索引的表和字段定义">10. 查询索引的表和字段定义</a></li>
+        <li><a href="#11查询dsldomain-specified-language特定领域的语言-">11.查询DSL(Domain Specified Language，特定领域的语言 )</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/linux/2018-10-06-ip-cidr/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>IP地址与CIDR</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/elasticsearch/2018-09-12-log-ekk/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>搭建EKK日志收集分析系统</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2023 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.b59d103b91d4cb8dc47e30d239e2ad29dbcd029b498bdc44d1a327c0b8f1bf2b.js"></script>
+
+</body>
+
+</html>

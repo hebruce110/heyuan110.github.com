@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>安全漏洞 on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/</link>
+    <description>Recent content in 安全漏洞 on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 15 Apr 2019 13:53:32 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ubuntu16.04环境Jira和Confluence搭建</title>
+      <link>http://www.heyuan110.com/posts/linux/2019-04-15-jira-confluence-install/</link>
+      <pubDate>Mon, 15 Apr 2019 13:53:32 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/linux/2019-04-15-jira-confluence-install/</guid>
+      <description>&lt;p&gt;jira和confluence都是Atlassian公司产品。jira是项目与事务跟踪工具，可以完成项目执行管理、敏捷开发管理、体系流程管理、产品Bug跟踪、提案跟踪、需求管理、客户服务等工作。confluence是一个专业的企业知识管理与协同软件，可以用于构建企业wiki，通过它可以实现团队成员之间的协作和知识共享。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

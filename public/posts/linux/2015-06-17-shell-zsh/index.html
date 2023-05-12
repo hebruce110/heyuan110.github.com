@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="cf-2fa-verify" content="9940932432">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="ZSH配置和使用">
+<meta itemprop="description" content="如果你使用Linux操作系统，那就免不了要和终端打交道，而shell是与系统交互的外壳，也是Linux的精髓，那么花一点时间使用配置一个强大的shell，绝对是物超所值的。通常系统默认安装的shell时bash，当然还有其他的shell。相对linux系统自带的bash，我更喜欢zsh(shell中的高富帅)，能安装各种插件，精美的主题，自定义各种快捷方式, zsh安装配置的方法也很简单，下面的方法我在ubuntu和mac上亲测有效。
+
+
+装完后看看你的vi吧，发两张截图
+"><meta itemprop="datePublished" content="2015-06-17T17:03:18+00:00" />
+<meta itemprop="dateModified" content="2015-06-17T17:03:18+00:00" />
+<meta itemprop="wordCount" content="51">
+<meta itemprop="keywords" content="zsh,shell,linux," /><meta property="og:title" content="ZSH配置和使用" />
+<meta property="og:description" content="如果你使用Linux操作系统，那就免不了要和终端打交道，而shell是与系统交互的外壳，也是Linux的精髓，那么花一点时间使用配置一个强大的shell，绝对是物超所值的。通常系统默认安装的shell时bash，当然还有其他的shell。相对linux系统自带的bash，我更喜欢zsh(shell中的高富帅)，能安装各种插件，精美的主题，自定义各种快捷方式, zsh安装配置的方法也很简单，下面的方法我在ubuntu和mac上亲测有效。
+
+
+装完后看看你的vi吧，发两张截图
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/linux/2015-06-17-shell-zsh/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2015-06-17T17:03:18+00:00" />
+<meta property="article:modified_time" content="2015-06-17T17:03:18+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ZSH配置和使用"/>
+<meta name="twitter:description" content="如果你使用Linux操作系统，那就免不了要和终端打交道，而shell是与系统交互的外壳，也是Linux的精髓，那么花一点时间使用配置一个强大的shell，绝对是物超所值的。通常系统默认安装的shell时bash，当然还有其他的shell。相对linux系统自带的bash，我更喜欢zsh(shell中的高富帅)，能安装各种插件，精美的主题，自定义各种快捷方式, zsh安装配置的方法也很简单，下面的方法我在ubuntu和mac上亲测有效。
+
+
+装完后看看你的vi吧，发两张截图
+"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>ZSH配置和使用</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.cb0663fd19952012fdb4a1345792a808ae19eb828578bde6eeae217ff1fb1e8b.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/docker-categories/">Docker系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://github.com/hebruce110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Jun 17, 2015</span></div>
+				<h1>ZSH配置和使用</h1>
+			</header>
+			<div class="content">
+				<p>如果你使用Linux操作系统，那就免不了要和终端打交道，而shell是与系统交互的外壳，也是Linux的精髓，那么花一点时间使用配置一个强大的shell，绝对是物超所值的。通常系统默认安装的shell时bash，当然还有其他的shell。相对linux系统自带的bash，我更喜欢zsh(shell中的高富帅)，能安装各种插件，精美的主题，自定义各种快捷方式, zsh安装配置的方法也很简单，下面的方法我在ubuntu和mac上亲测有效。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>装完后看看你的vi吧，发两张截图</p>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="一先安装zsh">一、先安装zsh<a href="#一先安装zsh" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p><code>sudo apt-get install zsh</code></p>
+<h2 id="二下载zsh配置文件">二、下载zsh配置文件<a href="#二下载zsh配置文件" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p><code>git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</code></p>
+<h2 id="三配置zsh">三、配置zsh<a href="#三配置zsh" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p><code>cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</code></p>
+<p><code>chsh -s /bin/zsh</code></p>
+<h2 id="四把bash的配置文件加到zsh里">四、把bash的配置文件加到zsh里<a href="#四把bash的配置文件加到zsh里" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>可以建一个zshrc配置文件:</p>
+<p><code>vi ~/.zshrc.local</code></p>
+<p>根据自己实际情况配置,vundle的安装向导：<a href="https://github.com/wxmcan/vundle">https://github.com/wxmcan/vundle</a></p>
+<h2 id="五一些灵活的配置">五、一些灵活的配置<a href="#五一些灵活的配置" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>按照步骤安装完后，可以配置一些常用的命令的“别名”，cd到根目录，看到的是这样的~
+输入</p>
+<p><code>vi .zshrc.local</code></p>
+<p>打开后在里面输入</p>
+<pre tabindex="0"><code>alias gs=&#39;git status&#39;
+
+alias app=&#39;cd Documents/project/code/v2.0/&#39;
+</code></pre><p>然后<code>wq</code>保存，</p>
+<p>上面输入的内容可以根据自己的需要更改
+<code>alias gs='git status'</code>意思就是给<code>git status</code>命令，取个别名<code>gs</code>,以后用的时候直接用<code>gs</code>代替<code>git status</code></p>
+<p><code>alias app='cd Documents/project/code/v2.0/'</code>的意思是以后直接输入app就直接到v2.0这个目录了，这些根据你的需要自己配置啦</p>
+<p>最后为了立即让设置生效，你可以重新打开终端或者直接执行命令</p>
+<p><code>source .zshrc.local</code></p>
+<p>最后直接在zsh里输入你刚自定义的短命令试试吧</p>
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/zsh">zsh</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/shell">shell</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/linux">linux</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>51 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2015-06-18 01:03 &#43;0800</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/macos/charles/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>网络抓包工具Charles</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/macos/show-hide-files/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>MacOSX 隐藏和显示隐藏文件</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2023 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.b59d103b91d4cb8dc47e30d239e2ad29dbcd029b498bdc44d1a327c0b8f1bf2b.js"></script>
+
+</body>
+
+</html>

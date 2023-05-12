@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>middleware on Bruce&#39;s Blog</title>
+    <link>http://www.heyuan110.com/tags/middleware/</link>
+    <description>Recent content in middleware on Bruce&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Fri, 02 Aug 2019 11:47:04 +0000</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/middleware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>消息队列-RabbitMQ</title>
+      <link>http://www.heyuan110.com/posts/middleware/2019-08-02-mq-rabbitmq/</link>
+      <pubDate>Fri, 02 Aug 2019 11:47:04 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/middleware/2019-08-02-mq-rabbitmq/</guid>
+      <description>前面文章《消息队列中间件选型》我们了解了消息队列技术选型，本文我们来学习开源消息队列RabbitMQ。
+1. RabbitMQ简介 RabbitMQ是一个开源的消息代理和队列服务器，用来通过普通协议在完全不同的应用之间共享数据，RabbitMQ是使用Erlang语言来编写的，并且RabbitMQ是基于AMQP协议的。
+2. RabbitMQ工作流程 RabbitMQ架构图 发布者P-Clients（Publisher）发布消息(Message)，经由交换机X（Exchange） 交换机根据路由规则将收到的消息分发给与该交换机绑定的队列(Queue) 最后RabbitMQ代理（Broker）会将消息投递（Push）给订阅了此队列的消费者(Consumer)，或者消费者按照需求自行获取(Pull)
+深入理解：
+(1)发布者、交换机、队列、消费者都可以有多个，因为RabbitMQ是基于网络协议AMQP，所以这个过程中发布者，交换机，队列，消费者可以处于不同的设备上。
+(2)消息发布者可以给消息指定各种属性（Message Meta-data),一些属性可能被消息代理(Broker)使用，一些只能被消费者使用。消息分两部分：payload(有效载荷，传输的数据)和label(标签,exchange的名字或者说是一个tag，它描述了payload)，RabbitMQ通过label决定把Message发给哪个消费者。AMQP协议仅仅描述了label，RabbitMQ决定了如何使用label的规则。消费者在收到消息时只有payload部分，label已经被删掉，对于消费者而言是不知道谁发送的消息。
+(3)从安全和可靠性角度，RabbitMQ很好实现了AMQP协议的消息确认(Message Acknowledgements)机制,当一个消息投递给消费者后，不会立即删除，直到它收到来自消费者的确认回执(Acknowledgements)后,才完成从队列里删除。
+3. RabbitMQ基本概念 我们先来看一张RabbitMQ管理界面截图
+这个界面包含了RabbitMQ很关键的几个概念(不是全部)
+3.1 Producer（生产者） 消息生产者
+3.2 Consumer（消费者） 消息消费者
+3.3 Connection（连接） 无论是生产者还是消费者，都需要和RabbitMQ Broker建立连接，这个连接就是一条TCP,当不要连接时，需要优雅释放掉RabbitMQ连接,而不是直接将TCP连接关闭。后面我们可以知道使用RabbitMQ程序开头时，都是先建立TCP连接。
+3.4 Channel（信道） 一旦TCP连接建立起来，客户端紧接着可以创建一个AMQP信道（Channel），每个信道都会被指派一个唯一的ID。信道是建立在Connection之上的虚拟连接，Rabbit处理的每条指令都是通过Channel完成的。一般情况程序起始建立TCP连接，第二步就是建立Channel。
+为什么要用Channel，而不直接用TCP连接？
+试想如果一个场景，如果一个应用程序有很多个线程需要从RabbitMQ消费或生产消息，那么必然会创建很多个TCP连接，我们知道建立一个TCP连接需要3次握手,关闭一个TCP连接需4次挥手，对于系统来说频繁建立和关闭TCP连接对于系统性能有很大影响，而且TCP连接数也有限制，也限制了系统处理高并发的能力。 Rabbitmq采用类似NIO(也称非阻塞 I/O，包含三大核心部分：Channel信道、Buffer缓冲区和 Selector选择器)的做法,选择TCP连接复用，每个线程把持一个信道，信道复用了Connection的TCP连接.当每个信道的流量不是很大时，复用单一connection可以有效节省TCP连接资源，但如果信道流量很大，复用单一connection，connection的带宽会限制消息传输。此时需创建多个connection，将信道分摊到connection中。
+3.5 Exchange（交换机） 消息交换机指定消息按什么规则，路由到哪个队列去。
+那为什么需要Exchange而不是直接将消息发送至队列呢？
+回到与RabbitM关系紧密的AMQP协议，AMQP协议核心思想就是生产者和消费者解耦，生产者不直接将消息发送给队列。生产者不知道消息会被发到哪个队列，它只将消息发给交换机，交换机接收到消息后按照特定的规则转发到队列进行存储。 在实际应用中我们只需要定义好Exchange的路由策略，而生产者不需要关心消息发送到哪个队列或被谁消费。消费者不需要关心谁生产，只需面向队列消费消息。
+Exchange定义了消息路由到Queue的规则，将各个层面的消息传递隔离开，使每一层只需要关心自己面向的下一层，降低了整体的耦合度。
+创建一个新的Exchange
+Virtual host:属于哪个Virtual host。 Name：名字，同一个Virtual host里面的Name不能重复。 Durability： 是否持久化，Durable：持久化。Transient：不持久化。 Auto delete：当最后一个绑定（队列或者exchange）被unbind之后，该exchange自动被删除。 Internal： 是否是内部专用exchange，是的话，就意味着我们不能往该exchange里面发消息。 Arguments： 参数，是AMQP协议留给AMQP实现做扩展使用的。 alternate_exchange配置的时候，exchange根据路由路由不到对应的队列的时候，这时候消息被路由到指定的alternate_exchange的value值配置的exchange上。 3.6 Exchange类型 （1）.Direct exchange
+将消息中的Routing key与该Exchange关联的所有Binding中的Routing key进行比较，如果相等，则发送到该Binding对应的Queue中。
+（2）.Topic Exchange 将消息中的Routing key与该Exchange关联的所有Binding中的Routing key进行对比，如果匹配上了，则发送到该Binding对应的Queue中。</description>
+    </item>
+    
+    <item>
+      <title>消息队列中间件选型</title>
+      <link>http://www.heyuan110.com/posts/middleware/2019-07-31-mq/</link>
+      <pubDate>Wed, 31 Jul 2019 21:26:23 +0000</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/middleware/2019-07-31-mq/</guid>
+      <description>“消息队列”是在消息的传输过程中保存消息的容器。消息队列管理器在将消息从它的源中继到它的目标时充当中间人。队列的主要目的是提供路由并保证消息的传递；如果发送消息时接收者不可用，消息队列会保留消息，直到可以成功地传递它。
+一.消息队列是什么 维基百科的解释：
+消息队列（英语：Message queue）是一种进程间通信或同一进程的不同线程间的通信方式，软件的贮列用来处理一系列的输入，通常是来自用户。消息队列提供了异步的通信协议，每一个贮列中的纪录包含详细说明的数据，包含发生的时间，输入设备的种类，以及特定的输入参数，也就是说：消息的发送者和接收者不需要同时与消息队列互交。消息会保存在队列中，直到接收者取回它。 ——维基百科 解释比较官方，来看一个最简单的架构模型：
+Producer：消息生产者，负责产生和发送消息到Broker； Broker：消息处理中心，负责消息存储、确认、重试等，一般其中会包含多个queue； Consumer：消息消费者，负责从 Broker 中获取消息，并进行相应处理； 消息队列是分布式系统中重要组件，使用消息队列主要是通过异步处理提高系统性能和削峰、降低系统耦合性。
+下面用一个故事来理解消息队列：
+小Y是攻城狮，有一天产品经理告诉他需要实现这样一个需求：&amp;ldquo;用户下单成功，给用户发送一封确认邮件&amp;rdquo;.小Y快速确认了需求，很简单嘛，加几行代码就搞定！如是在下单后调用发送邮件代码，经过本地和alpha测试，功能顺利上线。
+正常运行了几天，产品经理找到小Y说观察监控数据，发现下单处理时间过长影响了转化率，小Y思考了一下，原来发邮件代码是放在下单完成代码后单线程同步阻塞的方式执行，确实有问题，于是新起了一个线程发邮件，测试通过后立即上线，下单感觉确实更顺畅了。
+可是没过多久客服收到很多用户反馈没收到邮件，产品经理和小Y一起熬夜分析想办法，最后找到负责开发邮件模块的同事，负责邮件的同事说：&amp;ldquo;不用搞那么复杂，我给你提供一个类似邮局信箱的东西，你往这信箱里写上你要发送的消息，以及我们约定的地址。之后你就不用再操心了，我们自然能从约定的地址中取得消息，进行邮件的相应操作&amp;rdquo;。小Y快速按照邮件同事的建议修改了代码，并测试重新上线。
+小Y后来才知道这个就是消息队列，你只需要将你想发送的消息发送到队列里，不用知道具体服务在哪，怎么执行，对应的服务自然能监听到你的发送的消息并获取过来执行。
+后来其他业务也把邮件发送更换成这种方式，随着消息量增多，大量消息堆积，需要增加更多消费者来处理队列里的消息，于是便有了分布式消息处理
+二.为什么要用消息队列 当系统出现&amp;quot;生产&amp;quot;和&amp;quot;消费&amp;quot;的速度和稳定性不一致时，就需要消息队列，正是这个中间层弥合双方的差异。使用消息队列主要三个好处（六字）：解耦、异步、削峰。
+1.解耦 场景：A更新数据，通知B,C更新，D等待接入。
+传统架构:
+传统架构下，A更新数据后分别调用B,C系统API，将更新的数据传过去，这种结构有下面的问题：(1)耦合性太强 (2)B,C系统故障，无法正确接收更新数据 (3)如果有D再接入，A又需要配合修改代码
+引入消息队列中间件架构:
+引入消息队列中间件的架构后，如果A更新了数据，只需要将消息发布到消息队列，B,C只要从消息队列订阅这条消息，D接入也只需自己去订阅，完全无需A做任何改动。
+消息的发送方和接收方并不需要彼此联系，也不需要受对方的影响。
+2.异步 同步模式下，整个任务完成要耗时120s
+消息队列异步模式下耗时35s，B,C异步运行。 异步处理主要目的是减少请求响应时间，实现非核心流程异步化，提高系统响应性能。
+3.削峰 **场景1：**A系统有10000条数据更新，需要发送给B,C系统
+传统架构下，A系统调用B,C系统的接口发消息过去，B,C系统处理能力A是无法预估的，可能B,C系统流量洪峰，最后导致系统崩溃。
+消息队列架构下，系统BCD可以按照自己处理能力消费队列里的消息，在流量高峰期短暂积压是被允许的。
+**场景2：**每天0:00到12:00,A系统风平浪静,每秒并发请求数量50个.结果每次一到12:00~13:00,每秒并发请求数量突然会暴增到5k+条,A系统是直连mysql，假设mysql最大并发处理能力每秒2k，很明显这个时候mysql会被打死，导致系统崩溃，停止服务。但一过高峰期每秒请求量可能就50个，对系统毫无压力。如果使用消息队列，高峰期5k+每秒的请求先写入到消息队列，A系统每秒最多处理2k个请求，不超过自己最大处理能力，这样高峰期不会崩溃，由于这时消息数入大于出，就形成了高峰期短暂积压（百万消息堆积），高峰期过后，每秒就50个请求，A系统还是按照每秒2k处理，多出来的能力可以快速处理高峰期积压。
+三.使用消息队列带来的问题 考虑在项目引入一项新技术，除了知道这项技术的优点，更重要是对弊端的了解，如果都没考虑过，就把技术引入，就给项目带来了潜在风险。上面我们列了消息队列的有点，来一起看看它的缺点。
+1.降低系统可用性 系统可用性在某种程度上降低,在加入MQ之前，不用考虑消息丢失或者说MQ挂掉等等的情况，但是，引入MQ之后就需要去考虑.
+2.增加系统复杂度 原来两个系统简单直接调API相互通讯，加入MQ后，消息传递链路加长，延时会增加，要考虑消息传递的可靠性（消息丢失怎么处理？），消息不被重复消费，数据一致性等问题。
+四.什么时候用消息队列 1. 数据驱动的任务依赖 什么是任务依赖？举个例子：电商公司需要跑拣货单，在这之前可能需要同步订单，更新库存等，这些任务之间就存在一定依赖关系。下面是一个任务依赖示范图：
+(1) Task3需要Task2输出作为输入 (2) Task2需要Task1输出作为输入
+Task1,Task2,Task3就是任务依赖关系，必须先按照顺序Task1-&amp;gt;Task2-&amp;gt;Task3执行。类似的需求很多时候我们都是用cron人工排时间实现（预估每个task执行时间，然后留合适的间隔时间buffer）： (1) Task1 00：00执行，执行50分钟,Task1的buffer时间10分钟 (2) Task2 01：00执行，执行40分钟，Task2的buffer时间20分钟 (3) Task3 02：00执行，执行时间30分钟，依次类推
+这种方式可能遇到的问题：
+(1) 如果一个Task执行超出预期时间（例如随着样本数据增加，需要更长时间计算），后面的Task不清楚前面是否成功，此时需要手动重跑或调整时间安排。 (2) 需要预留很多buffer，总任务执行时间很长，后置任务不能再前置任务完成立即执行 (3) 如果一个任务被多个任务依赖，定时任务提现不出来，被改动后，依赖的任务容易出错 (4) 一个任务的时间调整，将有多个任务执行时间调整</description>
+    </item>
+    
+  </channel>
+</rss>

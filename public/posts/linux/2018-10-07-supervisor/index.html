@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="cf-2fa-verify" content="9940932432">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Supervisor安装配置与使用">
+<meta itemprop="description" content="Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。
+安装 服务器上所有应用统一安装到目录/usr/local/programs/，所以采用源码安装
+提前配置好python(2.7)环境，下载相关文件：
+wget wget https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg &ndash;no-check-certificate
+wget https://pypi.python.org/packages/80/37/964c0d53cbd328796b1aeb7abea4c0f7b0e8c7197ea9b0b9967b7d004def/supervisor-3.3.1.tar.gz
+按下面步骤执行:
+1. sh setuptools-0.6c11-py2.7.egg 2. tar -axvf supervisor-3.3.1.tar.gz 3. cd supervisor-3.3.1 4. python setup.py install 5. echo_supervisord_conf &gt; /usr/local/programs/supervisoretc/supervisord.conf 6. supervisord -c /usr/local/programs/supervisoretc/supervisord.conf 7. supervisorctl 8. done 配置文件supervisord.conf：
+; Sample supervisor config file. ; ; For more information on the config file, please see: ; http://supervisord.org/configuration.html ; ; Notes: ; - Shell expansion (&#34;~&#34; or &#34;$HOME&#34;) is not supported."><meta itemprop="datePublished" content="2018-10-07T00:35:04+00:00" />
+<meta itemprop="dateModified" content="2018-10-07T00:35:04+00:00" />
+<meta itemprop="wordCount" content="1285">
+<meta itemprop="keywords" content="supervisor,linux," /><meta property="og:title" content="Supervisor安装配置与使用" />
+<meta property="og:description" content="Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。
+安装 服务器上所有应用统一安装到目录/usr/local/programs/，所以采用源码安装
+提前配置好python(2.7)环境，下载相关文件：
+wget wget https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg &ndash;no-check-certificate
+wget https://pypi.python.org/packages/80/37/964c0d53cbd328796b1aeb7abea4c0f7b0e8c7197ea9b0b9967b7d004def/supervisor-3.3.1.tar.gz
+按下面步骤执行:
+1. sh setuptools-0.6c11-py2.7.egg 2. tar -axvf supervisor-3.3.1.tar.gz 3. cd supervisor-3.3.1 4. python setup.py install 5. echo_supervisord_conf &gt; /usr/local/programs/supervisoretc/supervisord.conf 6. supervisord -c /usr/local/programs/supervisoretc/supervisord.conf 7. supervisorctl 8. done 配置文件supervisord.conf：
+; Sample supervisor config file. ; ; For more information on the config file, please see: ; http://supervisord.org/configuration.html ; ; Notes: ; - Shell expansion (&#34;~&#34; or &#34;$HOME&#34;) is not supported." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.heyuan110.com/posts/linux/2018-10-07-supervisor/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-10-07T00:35:04+00:00" />
+<meta property="article:modified_time" content="2018-10-07T00:35:04+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Supervisor安装配置与使用"/>
+<meta name="twitter:description" content="Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。
+安装 服务器上所有应用统一安装到目录/usr/local/programs/，所以采用源码安装
+提前配置好python(2.7)环境，下载相关文件：
+wget wget https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg &ndash;no-check-certificate
+wget https://pypi.python.org/packages/80/37/964c0d53cbd328796b1aeb7abea4c0f7b0e8c7197ea9b0b9967b7d004def/supervisor-3.3.1.tar.gz
+按下面步骤执行:
+1. sh setuptools-0.6c11-py2.7.egg 2. tar -axvf supervisor-3.3.1.tar.gz 3. cd supervisor-3.3.1 4. python setup.py install 5. echo_supervisord_conf &gt; /usr/local/programs/supervisoretc/supervisord.conf 6. supervisord -c /usr/local/programs/supervisoretc/supervisord.conf 7. supervisorctl 8. done 配置文件supervisord.conf：
+; Sample supervisor config file. ; ; For more information on the config file, please see: ; http://supervisord.org/configuration.html ; ; Notes: ; - Shell expansion (&#34;~&#34; or &#34;$HOME&#34;) is not supported."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Supervisor安装配置与使用</title>
+	<link rel="stylesheet" href="http://www.heyuan110.com/css/style.min.cb0663fd19952012fdb4a1345792a808ae19eb828578bde6eeae217ff1fb1e8b.css">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://www.heyuan110.com">Bruce&#39;s Blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="http://www.heyuan110.com/posts/">文章</a>
+					<a href="http://www.heyuan110.com/go-categories/">Go系列</a>
+					<a href="http://www.heyuan110.com/docker-categories/">Docker系列</a>
+					<a href="http://www.heyuan110.com/linux-categories/">Linux系列</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://github.com/hebruce110" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://www.heyuan110.com/posts/">文章</a></li>
+			<li><a href="http://www.heyuan110.com/tags/">标签</a></li>
+			<li><a href="http://www.heyuan110.com/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Oct 7, 2018</span></div>
+				<h1>Supervisor安装配置与使用</h1>
+			</header>
+			<div class="content">
+				<p>Supervisor (<a href="http://supervisord.org">http://supervisord.org</a>) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。</p>
+<h2 id="安装">安装<a href="#安装" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>服务器上所有应用统一安装到目录/usr/local/programs/，所以采用源码安装</p>
+<p>提前配置好python(2.7)环境，下载相关文件：</p>
+<ul>
+<li>
+<p>wget wget <a href="https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg">https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg</a>  &ndash;no-check-certificate</p>
+</li>
+<li>
+<p>wget <a href="https://pypi.python.org/packages/80/37/964c0d53cbd328796b1aeb7abea4c0f7b0e8c7197ea9b0b9967b7d004def/supervisor-3.3.1.tar.gz">https://pypi.python.org/packages/80/37/964c0d53cbd328796b1aeb7abea4c0f7b0e8c7197ea9b0b9967b7d004def/supervisor-3.3.1.tar.gz</a></p>
+</li>
+</ul>
+<p>按下面步骤执行:</p>
+<pre tabindex="0"><code>    1. sh setuptools-0.6c11-py2.7.egg
+    2. tar -axvf supervisor-3.3.1.tar.gz
+    3. cd supervisor-3.3.1
+    4. python setup.py install
+    5. echo_supervisord_conf &gt; /usr/local/programs/supervisoretc/supervisord.conf
+    6. supervisord -c /usr/local/programs/supervisoretc/supervisord.conf
+    7. supervisorctl
+    8. done
+</code></pre><p>配置文件supervisord.conf：</p>
+<pre tabindex="0"><code> ; Sample supervisor config file.
+;
+; For more information on the config file, please see:
+; http://supervisord.org/configuration.html
+;
+; Notes:
+;  - Shell expansion (&#34;~&#34; or &#34;$HOME&#34;) is not supported.  Environment
+;    variables can be expanded using this syntax: &#34;%(ENV_HOME)s&#34;.
+;  - Comments must have a leading space: &#34;a=b ;comment&#34; not &#34;a=b;comment&#34;.
+
+[unix_http_server]
+file=/tmp/supervisor.sock   ; (the path to the socket file)
+;chmod=0700                 ; socket file mode (default 0700)
+;chown=nobody:nogroup       ; socket file uid:gid owner
+;username=user              ; (default is no username (open server))
+;password=123               ; (default is no password (open server))
+
+[inet_http_server]         ; inet (TCP) server disabled by default
+port=0.0.0.0:9001        ; (ip_address:port specifier, *:port for all iface)
+;username=user              ; (default is no username (open server))
+;password=123               ; (default is no password (open server))
+
+[supervisord]
+logfile=/tmp/supervisord.log ; (main log file;default $CWD/supervisord.log)
+logfile_maxbytes=50MB        ; (max main logfile bytes b4 rotation;default 50MB)
+logfile_backups=10           ; (num of main logfile rotation backups;default 10)
+loglevel=info                ; (log level;default info; others: debug,warn,trace)
+pidfile=/tmp/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
+nodaemon=false               ; (start in foreground if true;default false)
+minfds=1024                  ; (min. avail startup file descriptors;default 1024)
+minprocs=200                 ; (min. avail process descriptors;default 200)
+;umask=022                   ; (process file creation umask;default 022)
+;user=chrism                 ; (default is current user, required if root)
+;identifier=supervisor       ; (supervisord identifier, default is &#39;supervisor&#39;)
+;directory=/tmp              ; (default is not to cd during start)
+;nocleanup=true              ; (don&#39;t clean up tempfiles at start;default false)
+;childlogdir=/tmp            ; (&#39;AUTO&#39; child log dir, default $TEMP)
+;environment=KEY=&#34;value&#34;     ; (key value pairs to add to environment)
+;strip_ansi=false            ; (strip ansi escape codes in logs; def. false)
+
+; the below section must remain in the config file for RPC
+; (supervisorctl/web interface) to work, additional interfaces may be
+; added by defining them in separate rpcinterface: sections
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket
+;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket
+;username=chris              ; should be same as http_username if set
+;password=123                ; should be same as http_password if set
+;prompt=mysupervisor         ; cmd line prompt (default &#34;supervisor&#34;)
+;history_file=~/.sc_history  ; use readline history if available
+
+; The below sample program section shows all possible program subsection values,
+; create one or more &#39;real&#39; program: sections to be able to control them under
+; supervisor.
+
+;[program:theprogramname]
+;command=/bin/cat              ; the program (relative uses PATH, can take args)
+;process_name=%(program_name)s ; process_name expr (default %(program_name)s)
+;numprocs=1                    ; number of processes copies to start (def 1)
+;directory=/tmp                ; directory to cwd to before exec (def no cwd)
+;umask=022                     ; umask for process (default None)
+;priority=999                  ; the relative start priority (default 999)
+;autostart=true                ; start at supervisord start (default: true)
+;startsecs=1                   ; # of secs prog must stay up to be running (def. 1)
+;startretries=3                ; max # of serial start failures when starting (default 3)
+;autorestart=unexpected        ; when to restart if exited after running (def: unexpected)
+;exitcodes=0,2                 ; &#39;expected&#39; exit codes used with autorestart (default 0,2)
+;stopsignal=QUIT               ; signal used to kill process (default TERM)
+;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)
+;stopasgroup=false             ; send stop signal to the UNIX process group (default false)
+;killasgroup=false             ; SIGKILL the UNIX process group (def false)
+;user=chrism                   ; setuid to this UNIX account to run the program
+;redirect_stderr=true          ; redirect proc stderr to stdout (default false)
+;stdout_logfile=/a/path        ; stdout log path, NONE for none; default AUTO
+;stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stdout_logfile_backups=10     ; # of stdout logfile backups (default 10)
+;stdout_capture_maxbytes=1MB   ; number of bytes in &#39;capturemode&#39; (default 0)
+;stdout_events_enabled=false   ; emit events on stdout writes (default false)
+;stderr_logfile=/a/path        ; stderr log path, NONE for none; default AUTO
+;stderr_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stderr_logfile_backups=10     ; # of stderr logfile backups (default 10)
+;stderr_capture_maxbytes=1MB   ; number of bytes in &#39;capturemode&#39; (default 0)
+;stderr_events_enabled=false   ; emit events on stderr writes (default false)
+;environment=A=&#34;1&#34;,B=&#34;2&#34;       ; process environment additions (def no adds)
+;serverurl=AUTO                ; override serverurl computation (childutils)
+
+; The below sample eventlistener section shows all possible
+; eventlistener subsection values, create one or more &#39;real&#39;
+; eventlistener: sections to be able to handle event notifications
+; sent by supervisor.
+
+;[eventlistener:theeventlistenername]
+;command=/bin/eventlistener    ; the program (relative uses PATH, can take args)
+;process_name=%(program_name)s ; process_name expr (default %(program_name)s)
+;numprocs=1                    ; number of processes copies to start (def 1)
+;events=EVENT                  ; event notif. types to subscribe to (req&#39;d)
+;buffer_size=10                ; event buffer queue size (default 10)
+;directory=/tmp                ; directory to cwd to before exec (def no cwd)
+;umask=022                     ; umask for process (default None)
+;priority=-1                   ; the relative start priority (default -1)
+;autostart=true                ; start at supervisord start (default: true)
+;startsecs=1                   ; # of secs prog must stay up to be running (def. 1)
+;startretries=3                ; max # of serial start failures when starting (default 3)
+;autorestart=unexpected        ; autorestart if exited after running (def: unexpected)
+;exitcodes=0,2                 ; &#39;expected&#39; exit codes used with autorestart (default 0,2)
+;stopsignal=QUIT               ; signal used to kill process (default TERM)
+;stopwaitsecs=10               ; max num secs to wait b4 SIGKILL (default 10)
+;stopasgroup=false             ; send stop signal to the UNIX process group (default false)
+;killasgroup=false             ; SIGKILL the UNIX process group (def false)
+;user=chrism                   ; setuid to this UNIX account to run the program
+;redirect_stderr=false         ; redirect_stderr=true is not allowed for eventlisteners
+;stdout_logfile=/a/path        ; stdout log path, NONE for none; default AUTO
+;stdout_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stdout_logfile_backups=10     ; # of stdout logfile backups (default 10)
+;stdout_events_enabled=false   ; emit events on stdout writes (default false)
+;stderr_logfile=/a/path        ; stderr log path, NONE for none; default AUTO
+;stderr_logfile_maxbytes=1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stderr_logfile_backups=10     ; # of stderr logfile backups (default 10)
+;stderr_events_enabled=false   ; emit events on stderr writes (default false)
+;environment=A=&#34;1&#34;,B=&#34;2&#34;       ; process environment additions
+;serverurl=AUTO                ; override serverurl computation (childutils)
+
+; The below sample group section shows all possible group values,
+; create one or more &#39;real&#39; group: sections to create &#34;heterogeneous&#34;
+; process groups.
+
+;[group:thegroupname]
+;programs=progname1,progname2  ; each refers to &#39;x&#39; in [program:x] definitions
+;priority=999                  ; the relative start priority (default 999)
+
+; The [include] section can just contain the &#34;files&#34; setting.  This
+; setting can list multiple files (separated by whitespace or
+; newlines).  It can also contain wildcards.  The filenames are
+; interpreted as relative to this file.  Included files *cannot*
+; include files themselves.
+
+[include]
+files = conf.d/*.conf
+</code></pre><p>注意最下面一行，重点，要考！</p>
+<h2 id="配置管理程序">配置管理程序<a href="#配置管理程序" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>以nginx为例，在/usr/local/programs/supervisor/conf.d下创建</p>
+<p>vi nginx.conf</p>
+<pre tabindex="0"><code>[program:nginx]
+command=/usr/local/programs/nginx/nginx ;需要执行的命令wd
+user=root   ;(default  is  current  user , required  if  root)
+autostart=true ;start at supervisord start (default: true)
+autorestart=true  ;whether/when to restart (default: unexpected)
+startsecs=3  ;number of secs prog must stay running ( def . 1)
+stderr_logfile=/usr/local/programs/supervisor/logs/nginx_stderr_err.log  ;redirect proc stderr to stdout (default false) 错误输出重定向
+stdout_logfile=/usr/local/programs/supervisor/logs/nginx_stdout.log  ;stdout log path, NONE  for  none; default AUTO, log输出
+</code></pre><p><code>wq</code>保存退出，启动 <code>supervisord -c /etc/supervisord.conf</code></p>
+<h2 id="supervisorctl工具">Supervisorctl工具<a href="#supervisorctl工具" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>进入交互模式<code>supervisorctl</code></p>
+<pre tabindex="0"><code>&gt; status    # 查看程序状态
+&gt; stop usercenter   # 关闭 usercenter 程序
+&gt; start usercenter  # 启动 usercenter 程序
+&gt; restart usercenter    # 重启 usercenter 程序
+&gt; reread    ＃ 读取有更新（增加）的配置文件，不会启动新添加的程序
+&gt; update    ＃ 重启配置文件修改过的程序
+</code></pre><p>也可以不进入交互环境</p>
+<pre tabindex="0"><code>$ supervisorctl status
+$ supervisorctl stop usercenter
+$ supervisorctl start usercenter
+$ supervisorctl restart usercenter
+$ supervisorctl reread
+$ supervisorctl update
+</code></pre><h2 id="开机启动">开机启动<a href="#开机启动" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="ubuntu">ubuntu<a href="#ubuntu" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>打开配置<code>vi /etc/rc.local</code></p>
+<p>增加自启动配置项目</p>
+<pre tabindex="0"><code>#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will &#34;exit 0&#34; on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#开机自启动
+/bin/bash -c &#34;/usr/local/bin/supervisord -c /usr/local/programs/supervisor/supervisord.conf&#34;
+
+exit 0
+</code></pre><p>保存并退出。
+最后修改rc.local权限 <code>chmod +x /etc/rc.local</code></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://www.heyuan110.com/tags/supervisor">supervisor</a></span><span class="tag"><a href="http://www.heyuan110.com/tags/linux">linux</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1285 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2018-10-07 08:35 &#43;0800</p>
+			</footer>
+		</article>
+		<aside id="toc" class="show-toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#配置管理程序">配置管理程序</a></li>
+    <li><a href="#supervisorctl工具">Supervisorctl工具</a></li>
+    <li><a href="#开机启动">开机启动</a>
+      <ul>
+        <li><a href="#ubuntu">ubuntu</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://www.heyuan110.com/posts/linux/2018-11-20-jenkins-codedeploy-autoscaling/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Jenkins &#43; AWS CodeDeploy &#43; AutoScaling 持续集成</span>
+			</a>
+			<a class="prev-post" href="http://www.heyuan110.com/posts/linux/2018-10-06-ip-cidr/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>IP地址与CIDR</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+						<script src="https://utteranc.es/client.js"
+							repo="heyuan110/heyuan110.github.com"
+							issue-term="pathname"
+							theme="github-light"
+							crossorigin="anonymous"
+							async>
+			</script>
+
+
+		</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2015 - 2023 <a href="http://www.heyuan110.com">Bruce&#39;s Blog</a> &#183; 版权所有</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://www.heyuan110.com/post/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="http://www.heyuan110.com/js/main.min.b59d103b91d4cb8dc47e30d239e2ad29dbcd029b498bdc44d1a327c0b8f1bf2b.js"></script>
+
+</body>
+
+</html>
