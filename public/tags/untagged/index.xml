@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 11 May 2023 21:21:55 +0800</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/untagged/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 May 2023 13:48:00 +0800</lastBuildDate><atom:link href="http://www.heyuan110.com/tags/untagged/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>http://www.heyuan110.com/posts/my-first-post/</link>
+      <pubDate>Fri, 12 May 2023 13:48:00 +0800</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/my-first-post/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Test</title>
       <link>http://www.heyuan110.com/posts/test/</link>

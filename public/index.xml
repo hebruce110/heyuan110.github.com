@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 11 May 2023 21:21:55 +0800</lastBuildDate><atom:link href="http://www.heyuan110.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 May 2023 13:48:00 +0800</lastBuildDate><atom:link href="http://www.heyuan110.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>http://www.heyuan110.com/posts/my-first-post/</link>
+      <pubDate>Fri, 12 May 2023 13:48:00 +0800</pubDate>
+      
+      <guid>http://www.heyuan110.com/posts/my-first-post/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Test</title>
       <link>http://www.heyuan110.com/posts/test/</link>
@@ -122,15 +131,6 @@ Traceroute程序的设计是利用ICMP及IP header的TTL（Time To Live）栏位
       
       <guid>http://www.heyuan110.com/posts/linux/2020-03-19-linux-mac-commands/</guid>
       <description>&lt;p&gt;linux中许多常用命令是必须掌握的，很多用过没有记录下来很快就忘记，再次使用又到处搜索，本文主要列出我日常使用过的一些命令，会持续更新。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>关于</title>
-      <link>http://www.heyuan110.com/about/</link>
-      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
-      
-      <guid>http://www.heyuan110.com/about/</guid>
-      <description>联系方式： 邮箱：bruce.he@qq.com </description>
     </item>
     
   </channel>
